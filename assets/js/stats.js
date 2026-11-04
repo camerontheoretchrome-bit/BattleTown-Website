@@ -69,6 +69,14 @@
     return b > 0 ? Math.round((a / b) * 100) + "%" : "–";
   }
 
+  // Titles from servers before the fix read "ELIMINATION Champion": show the game's words.
+  var MODE_TITLES = { DUEL: "Duel", FFA: "Free For All", TDM: "Team Deathmatch", ELIMINATION: "Last Alive" };
+
+  function titleText(t) {
+    var m = /^(DUEL|FFA|TDM|ELIMINATION) Champion$/.exec(t || "");
+    return m ? MODE_TITLES[m[1]] + " Champion" : t;
+  }
+
   function profileLink(name) {
     return "/player/" + encodeURIComponent(name);
   }
@@ -261,8 +269,8 @@
 
     var head = el("div", "profile-head reveal is-in");
     var skin = el("img", "profile-skin");
-    // 3D skin render by Crafatar (third party, see Privacy).
-    skin.src = "https://crafatar.com/renders/body/" + encodeURIComponent(p.uuid) + "?overlay&scale=8";
+    // Skin render by mc-heads.net (third party, see Privacy).
+    skin.src = "https://mc-heads.net/body/" + encodeURIComponent(p.uuid.replace(/-/g, "")) + "/300";
     skin.alt = p.name + "'s Minecraft skin";
     skin.loading = "lazy";
     skin.onerror = function () { skin.remove(); };
@@ -278,7 +286,7 @@
 
     if (p.titles && p.titles.length) {
       var titles = el("ul", "chips profile-titles");
-      p.titles.forEach(function (t) { titles.appendChild(el("li", "", t)); });
+      p.titles.forEach(function (t) { titles.appendChild(el("li", "", titleText(t))); });
       who.appendChild(titles);
     }
     head.appendChild(who);
