@@ -9,16 +9,21 @@
   <meta property="og:type" content="website">
   <meta property="og:title" content="BattleTown">
   <meta property="og:description" content="BattleTown: class-based PvP arenas for Minecraft Java 26.3. Join at play.battletown.store. Public alpha 1 December 2026.">
-  <meta property="og:image" content="https://battletown.store/assets/img/logo-512.png">
+  <meta property="og:image" content="https://battletown.store/assets/img/social-card.jpg">
   <meta property="og:url" content="https://battletown.store/">
+  <meta property="og:site_name" content="BattleTown">
   <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://battletown.store/">
+  <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/assets/img/icon-32.png" sizes="32x32">
   <link rel="apple-touch-icon" href="/assets/img/icon-180.png">
   <link rel="preload" href="/assets/fonts/lilita-one-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/assets/css/site.css">
+  <link rel="stylesheet" href="/assets/css/site.css?v=bbca6b26">
   <script>document.documentElement.classList.add("js");</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"BattleTown","url":"https://battletown.store/","description":"Class-based PvP arenas for Minecraft: Java Edition 26.3, with 16 classes, four game modes and player-built Maps.","image":"https://battletown.store/assets/img/social-card.jpg","gamePlatform":"Minecraft: Java Edition","genre":["PvP","Arena"],"playMode":"MultiPlayer","sameAs":["https://discord.gg/TJ5wBJYCc"]}</script>
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to content</a>
   <div class="progress" aria-hidden="true"></div>
   <header class="site-header">
     <div class="wrap">
@@ -36,15 +41,15 @@
     </div>
   </header>
 
-  <main>
+  <main id="main">
     <section class="hero">
       <div class="hero-bg" aria-hidden="true">
           <img src="/assets/img/classes/knight.webp" alt="" fetchpriority="high" width="1600" height="900">
-          <img src="/assets/img/classes/stormcaller.webp" alt="" loading="lazy" width="1600" height="900">
-          <img src="/assets/img/classes/alchemist.webp" alt="" loading="lazy" width="1600" height="900">
-          <img src="/assets/img/classes/pyromancer.webp" alt="" loading="lazy" width="1600" height="900">
-          <img src="/assets/img/classes/geomancer.webp" alt="" loading="lazy" width="1600" height="900">
-          <img src="/assets/img/classes/acrobat.webp" alt="" loading="lazy" width="1600" height="900">
+          <img data-src="/assets/img/classes/stormcaller.webp" alt=""  width="1600" height="900">
+          <img data-src="/assets/img/classes/alchemist.webp" alt=""  width="1600" height="900">
+          <img data-src="/assets/img/classes/pyromancer.webp" alt=""  width="1600" height="900">
+          <img data-src="/assets/img/classes/geomancer.webp" alt=""  width="1600" height="900">
+          <img data-src="/assets/img/classes/acrobat.webp" alt=""  width="1600" height="900">
       </div>
       <canvas class="embers" aria-hidden="true"></canvas>
       <div class="wrap">
@@ -83,72 +88,72 @@
         <div class="section-head reveal">
           <span class="eyebrow">Choose your fighter</span>
           <h2>16 classes. One crown.</h2>
-          <p class="lead">Every class has its own weapons, armour and abilities. Walk into a Class Hall, step on a pad, and fight your way.</p>
+          <p class="lead">Eight Warriors &amp; Hunters. Eight Mages &amp; Specialists. Each class has its own weapons, armour and two abilities. Step on a class pad in the Warriors Hall or the Mages Hall and fight your way.</p>
         </div>
         <div class="rail reveal">
-          <a class="class-tile" href="/classes/#acrobat" style="--accent: #E0499E">
-            <img src="/assets/img/classes/acrobat-thumb.webp" alt="" loading="lazy" width="480" height="270">
-            <span class="tile-text"><span class="tile-name">Acrobat</span><span class="tile-motto">Own the air</span></span>
-          </a>
-          <a class="class-tile" href="/classes/#alchemist" style="--accent: #9ACD32">
-            <img src="/assets/img/classes/alchemist-thumb.webp" alt="" loading="lazy" width="480" height="270">
-            <span class="tile-text"><span class="tile-name">Alchemist</span><span class="tile-motto">Brew chaos</span></span>
-          </a>
-          <a class="class-tile" href="/classes/#assassin" style="--accent: #C77DFF">
-            <img src="/assets/img/classes/assassin-thumb.webp" alt="" loading="lazy" width="480" height="270">
-            <span class="tile-text"><span class="tile-name">Assassin</span><span class="tile-motto">Strike from the shadows</span></span>
+          <a class="class-tile" href="/classes/#knight" style="--accent: #55FFFF">
+            <img src="/assets/img/classes/knight-thumb.webp" alt="" loading="lazy" width="480" height="270">
+            <span class="tile-text"><span class="tile-hall">Warriors Hall</span><span class="tile-name">Knight</span><span class="tile-motto">LEAD THE CHARGE</span></span>
           </a>
           <a class="class-tile" href="/classes/#berserker" style="--accent: #FF3B3B">
             <img src="/assets/img/classes/berserker-thumb.webp" alt="" loading="lazy" width="480" height="270">
-            <span class="tile-text"><span class="tile-name">Berserker</span><span class="tile-motto">Give in to fury</span></span>
-          </a>
-          <a class="class-tile" href="/classes/#duelist" style="--accent: #FFFFFF">
-            <img src="/assets/img/classes/duelist-thumb.webp" alt="" loading="lazy" width="480" height="270">
-            <span class="tile-text"><span class="tile-name">Duelist</span><span class="tile-motto">Timing is everything</span></span>
-          </a>
-          <a class="class-tile" href="/classes/#frostborn" style="--accent: #7FD4F5">
-            <img src="/assets/img/classes/frostborn-thumb.webp" alt="" loading="lazy" width="480" height="270">
-            <span class="tile-text"><span class="tile-name">Frostborn</span><span class="tile-motto">Freeze the field</span></span>
-          </a>
-          <a class="class-tile" href="/classes/#geomancer" style="--accent: #A855F7">
-            <img src="/assets/img/classes/geomancer-thumb.webp" alt="" loading="lazy" width="480" height="270">
-            <span class="tile-text"><span class="tile-name">Geomancer</span><span class="tile-motto">Shape the land</span></span>
+            <span class="tile-text"><span class="tile-hall">Warriors Hall</span><span class="tile-name">Berserker</span><span class="tile-motto">GIVE IN TO FURY</span></span>
           </a>
           <a class="class-tile" href="/classes/#guardian" style="--accent: #B87333">
             <img src="/assets/img/classes/guardian-thumb.webp" alt="" loading="lazy" width="480" height="270">
-            <span class="tile-text"><span class="tile-name">Guardian</span><span class="tile-motto">Hold the line</span></span>
-          </a>
-          <a class="class-tile" href="/classes/#knight" style="--accent: #55FFFF">
-            <img src="/assets/img/classes/knight-thumb.webp" alt="" loading="lazy" width="480" height="270">
-            <span class="tile-text"><span class="tile-name">Knight</span><span class="tile-motto">Lead the charge</span></span>
-          </a>
-          <a class="class-tile" href="/classes/#lancer" style="--accent: #D3D47B">
-            <img src="/assets/img/classes/lancer-thumb.webp" alt="" loading="lazy" width="480" height="270">
-            <span class="tile-text"><span class="tile-name">Lancer</span><span class="tile-motto">Control the distance</span></span>
-          </a>
-          <a class="class-tile" href="/classes/#necromancer" style="--accent: #9AE69A">
-            <img src="/assets/img/classes/necromancer-thumb.webp" alt="" loading="lazy" width="480" height="270">
-            <span class="tile-text"><span class="tile-name">Necromancer</span><span class="tile-motto">Rise again</span></span>
-          </a>
-          <a class="class-tile" href="/classes/#poseidon" style="--accent: #39C6A3">
-            <img src="/assets/img/classes/poseidon-thumb.webp" alt="" loading="lazy" width="480" height="270">
-            <span class="tile-text"><span class="tile-name">Poseidon</span><span class="tile-motto">Command the tide</span></span>
-          </a>
-          <a class="class-tile" href="/classes/#pyromancer" style="--accent: #FF8C42">
-            <img src="/assets/img/classes/pyromancer-thumb.webp" alt="" loading="lazy" width="480" height="270">
-            <span class="tile-text"><span class="tile-name">Pyromancer</span><span class="tile-motto">Let it burn</span></span>
+            <span class="tile-text"><span class="tile-hall">Warriors Hall</span><span class="tile-name">Guardian</span><span class="tile-motto">HOLD THE LINE</span></span>
           </a>
           <a class="class-tile" href="/classes/#ranger" style="--accent: #5FAE5D">
             <img src="/assets/img/classes/ranger-thumb.webp" alt="" loading="lazy" width="480" height="270">
-            <span class="tile-text"><span class="tile-name">Ranger</span><span class="tile-motto">Own the distance</span></span>
+            <span class="tile-text"><span class="tile-hall">Warriors Hall</span><span class="tile-name">Ranger</span><span class="tile-motto">OWN THE DISTANCE</span></span>
           </a>
-          <a class="class-tile" href="/classes/#stormcaller" style="--accent: #5C7CFA">
-            <img src="/assets/img/classes/stormcaller-thumb.webp" alt="" loading="lazy" width="480" height="270">
-            <span class="tile-text"><span class="tile-name">Stormcaller</span><span class="tile-motto">Call the storm</span></span>
+          <a class="class-tile" href="/classes/#lancer" style="--accent: #D3D47B">
+            <img src="/assets/img/classes/lancer-thumb.webp" alt="" loading="lazy" width="480" height="270">
+            <span class="tile-text"><span class="tile-hall">Warriors Hall</span><span class="tile-name">Lancer</span><span class="tile-motto">CONTROL THE DISTANCE</span></span>
+          </a>
+          <a class="class-tile" href="/classes/#duelist" style="--accent: #FFFFFF">
+            <img src="/assets/img/classes/duelist-thumb.webp" alt="" loading="lazy" width="480" height="270">
+            <span class="tile-text"><span class="tile-hall">Warriors Hall</span><span class="tile-name">Duelist</span><span class="tile-motto">TIMING IS EVERYTHING</span></span>
+          </a>
+          <a class="class-tile" href="/classes/#assassin" style="--accent: #C77DFF">
+            <img src="/assets/img/classes/assassin-thumb.webp" alt="" loading="lazy" width="480" height="270">
+            <span class="tile-text"><span class="tile-hall">Warriors Hall</span><span class="tile-name">Assassin</span><span class="tile-motto">STRIKE FROM THE SHADOWS</span></span>
+          </a>
+          <a class="class-tile" href="/classes/#poseidon" style="--accent: #39C6A3">
+            <img src="/assets/img/classes/poseidon-thumb.webp" alt="" loading="lazy" width="480" height="270">
+            <span class="tile-text"><span class="tile-hall">Warriors Hall</span><span class="tile-name">Poseidon</span><span class="tile-motto">COMMAND THE TIDE</span></span>
           </a>
           <a class="class-tile" href="/classes/#warden" style="--accent: #C9812E">
             <img src="/assets/img/classes/warden-thumb.webp" alt="" loading="lazy" width="480" height="270">
-            <span class="tile-text"><span class="tile-name">Warden</span><span class="tile-motto">Set the rules</span></span>
+            <span class="tile-text"><span class="tile-hall">Mages Hall</span><span class="tile-name">Warden</span><span class="tile-motto">SET THE RULES</span></span>
+          </a>
+          <a class="class-tile" href="/classes/#frostborn" style="--accent: #7FD4F5">
+            <img src="/assets/img/classes/frostborn-thumb.webp" alt="" loading="lazy" width="480" height="270">
+            <span class="tile-text"><span class="tile-hall">Mages Hall</span><span class="tile-name">Frostborn</span><span class="tile-motto">FREEZE THE FIELD</span></span>
+          </a>
+          <a class="class-tile" href="/classes/#pyromancer" style="--accent: #FF8C42">
+            <img src="/assets/img/classes/pyromancer-thumb.webp" alt="" loading="lazy" width="480" height="270">
+            <span class="tile-text"><span class="tile-hall">Mages Hall</span><span class="tile-name">Pyromancer</span><span class="tile-motto">LET IT BURN</span></span>
+          </a>
+          <a class="class-tile" href="/classes/#alchemist" style="--accent: #9ACD32">
+            <img src="/assets/img/classes/alchemist-thumb.webp" alt="" loading="lazy" width="480" height="270">
+            <span class="tile-text"><span class="tile-hall">Mages Hall</span><span class="tile-name">Alchemist</span><span class="tile-motto">BREW CHAOS</span></span>
+          </a>
+          <a class="class-tile" href="/classes/#stormcaller" style="--accent: #5C7CFA">
+            <img src="/assets/img/classes/stormcaller-thumb.webp" alt="" loading="lazy" width="480" height="270">
+            <span class="tile-text"><span class="tile-hall">Mages Hall</span><span class="tile-name">Stormcaller</span><span class="tile-motto">CALL THE STORM</span></span>
+          </a>
+          <a class="class-tile" href="/classes/#necromancer" style="--accent: #9AE69A">
+            <img src="/assets/img/classes/necromancer-thumb.webp" alt="" loading="lazy" width="480" height="270">
+            <span class="tile-text"><span class="tile-hall">Mages Hall</span><span class="tile-name">Necromancer</span><span class="tile-motto">RISE AGAIN</span></span>
+          </a>
+          <a class="class-tile" href="/classes/#geomancer" style="--accent: #A855F7">
+            <img src="/assets/img/classes/geomancer-thumb.webp" alt="" loading="lazy" width="480" height="270">
+            <span class="tile-text"><span class="tile-hall">Mages Hall</span><span class="tile-name">Geomancer</span><span class="tile-motto">SHAPE THE LAND</span></span>
+          </a>
+          <a class="class-tile" href="/classes/#acrobat" style="--accent: #E0499E">
+            <img src="/assets/img/classes/acrobat-thumb.webp" alt="" loading="lazy" width="480" height="270">
+            <span class="tile-text"><span class="tile-hall">Mages Hall</span><span class="tile-name">Acrobat</span><span class="tile-motto">OWN THE AIR</span></span>
           </a>
         </div>
         <div class="btn-row" style="justify-content: flex-start; margin-top: 8px">
@@ -228,6 +233,126 @@
       </div>
     </section>
 
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">The Hub</span>
+          <h2>Welcome to BattleTown</h2>
+          <p class="lead">Every visit starts in the Hub. Ask a Hub Guide to take you anywhere.</p>
+        </div>
+        <div class="grid places">
+          <article class="card place tilt reveal" style="--delay: 0.00s">
+            <h3>Battle Plaza</h3>
+            <p>Step onto a platform to queue for Quick Play, Duel, Free For All, Team Deathmatch or Last Alive.</p>
+          </article>
+          <article class="card place tilt reveal" style="--delay: 0.05s">
+            <h3>Warriors Hall</h3>
+            <p>Warriors &amp; Hunters: Knight, Guardian, Berserker, Lancer, Duelist, Ranger, Assassin and Poseidon.</p>
+          </article>
+          <article class="card place tilt reveal" style="--delay: 0.10s">
+            <h3>Mages Hall</h3>
+            <p>Mages &amp; Specialists: Warden, Frostborn, Pyromancer, Alchemist, Stormcaller, Necromancer, Geomancer and Acrobat.</p>
+          </article>
+          <article class="card place tilt reveal" style="--delay: 0.15s">
+            <h3>Cosmetic Shop</h3>
+            <p>Armour and weapon looks, trails, kill and victory effects, companions, Movement and Medallions.</p>
+          </article>
+          <article class="card place tilt reveal" style="--delay: 0.20s">
+            <h3>Creative Shop</h3>
+            <p>Buy a Map, then build your own arena in Creative.</p>
+          </article>
+          <article class="card place tilt reveal" style="--delay: 0.25s">
+            <h3>Leaderboards</h3>
+            <p>See who's on top, from kills and wins to the best builders.</p>
+          </article>
+          <article class="card place tilt reveal" style="--delay: 0.30s">
+            <h3>Sky Spirals</h3>
+            <p>Four parkour climbs with a timer and medals. Type <code>/sky</code>.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head center reveal">
+          <span class="eyebrow">Always something to chase</span>
+          <h2>More than a match</h2>
+        </div>
+        <div class="grid features">
+          <article class="card feature tilt reveal" style="--delay: 0.00s">
+            <p class="big">1 → 100</p>
+            <h3>Rank up</h3>
+            <p>Level up from 1 to 100 by playing. Rewards are earned, never sold.</p>
+          </article>
+          <article class="card feature tilt reveal" style="--delay: 0.06s">
+            <p class="big">16</p>
+            <h3>Hidden Relics</h3>
+            <p>Sixteen relics are hidden around the Hub. How many can you find?</p>
+          </article>
+          <article class="card feature tilt reveal" style="--delay: 0.12s">
+            <p class="big">$1,000</p>
+            <h3>Map royalties</h3>
+            <p>Builders earn BattleBucks every time a public match on their Map finishes.</p>
+          </article>
+          <article class="card feature tilt reveal" style="--delay: 0.18s">
+            <p class="big">Weekly</p>
+            <h3>Map of the Week</h3>
+            <p>The best Community Map gets the spotlight. Type <code>/mapweek</code>.</p>
+          </article>
+          <article class="card feature tilt reveal" style="--delay: 0.24s">
+            <p class="big">2v2 · 4v4</p>
+            <h3>Parties</h3>
+            <p>Team up with friends with <code>/party</code> and queue Team Deathmatch together.</p>
+          </article>
+          <article class="card feature tilt reveal" style="--delay: 0.30s">
+            <p class="big">Voice</p>
+            <h3>Proximity voice</h3>
+            <p>Talk to players near you with the Simple Voice Chat mod.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="wrap faq-wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">Questions</span>
+          <h2>FAQ</h2>
+        </div>
+        <div class="faq reveal">
+          <details>
+            <summary>Is BattleTown free?</summary>
+            <p>Yes, it's free to play. The store sells cosmetics, BattleBucks and XP Boosts.</p>
+          </details>
+          <details>
+            <summary>Which Minecraft do I need?</summary>
+            <p>Minecraft: Java Edition 26.3. Bedrock isn't supported.</p>
+          </details>
+          <details>
+            <summary>Do I need mods?</summary>
+            <p>No. The BattleTown resource pack downloads when you join. Performance mods (Sodium, Lithium, Iris), Simple Voice Chat, and the Lunar, Feather and LabyMod clients are allowed. Mods that give an advantage are not.</p>
+          </details>
+          <details>
+            <summary>Is it pay-to-win?</summary>
+            <p>No. Nothing in the store changes a fight. XP Boosts only speed up rank XP, and BattleBucks buy cosmetics and Maps.</p>
+          </details>
+          <details>
+            <summary>When can I play?</summary>
+            <p>The public alpha opens on 1 December 2026. Join the Discord for news before then.</p>
+          </details>
+          <details>
+            <summary>Can I play with friends?</summary>
+            <p>Yes. Add friends with <code>/friends</code>, team up with <code>/party</code>, and queue together.</p>
+          </details>
+          <details>
+            <summary>How old do I have to be?</summary>
+            <p>13 or older. Under 18s need a parent or guardian to agree to the <a href="/rules/#terms">Terms</a>.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
     <section class="cta-band" id="join">
       <div class="wrap">
         <div class="reveal">
@@ -264,7 +389,7 @@
     </div>
   </footer>
 
-  <script src="/assets/js/config.js"></script>
-  <script src="/assets/js/site.js"></script>
+  <script src="/assets/js/config.js?v=10e8e920"></script>
+  <script src="/assets/js/site.js?v=5969abb7"></script>
 </body>
 </html>

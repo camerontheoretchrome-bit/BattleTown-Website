@@ -565,7 +565,7 @@
     }
     render();
   }).catch(function () {
-    message("The store couldn't load right now. You can still buy in game with /buy.", true);
+    message("The store couldn't load right now. You can still buy in game with /store.", true);
   }).then(function () {
     busy(false);
   });

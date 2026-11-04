@@ -286,6 +286,22 @@
       return;
     }
 
+    // The later slides load only after the page has, to keep the first paint quick.
+    function loadRest() {
+      images.forEach(function (img) {
+        if (img.dataset.src) {
+          img.src = img.dataset.src;
+          img.removeAttribute("data-src");
+        }
+      });
+    }
+
+    if (document.readyState === "complete") {
+      loadRest();
+    } else {
+      window.addEventListener("load", loadRest);
+    }
+
     setInterval(function () {
       images[index].classList.remove("is-on");
       index = (index + 1) % images.length;

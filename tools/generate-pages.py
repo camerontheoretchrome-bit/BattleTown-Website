@@ -5,17 +5,28 @@ script is their source: change the words here, run it, and commit both.
 
     python3 tools/generate-pages.py
 
-The Rules, Terms and Privacy text is read straight from the plugin's
-RulesDocuments.java, so the website always says what /rules says in game.
-Run this again whenever that file changes.
+Game words are read straight from the game, so the website always says
+what the game says. Run this again whenever one of these changes:
+
+  RulesDocuments.java  the Rules, Terms and Privacy text (/rules)
+  ClassCards.java      every class card: motto, role, weapons, abilities, hall
+  classes.yml          max health (the live server config)
+
+It also writes sitemap.xml and robots.txt, and stamps every CSS/JS link
+with a content hash so visitors get changes straight away.
 """
+import hashlib
 import html
 import os
 import re
 
 SITE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-RULES_JAVA = os.path.expanduser(
-    "~/Documents/BattleTown-Plugin/src/main/java/me/camerontheoret/battletown/hub/rules/RulesDocuments.java")
+PLUGIN_SRC = os.path.expanduser("~/Documents/BattleTown-Plugin/src/main/java/me/camerontheoret/battletown")
+RULES_JAVA = os.path.join(PLUGIN_SRC, "hub/rules/RulesDocuments.java")
+CLASS_CARDS_JAVA = os.path.join(PLUGIN_SRC, "classhall/ClassCards.java")
+CLASSES_YML = os.path.expanduser("~/Documents/BattleTown-Server/plugins/BattleTown/classes.yml")
+SITE_URL = "https://battletown.store"
+PAGES = []
 
 NAV = [("/", "Home"), ("/classes/", "Classes"), ("/modes/", "Game modes"),
        ("/maps/", "Maps"), ("/store/", "Store"), ("/rules/", "Rules")]
@@ -27,9 +38,20 @@ ADDRESS = "play.battletown.store"
 ALPHA_START = "2026-12-01T00:00:00-05:00"
 
 
-def page(path, title, description, body, scripts=(), image="https://battletown.store/assets/img/logo-512.png"):
+def asset(path):
+    """A site path with ?v=<content hash>, so browsers fetch changed files."""
+    with open(os.path.join(SITE, path.lstrip("/")), "rb") as f:
+        return path + "?v=" + hashlib.sha1(f.read()).hexdigest()[:8]
+
+
+JSON_LD = """<script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"BattleTown","url":"https://battletown.store/","description":"Class-based PvP arenas for Minecraft: Java Edition 26.3, with 16 classes, four game modes and player-built Maps.","image":"https://battletown.store/assets/img/social-card.jpg","gamePlatform":"Minecraft: Java Edition","genre":["PvP","Arena"],"playMode":"MultiPlayer","sameAs":["https://discord.gg/TJ5wBJYCc"]}</script>"""
+
+
+def page(path, title, description, body, scripts=(), image="https://battletown.store/assets/img/social-card.jpg"):
+    if path not in ("/404", "/store/thanks/"):
+        PAGES.append(path)
     nav = "\n".join(f'        <a href="{href}">{label}</a>' for href, label in NAV)
-    extra_scripts = "".join(f'  <script src="{src}"></script>\n' for src in scripts)
+    extra_scripts = "".join(f'  <script src="{asset(src)}"></script>\n' for src in scripts)
     full_title = "BattleTown" if title is None else f"{title} · BattleTown"
     out = f"""<!doctype html>
 <html lang="en">
@@ -44,14 +66,19 @@ def page(path, title, description, body, scripts=(), image="https://battletown.s
   <meta property="og:description" content="{html.escape(description)}">
   <meta property="og:image" content="{image}">
   <meta property="og:url" content="https://battletown.store{path}">
+  <meta property="og:site_name" content="BattleTown">
   <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://battletown.store{path if path != '/404' else '/'}">
+  <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/assets/img/icon-32.png" sizes="32x32">
   <link rel="apple-touch-icon" href="/assets/img/icon-180.png">
   <link rel="preload" href="/assets/fonts/lilita-one-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/assets/css/site.css">
+  <link rel="stylesheet" href="{asset('/assets/css/site.css')}">
   <script>document.documentElement.classList.add("js");</script>
+  {JSON_LD if path == "/" else ""}
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to content</a>
   <div class="progress" aria-hidden="true"></div>
   <header class="site-header">
     <div class="wrap">
@@ -64,7 +91,7 @@ def page(path, title, description, body, scripts=(), image="https://battletown.s
     </div>
   </header>
 
-  <main>
+  <main id="main">
 {body}
   </main>
 
@@ -85,8 +112,8 @@ def page(path, title, description, body, scripts=(), image="https://battletown.s
     </div>
   </footer>
 
-  <script src="/assets/js/config.js"></script>
-  <script src="/assets/js/site.js"></script>
+  <script src="{asset('/assets/js/config.js')}"></script>
+  <script src="{asset('/assets/js/site.js')}"></script>
 {extra_scripts}</body>
 </html>
 """
@@ -104,66 +131,161 @@ def ip_box():
 
 
 # ---------------------------------------------------------------- Classes
-# (id, name, accent, motto, line, hall, hearts). Words from classes.yml via the vault class pages.
-CLASSES = [
-    ("acrobat", "Acrobat", "#E0499E", "Own the air", "Sky Dancer. Live upstairs. Vault up, then smash down from the sky.", 1, 9),
-    ("alchemist", "Alchemist", "#9ACD32", "Brew chaos", "Potion Master. Throw flasks. Clouds and weaker melee hits win fights.", 1, 10),
-    ("assassin", "Assassin", "#C77DFF", "Strike from the shadows", "Sneak & Strike. Vanish, relocate, hit from behind.", 2, 10),
-    ("berserker", "Berserker", "#FF3B3B", "Give in to fury", "All-Out Attacker. Hit harder while you fight. You also take more damage.", 2, 10),
-    ("duelist", "Duelist", "#FFFFFF", "Timing is everything", "Counter-Puncher. Wait for their swing, then make them regret it.", 2, 10),
-    ("frostborn", "Frostborn", "#7FD4F5", "Freeze the field", "Field Freezer. Chill them first. Then freeze them solid.", 1, 10),
-    ("geomancer", "Geomancer", "#A855F7", "Shape the land", "Ground Shaper. Raise walls. Split the ground. Own the map.", 1, 10),
-    ("guardian", "Guardian", "#B87333", "Hold the line", "Human Shield. Tank the hit, then throw them off you.", 2, 10),
-    ("knight", "Knight", "#55FFFF", "Lead the charge", "Frontline Leader. Walk in, take hits, knock them down.", 2, 10),
-    ("lancer", "Lancer", "#D3D47B", "Control the distance", "Reach Fighter. Your spear hits from farther than they expect.", 2, 10),
-    ("necromancer", "Necromancer", "#9AE69A", "Rise again", "Soul Collector. Harvest Souls. Permanent night vision. Save two for a second life.", 1, 9),
-    ("poseidon", "Poseidon", "#39C6A3", "Command the tide", "Water Commander. Pull enemies in, then dash through them faster.", 2, 10),
-    ("pyromancer", "Pyromancer", "#FF8C42", "Let it burn", "Fire Starter. Set the field alight and keep them burning.", 1, 10),
-    ("ranger", "Ranger", "#366B35", "Own the distance", "Long-Range Shooter. Stay far. Mark a target. Hit harder with bow and crossbow.", 2, 10),
-    ("stormcaller", "Stormcaller", "#5C7CFA", "Call the storm", "Lightning Bringer. Zap several enemies, then finish with your trident.", 1, 10),
-    ("warden", "Warden", "#C9812E", "Set the rules", "Ability Breaker. Stop their special moves. You pick who gets shut down.", 1, 10),
-]
+# Read from the game itself: ClassCards.java (the Class Hall card for every
+# class) and classes.yml (max health).
+
+HALLS = {"Warriors Hall": "Warriors & Hunters", "Mages Hall": "Mages & Specialists"}
 
 
-def accent(cid, colour):
+def _balanced(text, i):
+    """Index just past the ")" that closes the "(" at text[i], skipping strings."""
+    depth, j, in_str = 0, i, False
+    while j < len(text):
+        c = text[j]
+        if in_str:
+            if c == "\\":
+                j += 1
+            elif c == '"':
+                in_str = False
+        elif c == '"':
+            in_str = True
+        elif c == "(":
+            depth += 1
+        elif c == ")":
+            depth -= 1
+            if depth == 0:
+                return j + 1
+        j += 1
+    raise ValueError("unbalanced parentheses")
+
+
+def _strings(text):
+    return [java_string(m) for m in re.findall(r'"((?:[^"\\]|\\.)*)"', text)]
+
+
+def parse_class_cards():
+    src = open(CLASS_CARDS_JAVA).read()
+    body = src[src.index("private static Map<String, ClassCard> build()"):]
+    halls = [(m.start(), m.group(1)) for m in re.finditer(r"//[^\n]*\((Warriors Hall|Mages Hall)\)", body)]
+    cards = []
+    for m in re.finditer(r"\bput\(\s*cards,", body):
+        open_at = body.index("(", m.start())
+        block = body[open_at + 1:_balanced(body, open_at) - 1]
+        lists = []
+        for lm in re.finditer(r"List\.of\(", block):
+            if any(a <= lm.start() < b for a, b in lists):
+                continue
+            o = lm.end() - 1
+            lists.append((lm.start(), _balanced(block, o)))
+        head = _strings(block[:lists[0][0]])
+        weapons = _strings(block[lists[0][0]:lists[0][1]])
+        supplies = _strings(block[lists[1][0]:lists[1][1]])
+        abilities = re.findall(r'new Ability\(\s*"((?:[^"\\]|\\.)*)",\s*"((?:[^"\\]|\\.)*)"\s*\)', block[lists[2][0]:lists[2][1]])
+        colour = "#" + re.search(r"0x([0-9A-Fa-f]{6})", block[lists[2][1]:]).group(1).upper()
+        hall = [h for at, h in halls if at < m.start()][-1]
+        cid, name, tagline, role, playstyle = head[:5]
+        cards.append({
+            "id": cid, "name": name, "tagline": tagline, "role": role, "playstyle": playstyle,
+            "weapons": weapons, "supplies": supplies,
+            "abilities": [(java_string(a), java_string(b)) for a, b in abilities],
+            "colour": colour, "hall": hall,
+        })
+    return cards
+
+
+def parse_hearts():
+    hearts, current = {}, None
+    for line in open(CLASSES_YML):
+        top = re.match(r"^  ([a-z_]+):\s*$", line)
+        if top:
+            current = top.group(1)
+            continue
+        health = re.match(r"^\s+max-health:\s*([0-9.]+)", line)
+        if health and current and current not in hearts:
+            hearts[current] = float(health.group(1)) / 2
+    return hearts
+
+
+def java_string(s):
+    return s.replace('\\"', '"').replace("\\\\", "\\")
+
+
+CARDS = parse_class_cards()
+HEARTS = parse_hearts()
+assert len(CARDS) == 16, len(CARDS)
+
+
+def hearts_text(cid):
+    h = HEARTS.get(cid, 10)
+    return f"{h:g} hearts"
+
+
+def weapon_name(w):
+    """"Oathkeeper [Iron Sword]" -> ("Oathkeeper", "Iron Sword")."""
+    m = re.match(r"(.*?)\s*\[(.*)\]$", w)
+    return (m.group(1), m.group(2)) if m else (w, "")
+
+
+def accent(card):
     # Ranger's dark green needs a lighter tint to read on black.
-    return "#5FAE5D" if cid == "ranger" else colour
+    return "#5FAE5D" if card["id"] == "ranger" else card["colour"]
+
+
+def motto(card):
+    return card["tagline"].capitalize()
 
 
 def class_tiles():
     tiles = []
-    for cid, name, colour, motto, line, hall, hearts in CLASSES:
-        tiles.append(f"""          <a class="class-tile" href="/classes/#{cid}" style="--accent: {accent(cid, colour)}">
-            <img src="/assets/img/classes/{cid}-thumb.webp" alt="" loading="lazy" width="480" height="270">
-            <span class="tile-text"><span class="tile-name">{name}</span><span class="tile-motto">{html.escape(motto)}</span></span>
+    for c in CARDS:
+        tiles.append(f"""          <a class="class-tile" href="/classes/#{c['id']}" style="--accent: {accent(c)}">
+            <img src="/assets/img/classes/{c['id']}-thumb.webp" alt="" loading="lazy" width="480" height="270">
+            <span class="tile-text"><span class="tile-hall">{c['hall']}</span><span class="tile-name">{c['name']}</span><span class="tile-motto">{html.escape(c['tagline'])}</span></span>
           </a>""")
     return "\n".join(tiles)
 
 
 def class_slides():
     slides = []
-    for i, (cid, name, colour, motto, line, hall, hearts) in enumerate(CLASSES):
-        loading = "eager" if i == 0 else "lazy"
-        slides.append(f"""          <article class="class-slide{' is-active' if i == 0 else ''}" id="{cid}" data-id="{cid}" style="--accent: {accent(cid, colour)}">
-            <img src="/assets/img/classes/{cid}.webp" alt="The {name} shrine in a BattleTown Class Hall" loading="{loading}" width="1600" height="900">
+    for i, c in enumerate(CARDS):
+        weapons = "".join(
+            f"<li><strong>{html.escape(n)}</strong>{(' · ' + html.escape(k)) if k else ''}</li>"
+            for n, k in map(weapon_name, c["weapons"]))
+        supplies = "".join(f"<li>{html.escape(x)}</li>" for x in c["supplies"])
+        abilities = "".join(
+            f'<li><strong>{html.escape(n)}</strong><span>{html.escape(e)}</span></li>' for n, e in c["abilities"])
+        slides.append(f"""          <article class="class-slide{' is-active' if i == 0 else ''}" id="{c['id']}" data-id="{c['id']}" style="--accent: {accent(c)}">
+            <img src="/assets/img/classes/{c['id']}.webp" alt="The {c['name']} shrine in the {c['hall']}" loading="{'eager' if i == 0 else 'lazy'}" width="1600" height="900">
             <div class="slide-text">
-              <p class="slide-hall">Class Hall {hall}</p>
-              <h2 class="slide-name">{name}</h2>
-              <p class="slide-motto">{html.escape(motto)}</p>
-              <p class="slide-line">{html.escape(line)}</p>
-              <ul class="chips"><li>{hearts} hearts</li><li>Own weapons &amp; abilities</li></ul>
+              <p class="slide-hall">{c['hall']} · {html.escape(c['role'])}</p>
+              <h2 class="slide-name">{c['name']}</h2>
+              <p class="slide-motto">{html.escape(c['tagline'])}</p>
+              <p class="slide-line">{html.escape(c['playstyle'])}</p>
+              <ul class="abilities">{abilities}</ul>
+              <ul class="chips"><li>{hearts_text(c['id'])}</li>{weapons}{supplies}</ul>
             </div>
           </article>""")
     return "\n".join(slides)
 
 
 def class_picker():
-    picks = []
-    for i, (cid, name, colour, *_rest) in enumerate(CLASSES):
-        picks.append(f"""          <a href="#{cid}" style="--pick: {accent(cid, colour)}" aria-current="{'true' if i == 0 else 'false'}">
-            <img src="/assets/img/classes/{cid}-thumb.webp" alt="" loading="lazy" width="480" height="270"><span>{name}</span>
-          </a>""")
-    return "\n".join(picks)
+    groups = []
+    for hall, subtitle in HALLS.items():
+        picks = []
+        for c in CARDS:
+            if c["hall"] != hall:
+                continue
+            first = c is CARDS[0]
+            picks.append(f"""            <a href="#{c['id']}" style="--pick: {accent(c)}" aria-current="{'true' if first else 'false'}">
+              <img src="/assets/img/classes/{c['id']}-thumb.webp" alt="" loading="lazy" width="480" height="270"><span>{c['name']}</span>
+            </a>""")
+        groups.append(f"""          <div class="picker-group">
+            <p class="picker-hall"><strong>{hall}</strong> {subtitle}</p>
+            <div class="picker">
+{chr(10).join(picks)}
+            </div>
+          </div>""")
+    return "\n".join(groups)
 
 
 # ---------------------------------------------------------------- Icons (inline SVG, drawn for this site)
@@ -194,12 +316,70 @@ def mode_tiles(full):
     return "\n".join(tiles)
 
 
+# ---------------------------------------------------------------- Hub, features, FAQ
+
+PLACES = [
+    ("Battle Plaza", "Step onto a platform to queue for Quick Play, Duel, Free For All, Team Deathmatch or Last Alive."),
+    ("Warriors Hall", "Warriors &amp; Hunters: Knight, Guardian, Berserker, Lancer, Duelist, Ranger, Assassin and Poseidon."),
+    ("Mages Hall", "Mages &amp; Specialists: Warden, Frostborn, Pyromancer, Alchemist, Stormcaller, Necromancer, Geomancer and Acrobat."),
+    ("Cosmetic Shop", "Armour and weapon looks, trails, kill and victory effects, companions, Movement and Medallions."),
+    ("Creative Shop", "Buy a Map, then build your own arena in Creative."),
+    ("Leaderboards", "See who's on top, from kills and wins to the best builders."),
+    ("Sky Spirals", "Four parkour climbs with a timer and medals. Type <code>/sky</code>."),
+]
+
+FEATURES = [
+    ("1 → 100", "Rank up", "Level up from 1 to 100 by playing. Rewards are earned, never sold."),
+    ("16", "Hidden Relics", "Sixteen relics are hidden around the Hub. How many can you find?"),
+    ("$1,000", "Map royalties", "Builders earn BattleBucks every time a public match on their Map finishes."),
+    ("Weekly", "Map of the Week", "The best Community Map gets the spotlight. Type <code>/mapweek</code>."),
+    ("2v2 · 4v4", "Parties", "Team up with friends with <code>/party</code> and queue Team Deathmatch together."),
+    ("Voice", "Proximity voice", "Talk to players near you with the Simple Voice Chat mod."),
+]
+
+FAQ = [
+    ("Is BattleTown free?", "Yes, it's free to play. The store sells cosmetics, BattleBucks and XP Boosts."),
+    ("Which Minecraft do I need?", "Minecraft: Java Edition 26.3. Bedrock isn't supported."),
+    ("Do I need mods?", "No. The BattleTown resource pack downloads when you join. Performance mods (Sodium, Lithium, Iris), Simple Voice Chat, and the Lunar, Feather and LabyMod clients are allowed. Mods that give an advantage are not."),
+    ("Is it pay-to-win?", "No. Nothing in the store changes a fight. XP Boosts only speed up rank XP, and BattleBucks buy cosmetics and Maps."),
+    ("When can I play?", "The public alpha opens on 1 December 2026. Join the Discord for news before then."),
+    ("Can I play with friends?", "Yes. Add friends with <code>/friends</code>, team up with <code>/party</code>, and queue together."),
+    ("How old do I have to be?", "13 or older. Under 18s need a parent or guardian to agree to the <a href=\"/rules/#terms\">Terms</a>."),
+]
+
+
+def places():
+    return "\n".join(
+        f"""          <article class="card place tilt reveal" style="--delay: {i * 0.05:.2f}s">
+            <h3>{name}</h3>
+            <p>{text}</p>
+          </article>""" for i, (name, text) in enumerate(PLACES))
+
+
+def features():
+    return "\n".join(
+        f"""          <article class="card feature tilt reveal" style="--delay: {i * 0.06:.2f}s">
+            <p class="big">{big}</p>
+            <h3>{name}</h3>
+            <p>{text}</p>
+          </article>""" for i, (big, name, text) in enumerate(FEATURES))
+
+
+def faq():
+    return "\n".join(
+        f"""          <details>
+            <summary>{q}</summary>
+            <p>{a}</p>
+          </details>""" for q, a in FAQ)
+
+
 # ---------------------------------------------------------------- Home
 
 HERO_SLIDES = ["knight", "stormcaller", "alchemist", "pyromancer", "geomancer", "acrobat"]
+# Only the first slide loads with the page; site.js fetches the rest once it has loaded.
 hero_imgs = "\n".join(
-    '          <img src="/assets/img/classes/%s.webp" alt="" %s width="1600" height="900">'
-    % (c, 'fetchpriority="high"' if i == 0 else 'loading="lazy"')
+    '          <img %s="/assets/img/classes/%s.webp" alt="" %s width="1600" height="900">'
+    % ("src" if i == 0 else "data-src", c, 'fetchpriority="high"' if i == 0 else "")
     for i, c in enumerate(HERO_SLIDES))
 
 TICKER_WORDS = ["16 classes", "4 game modes", "14 official Maps", "Build your own Map", "Earn royalties", "Rank 1 to 100",
@@ -244,7 +424,7 @@ HOME = f"""    <section class="hero">
         <div class="section-head reveal">
           <span class="eyebrow">Choose your fighter</span>
           <h2>16 classes. One crown.</h2>
-          <p class="lead">Every class has its own weapons, armour and abilities. Walk into a Class Hall, step on a pad, and fight your way.</p>
+          <p class="lead">Eight Warriors &amp; Hunters. Eight Mages &amp; Specialists. Each class has its own weapons, armour and two abilities. Step on a class pad in the Warriors Hall or the Mages Hall and fight your way.</p>
         </div>
         <div class="rail reveal">
 {class_tiles()}
@@ -303,6 +483,43 @@ HOME = f"""    <section class="hero">
       </div>
     </section>
 
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">The Hub</span>
+          <h2>Welcome to BattleTown</h2>
+          <p class="lead">Every visit starts in the Hub. Ask a Hub Guide to take you anywhere.</p>
+        </div>
+        <div class="grid places">
+{places()}
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head center reveal">
+          <span class="eyebrow">Always something to chase</span>
+          <h2>More than a match</h2>
+        </div>
+        <div class="grid features">
+{features()}
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="wrap faq-wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">Questions</span>
+          <h2>FAQ</h2>
+        </div>
+        <div class="faq reveal">
+{faq()}
+        </div>
+      </div>
+    </section>
+
     <section class="cta-band" id="join">
       <div class="wrap">
         <div class="reveal">
@@ -324,7 +541,7 @@ CLASSES_BODY = f"""    <section class="page-head">
       <div class="wrap reveal">
         <span class="eyebrow">Choose your fighter</span>
         <h1>Classes</h1>
-        <p class="lead">Walk into a Class Hall in the Hub and step on a class pad to pick one. Every class has its own weapons, armour and abilities, and you can switch between matches.</p>
+        <p class="lead">Sixteen classes in two halls. Walk into the <strong>Warriors Hall</strong> or the <strong>Mages Hall</strong> in the Hub and step on a class pad to pick one. Every class has its own weapons, armour and two abilities, and you can switch between matches.</p>
       </div>
     </section>
 
@@ -335,7 +552,7 @@ CLASSES_BODY = f"""    <section class="page-head">
           <button class="stage-arrow prev" type="button" aria-label="Previous class">‹</button>
           <button class="stage-arrow next" type="button" aria-label="Next class">›</button>
         </div>
-        <nav class="picker" aria-label="Pick a class">
+        <nav class="pickers" aria-label="Pick a class">
 {class_picker()}
         </nav>
       </div>
@@ -413,7 +630,7 @@ MAPS_BODY = f"""    <section class="page-head">
           <li><strong>Build</strong> your arena in Creative, with the build tools.</li>
           <li><strong>Set Battle Spawns</strong> so a full match can play on it, then test it.</li>
           <li><strong>Send it to BattleTown.</strong> A curator plays it and decides.</li>
-          <li><strong>Get approved</strong> and your Map shows up in public Map votes, with your name on it.</li>
+          <li><strong>Get approved</strong> and it becomes a Community Map in public Map votes, with your name on it.</li>
           <li><strong>Earn royalties:</strong> $1,000 BattleBucks every time a public match on your Map finishes.</li>
         </ol>
       </div>
@@ -479,9 +696,9 @@ STORE_BODY = f"""    <section class="page-head">
         </div>
 
         <div class="callout" id="store-coming-soon">
-          <p><strong>Buy in game.</strong> Join <code>{ADDRESS}</code> and type <code>/buy</code>. Checkout is handled by Tebex, and we never see your card details.</p>
+          <p><strong>Buy in game.</strong> Join <code>{ADDRESS}</code> and type <code>/store</code>. Checkout is handled by Tebex, and we never see your card details.</p>
         </div>
-        <noscript><p>The store needs JavaScript. You can also buy in game with <code>/buy</code>.</p></noscript>
+        <noscript><p>The store needs JavaScript. You can also buy in game with <code>/store</code>.</p></noscript>
       </div>
     </section>
 """
@@ -643,4 +860,13 @@ page("/store/", "Store", "The BattleTown store: BattleBucks, XP Boosts, Class Co
 page("/store/thanks/", "Thank you", "Thanks for supporting BattleTown.", THANKS_BODY)
 page("/rules/", "Rules & Terms", "BattleTown Server Rules, Terms of Service and Privacy Policy.", RULES_BODY)
 page("/404", "Page not found", "Page not found.", NOT_FOUND)
-print("ok", sum(len(v) for v in docs.values()), "rule blocks")
+with open(os.path.join(SITE, "sitemap.xml"), "w") as f:
+    f.write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n')
+    for path in PAGES:
+        f.write(f"  <url><loc>{SITE_URL}{path}</loc></url>\n")
+    f.write("</urlset>\n")
+
+with open(os.path.join(SITE, "robots.txt"), "w") as f:
+    f.write(f"User-agent: *\nAllow: /\nDisallow: /store/thanks/\n\nSitemap: {SITE_URL}/sitemap.xml\n")
+
+print("ok", sum(len(v) for v in docs.values()), "rule blocks,", len(CARDS), "class cards,", len(PAGES), "pages in sitemap")

@@ -170,6 +170,40 @@ def crop_to(im, width, height):
     return im.crop((left, top, left + width, top + height))
 
 
+def social_card():
+    """1200x630 link preview: a graded Class Hall, the logo exactly as drawn, the title and address."""
+    from PIL import ImageChops
+    width, height = 1200, 630
+    back = crop_to(Image.open(os.path.join(OUT, "classes", "knight.webp")).convert("RGB"), width, height)
+    a = np.asarray(back).astype(np.float32)
+    ramp = np.linspace(0.25, 0.85, width)[None, :, None]
+    back = Image.fromarray((a * ramp).astype(np.uint8)).convert("RGBA")
+
+    # The logo has a black background; "lighter" keeps every logo pixel as drawn.
+    logo = Image.open(os.path.expanduser("~/Documents/BattleTown-Plugin/assets/battletown-logo-4k-transparent.png")).convert("RGB").resize((430, 430), Image.LANCZOS)
+    region = back.crop((40, 100, 470, 530)).convert("RGB")
+    back.paste(ImageChops.lighter(region, logo), (40, 100))
+
+    title = gold_title("BATTLETOWN", 120, 680)
+    back.alpha_composite(title, (480, 140))
+    font = ImageFont.truetype(FONT, 40)
+    draw = ImageDraw.Draw(back)
+    draw.text((510, 330), "16 CLASSES · 4 GAME MODES", font=font, fill=(244, 239, 228, 255))
+    draw.text((510, 385), "BUILD YOUR OWN MAPS", font=font, fill=(244, 239, 228, 255))
+    draw.rounded_rectangle([505, 455, 1125, 525], 14, outline=(245, 184, 46, 255), width=4, fill=(10, 10, 14, 230))
+    draw.text((530, 466), "play.battletown.store", font=ImageFont.truetype(FONT, 44), fill=(255, 212, 92, 255))
+    back.convert("RGB").save(os.path.join(OUT, "social-card.jpg"), quality=88)
+    print("built social-card")
+
+
+def favicon():
+    icon = Image.open(os.path.join(OUT, "icon-192.png")).convert("RGBA")
+    icon.save(os.path.join(SITE, "favicon.ico"), sizes=[(16, 16), (32, 32), (48, 48)])
+    print("built favicon.ico")
+
+
 if __name__ == "__main__":
     classes()
     bundles_banner()
+    social_card()
+    favicon()
