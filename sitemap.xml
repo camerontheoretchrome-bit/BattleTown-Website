@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://battletown.store/</loc></url>
+  <url><loc>https://battletown.store/leaderboards/</loc></url>
+  <url><loc>https://battletown.store/player/</loc></url>
   <url><loc>https://battletown.store/classes/</loc></url>
   <url><loc>https://battletown.store/modes/</loc></url>
   <url><loc>https://battletown.store/maps/</loc></url>

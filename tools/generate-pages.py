@@ -29,7 +29,7 @@ SITE_URL = "https://battletown.store"
 PAGES = []
 
 NAV = [("/", "Home"), ("/classes/", "Classes"), ("/modes/", "Game modes"),
-       ("/maps/", "Maps"), ("/store/", "Store"), ("/rules/", "Rules")]
+       ("/maps/", "Maps"), ("/leaderboards/", "Leaderboards"), ("/store/", "Store"), ("/rules/", "Rules")]
 
 DISCORD = "https://discord.gg/TJ5wBJYCc"
 ADDRESS = "play.battletown.store"
@@ -408,6 +408,7 @@ HOME = f"""    <section class="hero">
           <span class="pill" data-countdown="{ALPHA_START}"><span class="countdown-label">Public alpha in</span> <span class="countdown"></span></span>
           <span class="pill">Minecraft <strong>Java 26.3</strong></span>
         </div>
+        <div class="live-row live-summary" data-live-summary hidden></div>
 
         <div class="btn-row">
           <a class="btn" href="#join">How to join</a>
@@ -727,6 +728,45 @@ THANKS_BODY = f"""    <section class="page-head">
     <script>try {{ localStorage.removeItem("bt-store-basket"); }} catch (e) {{}}</script>
 """
 
+# ---------------------------------------------------------------- Live stats (phase 3)
+
+SEARCH_FORM = """<form class="store-name-row player-search" data-player-search role="search">
+            <input type="text" name="name" placeholder="Search a player…" aria-label="Minecraft name" autocapitalize="off" autocorrect="off" spellcheck="false" maxlength="16" required>
+            <button class="copy-btn" type="submit">Find</button>
+          </form>"""
+
+LEADERBOARDS_BODY = f"""    <section class="page-head">
+      <div class="page-head-art" style="background-image: url('/assets/img/classes/stormcaller.webp')"></div>
+      <div class="wrap reveal">
+        <span class="eyebrow">Live from the Hub</span>
+        <h1>Leaderboards</h1>
+        <p class="lead">The same boards that stand in the Hub's halls of fame, updated about every minute. Tap a name to see their profile.</p>
+        {SEARCH_FORM}
+      </div>
+    </section>
+
+    <section class="section-tight">
+      <div class="wrap" id="leaderboards">
+        <p class="store-loading">Loading the leaderboards…</p>
+      </div>
+    </section>
+"""
+
+
+def classes_json():
+    import json
+    return json.dumps({c["id"]: {"name": c["name"], "colour": accent(c)} for c in CARDS}, separators=(",", ":"))
+
+
+PLAYER_BODY = f"""    <section class="section-tight">
+      <div class="wrap">
+        <div class="profile-search">{SEARCH_FORM}</div>
+        <div id="profile"><p class="store-loading">Loading player…</p></div>
+      </div>
+    </section>
+    <script>window.BT_CLASSES = {classes_json()};</script>
+"""
+
 # ---------------------------------------------------------------- Rules
 
 
@@ -835,12 +875,20 @@ RULES_BODY = f"""    <section class="page-head">
         <p>battletown.store is a plain website hosted on GitHub Pages. It sets no cookies and has no ads or trackers. GitHub may log your IP address when you visit, to run and protect its service.</p>
         <p>The home page asks mcsrvstat.us, a public server-status service, whether the BattleTown server is online, so your browser contacts that service when you visit it.</p>
         <p>The Store page talks to Tebex to show what's for sale and to keep your basket. It sends Tebex the Minecraft name you type there, and your browser remembers that name and your basket on your own device. Payment happens on Tebex's checkout, under Tebex's own terms and privacy policy.</p>
+        <p>The Leaderboards and player pages read BattleTown's own public stats feed (api.battletown.store). Player pages show Minecraft skins rendered by Crafatar, a third-party service, so your browser contacts it when you open one.</p>
         <p>If you turn on the music, your browser remembers that for the rest of your visit. Music never plays until you tap it.</p>
       </div>
     </section>
 """
 
-NOT_FOUND = """    <section class="hero" style="min-height: 70vh">
+NOT_FOUND = """    <script>
+      (function () {
+        // battletown.store/player/NAME is a share-friendly profile link.
+        var m = location.pathname.match(/^\\/player\\/([A-Za-z0-9_]{1,16})\\/?$/);
+        if (m) { location.replace("/player/?name=" + m[1]); }
+      })();
+    </script>
+    <section class="hero" style="min-height: 70vh">
       <canvas class="embers" aria-hidden="true"></canvas>
       <div class="wrap">
         <h1>Lost in the arena</h1>
@@ -850,7 +898,12 @@ NOT_FOUND = """    <section class="hero" style="min-height: 70vh">
     </section>
 """
 
-page("/", None, "BattleTown: class-based PvP arenas for Minecraft Java 26.3. Join at play.battletown.store. Public alpha 1 December 2026.", HOME)
+page("/", None, "BattleTown: class-based PvP arenas for Minecraft Java 26.3. Join at play.battletown.store. Public alpha 1 December 2026.", HOME,
+     scripts=("/assets/js/stats.js",))
+page("/leaderboards/", "Leaderboards", "Live BattleTown leaderboards: Champions, Records and Builders, straight from the Hub.", LEADERBOARDS_BODY,
+     scripts=("/assets/js/stats.js",))
+page("/player/", "Player", "A BattleTown player's profile: rank, wins, kills, best classes and leaderboard places.", PLAYER_BODY,
+     scripts=("/assets/js/stats.js",))
 page("/classes/", "Classes", "All 16 BattleTown classes, from Acrobat to Warden.", CLASSES_BODY, scripts=("/assets/js/classes.js",),
      image="https://battletown.store/assets/img/classes/knight.webp")
 page("/modes/", "Game modes", "BattleTown game modes: Duel, Free For All, Team Deathmatch and Last Alive.", MODES_BODY)
