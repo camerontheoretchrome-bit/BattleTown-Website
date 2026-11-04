@@ -5,81 +5,78 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Game modes · BattleTown</title>
   <meta name="description" content="BattleTown game modes: Duel, Free For All, Team Deathmatch and Last Alive.">
-  <meta name="theme-color" content="#0a0a0d">
+  <meta name="theme-color" content="#07070a">
+  <meta property="og:type" content="website">
   <meta property="og:title" content="Game modes · BattleTown">
   <meta property="og:description" content="BattleTown game modes: Duel, Free For All, Team Deathmatch and Last Alive.">
   <meta property="og:image" content="https://battletown.store/assets/img/logo-512.png">
   <meta property="og:url" content="https://battletown.store/modes/">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="/assets/img/icon-32.png" sizes="32x32">
   <link rel="apple-touch-icon" href="/assets/img/icon-180.png">
+  <link rel="preload" href="/assets/fonts/lilita-one-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/assets/css/site.css">
+  <script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
+  <div class="progress" aria-hidden="true"></div>
   <header class="site-header">
     <div class="wrap">
-      <a class="brand" href="/"><img src="/assets/img/icon-192.png" alt="" width="36" height="36">BattleTown</a>
-      <nav class="nav" aria-label="Main">
+      <a class="brand" href="/"><img src="/assets/img/icon-192.png" alt="" width="38" height="38">BattleTown</a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Menu"><span></span><span></span><span></span></button>
+      <nav class="nav" id="main-nav" aria-label="Main">
         <a href="/">Home</a>
         <a href="/classes/">Classes</a>
         <a href="/modes/">Game modes</a>
         <a href="/maps/">Maps</a>
         <a href="/store/">Store</a>
         <a href="/rules/">Rules</a>
+        <a class="nav-play" href="/#join">Play now</a>
       </nav>
     </div>
   </header>
 
   <main>
     <section class="page-head">
-      <div class="wrap">
-        <h1>Game modes</h1>
-        <p>Step onto a Battle Plaza platform in the Hub, or type <code>/play</code>. Quick Play puts you in whichever mode fills first. Players vote on the Map, then the fight starts.</p>
+      <div class="page-head-art" style="background-image: url('/assets/img/classes/knight.webp')"></div>
+      <div class="wrap reveal">
+        <span class="eyebrow">Game modes</span>
+        <h1>Pick your fight</h1>
+        <p class="lead">Step onto a Battle Plaza platform in the Hub, or type <code>/play</code>. Quick Play puts you in whichever mode fills first. Players vote on the Map, then the fight starts.</p>
       </div>
     </section>
 
-    <section class="section">
+    <section class="section-tight">
       <div class="wrap">
         <div class="grid grid-2">
-          <article class="card mode-card">
+          <article class="card mode-tile tilt reveal" style="--delay: 0.00s">
+            <svg class="icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 10l28 28M10 10h8v8M54 10L26 38M54 10h-8v8M34 42l-6 6 6 6M30 42l6 6-6 6M20 44l-8 8M44 44l8 8"/></svg>
+            <p class="big">1v1</p>
             <h3>Duel</h3>
-            <p class="players">1 vs 1</p>
-            <ul>
-              <li>Best of 3 rounds. Win 2 rounds to win the Duel.</li>
-              <li>Each round lasts up to 90 seconds.</li>
-              <li>If time runs out, the player with more health left wins the round.</li>
-            </ul>
+            <ul><li>Best of 3 rounds. Win 2 rounds to win the Duel.</li><li>Each round lasts up to 90 seconds.</li><li>If time runs out, the player with more health left wins the round.</li></ul>
           </article>
-          <article class="card mode-card">
+          <article class="card mode-tile tilt reveal" style="--delay: 0.08s">
+            <svg class="icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M32 6l5 15 15-5-8 13 14 6-15 4 5 15-14-8-2 12-2-12-14 8 5-15-15-4 14-6-8-13 15 5z"/></svg>
+            <p class="big">3–8</p>
             <h3>Free For All</h3>
-            <p class="players">3 to 8 players</p>
-            <ul>
-              <li>Everyone for themselves. You respawn after 5 seconds.</li>
-              <li>First to 10 kills wins, or most kills after 6 minutes.</li>
-              <li>No teaming.</li>
-            </ul>
+            <ul><li>Everyone for themselves. You respawn after 5 seconds.</li><li>First to 10 kills wins, or most kills after 6 minutes.</li><li>No teaming.</li></ul>
           </article>
-          <article class="card mode-card">
+          <article class="card mode-tile tilt reveal" style="--delay: 0.16s">
+            <svg class="icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round" aria-hidden="true"><path d="M8 14l14-6 14 6v14c0 12-8 20-14 24C16 48 8 40 8 28z"/><path d="M28 18l14-6 14 6v14c0 12-8 20-14 24-3-2-6-4-8-7"/></svg>
+            <p class="big">2v2 · 4v4</p>
             <h3>Team Deathmatch</h3>
-            <p class="players">2 vs 2 or 4 vs 4</p>
-            <ul>
-              <li>Blue team against Red team. You respawn after 5 seconds.</li>
-              <li>First team to 10 kills (2v2) or 20 kills (4v4) wins.</li>
-              <li>Bring your friends: party up and queue together.</li>
-            </ul>
+            <ul><li>Blue team against Red team. You respawn after 5 seconds.</li><li>First team to 10 kills (2v2) or 20 kills (4v4) wins.</li><li>Bring your friends: party up and queue together.</li></ul>
           </article>
-          <article class="card mode-card">
+          <article class="card mode-tile tilt reveal" style="--delay: 0.24s">
+            <svg class="icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round" aria-hidden="true"><path d="M8 48l4-30 12 12 8-18 8 18 12-12 4 30z"/><path d="M8 56h48"/><circle cx="32" cy="38" r="3" fill="currentColor"/></svg>
+            <p class="big">4 · 8</p>
             <h3>Last Alive</h3>
-            <p class="players">4 or 8 players</p>
-            <ul>
-              <li>One life each. The last fighter standing wins.</li>
-              <li>Out of the fight? Watch the rest of the match as a spectator.</li>
-              <li>No teaming.</li>
-            </ul>
+            <ul><li>One life each. The last fighter standing wins.</li><li>Out of the fight? Watch the rest of the match as a spectator.</li><li>No teaming.</li></ul>
           </article>
         </div>
 
-        <div class="callout">
-          <strong>Every finished public match pays BattleBucks and rank XP.</strong> Win, get kills and assists, and spend it on cosmetics or your own Map.
+        <div class="callout reveal">
+          <p><strong>Every finished public match pays BattleBucks and rank XP.</strong> Win, get kills and assists, and spend it on cosmetics or your own Map.</p>
         </div>
       </div>
     </section>
@@ -88,9 +85,13 @@
 
   <footer class="site-footer">
     <div class="wrap">
-      <p>BattleTown · <code>play.battletown.store</code> · Minecraft Java 26.3</p>
+      <div class="footer-brand">
+        <img src="/assets/img/icon-192.png" alt="" width="52" height="52">
+        <p><strong>BattleTown</strong><br><code>play.battletown.store</code> · Minecraft Java 26.3</p>
+      </div>
       <nav aria-label="Footer">
         <a href="https://discord.gg/TJ5wBJYCc">Discord</a>
+        <a href="/store/">Store</a>
         <a href="/rules/">Server Rules</a>
         <a href="/rules/#terms">Terms</a>
         <a href="/rules/#privacy">Privacy</a>

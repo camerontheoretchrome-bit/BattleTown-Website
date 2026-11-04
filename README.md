@@ -15,6 +15,17 @@ The public website at **https://battletown.store**, served by GitHub Pages from 
 | `/rules/` | `rules/index.html` | Server Rules (`#rules`), Terms (`#terms`), Privacy (`#privacy`) |
 | 404 | `404.html` | Page not found |
 
+## Look and feel (4 Nov redesign)
+
+- **Type and colour:** gold block headings in Lilita One (self-hosted in `assets/fonts/`, OFL licence) with a stepped brown extrusion that echoes the logo, on near-black with ruby accents.
+- **Art:** `assets/img/classes/` are crops of Cameron's in-game Class Hall shrine shots (`~/Documents/BattleTown Art/IG POSTS/<Class>/`). `assets/img/art/` holds his store banners and category art (`STORE BACKGROUNDS`, `DEALS`, `COLLECTIONS`, `XP BOOSTS`). The `CONCEPT ART` folder is screenshots of another server and must not be used.
+- **Motion (`assets/js/site.js`):** rising ember particles, a crossfading class-hall slideshow behind the hero, scroll reveals, pointer tilt on cards, a scroll progress bar, page-to-page view transitions, and a coin burst on Copy. Everything turns off for visitors who ask their system for reduced motion.
+- **Live bits:** a server status pill (public `api.mcsrvstat.us`) and a countdown to the public alpha (1 Dec 2026, midnight Ottawa).
+- **Music:** four BattleTown Hub tracks in `assets/audio/`. They play only after the visitor taps the player, and keep playing across pages within the same visit.
+- **Classes page (`assets/js/classes.js`):** a showcase that shows one class at a time, recolours to its accent, and supports arrows, keys, swipe and `#class` links. Without JavaScript the classes stack.
+- **Store:** category banners, a coin that flies into the basket, and a basket button on phones.
+- **Phones:** the nav becomes a full-screen menu.
+
 ## Changing a page
 
 Every HTML page is written by `tools/generate-pages.py`. Edit the words there, then run:
@@ -27,7 +38,7 @@ Commit the script and the HTML together. Do not hand-edit the HTML files, or the
 
 The Rules, Terms and Privacy text is read from the plugin's `RulesDocuments.java` (`~/Documents/BattleTown-Plugin/src/main/java/me/camerontheoret/battletown/hub/rules/`). When `/rules` changes in game, run the script again so the website matches.
 
-Styles are in `assets/css/site.css` and the shared script (copy button, current-page highlight) is in `assets/js/site.js`.
+Styles are in `assets/css/site.css`. The shared script (effects, copy button, menu, status, countdown, music) is `assets/js/site.js`.
 
 ## Logo
 

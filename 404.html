@@ -5,35 +5,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Page not found · BattleTown</title>
   <meta name="description" content="Page not found.">
-  <meta name="theme-color" content="#0a0a0d">
+  <meta name="theme-color" content="#07070a">
+  <meta property="og:type" content="website">
   <meta property="og:title" content="Page not found · BattleTown">
   <meta property="og:description" content="Page not found.">
   <meta property="og:image" content="https://battletown.store/assets/img/logo-512.png">
   <meta property="og:url" content="https://battletown.store/404">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="/assets/img/icon-32.png" sizes="32x32">
   <link rel="apple-touch-icon" href="/assets/img/icon-180.png">
+  <link rel="preload" href="/assets/fonts/lilita-one-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/assets/css/site.css">
+  <script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
+  <div class="progress" aria-hidden="true"></div>
   <header class="site-header">
     <div class="wrap">
-      <a class="brand" href="/"><img src="/assets/img/icon-192.png" alt="" width="36" height="36">BattleTown</a>
-      <nav class="nav" aria-label="Main">
+      <a class="brand" href="/"><img src="/assets/img/icon-192.png" alt="" width="38" height="38">BattleTown</a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Menu"><span></span><span></span><span></span></button>
+      <nav class="nav" id="main-nav" aria-label="Main">
         <a href="/">Home</a>
         <a href="/classes/">Classes</a>
         <a href="/modes/">Game modes</a>
         <a href="/maps/">Maps</a>
         <a href="/store/">Store</a>
         <a href="/rules/">Rules</a>
+        <a class="nav-play" href="/#join">Play now</a>
       </nav>
     </div>
   </header>
 
   <main>
-    <section class="page-head">
+    <section class="hero" style="min-height: 70vh">
+      <canvas class="embers" aria-hidden="true"></canvas>
       <div class="wrap">
-        <h1>Page not found</h1>
-        <p>That page doesn't exist. <a href="/">Back to the home page</a>.</p>
+        <h1>Lost in the arena</h1>
+        <p class="lead" style="margin: 0 auto 26px">That page doesn't exist.</p>
+        <div class="btn-row"><a class="btn" href="/">Back to the Hub</a></div>
       </div>
     </section>
 
@@ -41,9 +50,13 @@
 
   <footer class="site-footer">
     <div class="wrap">
-      <p>BattleTown · <code>play.battletown.store</code> · Minecraft Java 26.3</p>
+      <div class="footer-brand">
+        <img src="/assets/img/icon-192.png" alt="" width="52" height="52">
+        <p><strong>BattleTown</strong><br><code>play.battletown.store</code> · Minecraft Java 26.3</p>
+      </div>
       <nav aria-label="Footer">
         <a href="https://discord.gg/TJ5wBJYCc">Discord</a>
+        <a href="/store/">Store</a>
         <a href="/rules/">Server Rules</a>
         <a href="/rules/#terms">Terms</a>
         <a href="/rules/#privacy">Privacy</a>

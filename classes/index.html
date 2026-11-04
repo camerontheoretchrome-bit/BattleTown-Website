@@ -5,138 +5,262 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Classes · BattleTown</title>
   <meta name="description" content="All 16 BattleTown classes, from Acrobat to Warden.">
-  <meta name="theme-color" content="#0a0a0d">
+  <meta name="theme-color" content="#07070a">
+  <meta property="og:type" content="website">
   <meta property="og:title" content="Classes · BattleTown">
   <meta property="og:description" content="All 16 BattleTown classes, from Acrobat to Warden.">
-  <meta property="og:image" content="https://battletown.store/assets/img/logo-512.png">
+  <meta property="og:image" content="https://battletown.store/assets/img/classes/knight.webp">
   <meta property="og:url" content="https://battletown.store/classes/">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="/assets/img/icon-32.png" sizes="32x32">
   <link rel="apple-touch-icon" href="/assets/img/icon-180.png">
+  <link rel="preload" href="/assets/fonts/lilita-one-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/assets/css/site.css">
+  <script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
+  <div class="progress" aria-hidden="true"></div>
   <header class="site-header">
     <div class="wrap">
-      <a class="brand" href="/"><img src="/assets/img/icon-192.png" alt="" width="36" height="36">BattleTown</a>
-      <nav class="nav" aria-label="Main">
+      <a class="brand" href="/"><img src="/assets/img/icon-192.png" alt="" width="38" height="38">BattleTown</a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Menu"><span></span><span></span><span></span></button>
+      <nav class="nav" id="main-nav" aria-label="Main">
         <a href="/">Home</a>
         <a href="/classes/">Classes</a>
         <a href="/modes/">Game modes</a>
         <a href="/maps/">Maps</a>
         <a href="/store/">Store</a>
         <a href="/rules/">Rules</a>
+        <a class="nav-play" href="/#join">Play now</a>
       </nav>
     </div>
   </header>
 
   <main>
     <section class="page-head">
-      <div class="wrap">
+      <div class="wrap reveal">
+        <span class="eyebrow">Choose your fighter</span>
         <h1>Classes</h1>
-        <p>BattleTown has 16 classes. Walk into a Class Hall in the Hub and step on a class pad to pick one. Every class has its own weapons, armour and abilities, and you can switch between matches.</p>
+        <p class="lead">Walk into a Class Hall in the Hub and step on a class pad to pick one. Every class has its own weapons, armour and abilities, and you can switch between matches.</p>
       </div>
     </section>
 
-    <section class="section">
-      <div class="wrap">
-        <div class="grid">
-          <article class="card class-card" id="acrobat" style="--accent: #E0499E">
-            <h3>Acrobat</h3>
-            <p class="motto">Own the air</p>
-            <p>Sky Dancer. Live upstairs. Vault up, then smash down from the sky.</p>
-            <p class="meta">Class Hall 1 · 9 hearts</p>
+    <section class="section-tight">
+      <div class="wrap showcase">
+        <div class="stage" aria-roledescription="carousel" aria-label="Classes">
+          <article class="class-slide is-active" id="acrobat" data-id="acrobat" style="--accent: #E0499E">
+            <img src="/assets/img/classes/acrobat.webp" alt="The Acrobat shrine in a BattleTown Class Hall" loading="eager" width="1600" height="900">
+            <div class="slide-text">
+              <p class="slide-hall">Class Hall 1</p>
+              <h2 class="slide-name">Acrobat</h2>
+              <p class="slide-motto">Own the air</p>
+              <p class="slide-line">Sky Dancer. Live upstairs. Vault up, then smash down from the sky.</p>
+              <ul class="chips"><li>9 hearts</li><li>Own weapons &amp; abilities</li></ul>
+            </div>
           </article>
-          <article class="card class-card" id="alchemist" style="--accent: #9ACD32">
-            <h3>Alchemist</h3>
-            <p class="motto">Brew chaos</p>
-            <p>Potion Master. Throw flasks. Clouds and weaker melee hits win fights.</p>
-            <p class="meta">Class Hall 1 · 10 hearts</p>
+          <article class="class-slide" id="alchemist" data-id="alchemist" style="--accent: #9ACD32">
+            <img src="/assets/img/classes/alchemist.webp" alt="The Alchemist shrine in a BattleTown Class Hall" loading="lazy" width="1600" height="900">
+            <div class="slide-text">
+              <p class="slide-hall">Class Hall 1</p>
+              <h2 class="slide-name">Alchemist</h2>
+              <p class="slide-motto">Brew chaos</p>
+              <p class="slide-line">Potion Master. Throw flasks. Clouds and weaker melee hits win fights.</p>
+              <ul class="chips"><li>10 hearts</li><li>Own weapons &amp; abilities</li></ul>
+            </div>
           </article>
-          <article class="card class-card" id="assassin" style="--accent: #C77DFF">
-            <h3>Assassin</h3>
-            <p class="motto">Strike from the shadows</p>
-            <p>Sneak &amp; Strike. Vanish, relocate, hit from behind.</p>
-            <p class="meta">Class Hall 2 · 10 hearts</p>
+          <article class="class-slide" id="assassin" data-id="assassin" style="--accent: #C77DFF">
+            <img src="/assets/img/classes/assassin.webp" alt="The Assassin shrine in a BattleTown Class Hall" loading="lazy" width="1600" height="900">
+            <div class="slide-text">
+              <p class="slide-hall">Class Hall 2</p>
+              <h2 class="slide-name">Assassin</h2>
+              <p class="slide-motto">Strike from the shadows</p>
+              <p class="slide-line">Sneak &amp; Strike. Vanish, relocate, hit from behind.</p>
+              <ul class="chips"><li>10 hearts</li><li>Own weapons &amp; abilities</li></ul>
+            </div>
           </article>
-          <article class="card class-card" id="berserker" style="--accent: #FF3B3B">
-            <h3>Berserker</h3>
-            <p class="motto">Give in to fury</p>
-            <p>All-Out Attacker. Hit harder while you fight. You also take more damage.</p>
-            <p class="meta">Class Hall 2 · 10 hearts</p>
+          <article class="class-slide" id="berserker" data-id="berserker" style="--accent: #FF3B3B">
+            <img src="/assets/img/classes/berserker.webp" alt="The Berserker shrine in a BattleTown Class Hall" loading="lazy" width="1600" height="900">
+            <div class="slide-text">
+              <p class="slide-hall">Class Hall 2</p>
+              <h2 class="slide-name">Berserker</h2>
+              <p class="slide-motto">Give in to fury</p>
+              <p class="slide-line">All-Out Attacker. Hit harder while you fight. You also take more damage.</p>
+              <ul class="chips"><li>10 hearts</li><li>Own weapons &amp; abilities</li></ul>
+            </div>
           </article>
-          <article class="card class-card" id="duelist" style="--accent: #FFFFFF">
-            <h3>Duelist</h3>
-            <p class="motto">Timing is everything</p>
-            <p>Counter-Puncher. Wait for their swing, then make them regret it.</p>
-            <p class="meta">Class Hall 2 · 10 hearts</p>
+          <article class="class-slide" id="duelist" data-id="duelist" style="--accent: #FFFFFF">
+            <img src="/assets/img/classes/duelist.webp" alt="The Duelist shrine in a BattleTown Class Hall" loading="lazy" width="1600" height="900">
+            <div class="slide-text">
+              <p class="slide-hall">Class Hall 2</p>
+              <h2 class="slide-name">Duelist</h2>
+              <p class="slide-motto">Timing is everything</p>
+              <p class="slide-line">Counter-Puncher. Wait for their swing, then make them regret it.</p>
+              <ul class="chips"><li>10 hearts</li><li>Own weapons &amp; abilities</li></ul>
+            </div>
           </article>
-          <article class="card class-card" id="frostborn" style="--accent: #7FD4F5">
-            <h3>Frostborn</h3>
-            <p class="motto">Freeze the field</p>
-            <p>Field Freezer. Chill them first. Then freeze them solid.</p>
-            <p class="meta">Class Hall 1 · 10 hearts</p>
+          <article class="class-slide" id="frostborn" data-id="frostborn" style="--accent: #7FD4F5">
+            <img src="/assets/img/classes/frostborn.webp" alt="The Frostborn shrine in a BattleTown Class Hall" loading="lazy" width="1600" height="900">
+            <div class="slide-text">
+              <p class="slide-hall">Class Hall 1</p>
+              <h2 class="slide-name">Frostborn</h2>
+              <p class="slide-motto">Freeze the field</p>
+              <p class="slide-line">Field Freezer. Chill them first. Then freeze them solid.</p>
+              <ul class="chips"><li>10 hearts</li><li>Own weapons &amp; abilities</li></ul>
+            </div>
           </article>
-          <article class="card class-card" id="geomancer" style="--accent: #A855F7">
-            <h3>Geomancer</h3>
-            <p class="motto">Shape the land</p>
-            <p>Ground Shaper. Raise walls. Split the ground. Own the map.</p>
-            <p class="meta">Class Hall 1 · 10 hearts</p>
+          <article class="class-slide" id="geomancer" data-id="geomancer" style="--accent: #A855F7">
+            <img src="/assets/img/classes/geomancer.webp" alt="The Geomancer shrine in a BattleTown Class Hall" loading="lazy" width="1600" height="900">
+            <div class="slide-text">
+              <p class="slide-hall">Class Hall 1</p>
+              <h2 class="slide-name">Geomancer</h2>
+              <p class="slide-motto">Shape the land</p>
+              <p class="slide-line">Ground Shaper. Raise walls. Split the ground. Own the map.</p>
+              <ul class="chips"><li>10 hearts</li><li>Own weapons &amp; abilities</li></ul>
+            </div>
           </article>
-          <article class="card class-card" id="guardian" style="--accent: #B87333">
-            <h3>Guardian</h3>
-            <p class="motto">Hold the line</p>
-            <p>Human Shield. Tank the hit, then throw them off you.</p>
-            <p class="meta">Class Hall 2 · 10 hearts</p>
+          <article class="class-slide" id="guardian" data-id="guardian" style="--accent: #B87333">
+            <img src="/assets/img/classes/guardian.webp" alt="The Guardian shrine in a BattleTown Class Hall" loading="lazy" width="1600" height="900">
+            <div class="slide-text">
+              <p class="slide-hall">Class Hall 2</p>
+              <h2 class="slide-name">Guardian</h2>
+              <p class="slide-motto">Hold the line</p>
+              <p class="slide-line">Human Shield. Tank the hit, then throw them off you.</p>
+              <ul class="chips"><li>10 hearts</li><li>Own weapons &amp; abilities</li></ul>
+            </div>
           </article>
-          <article class="card class-card" id="knight" style="--accent: #55FFFF">
-            <h3>Knight</h3>
-            <p class="motto">Lead the charge</p>
-            <p>Frontline Leader. Walk in, take hits, knock them down.</p>
-            <p class="meta">Class Hall 2 · 10 hearts</p>
+          <article class="class-slide" id="knight" data-id="knight" style="--accent: #55FFFF">
+            <img src="/assets/img/classes/knight.webp" alt="The Knight shrine in a BattleTown Class Hall" loading="lazy" width="1600" height="900">
+            <div class="slide-text">
+              <p class="slide-hall">Class Hall 2</p>
+              <h2 class="slide-name">Knight</h2>
+              <p class="slide-motto">Lead the charge</p>
+              <p class="slide-line">Frontline Leader. Walk in, take hits, knock them down.</p>
+              <ul class="chips"><li>10 hearts</li><li>Own weapons &amp; abilities</li></ul>
+            </div>
           </article>
-          <article class="card class-card" id="lancer" style="--accent: #D3D47B">
-            <h3>Lancer</h3>
-            <p class="motto">Control the distance</p>
-            <p>Reach Fighter. Your spear hits from farther than they expect.</p>
-            <p class="meta">Class Hall 2 · 10 hearts</p>
+          <article class="class-slide" id="lancer" data-id="lancer" style="--accent: #D3D47B">
+            <img src="/assets/img/classes/lancer.webp" alt="The Lancer shrine in a BattleTown Class Hall" loading="lazy" width="1600" height="900">
+            <div class="slide-text">
+              <p class="slide-hall">Class Hall 2</p>
+              <h2 class="slide-name">Lancer</h2>
+              <p class="slide-motto">Control the distance</p>
+              <p class="slide-line">Reach Fighter. Your spear hits from farther than they expect.</p>
+              <ul class="chips"><li>10 hearts</li><li>Own weapons &amp; abilities</li></ul>
+            </div>
           </article>
-          <article class="card class-card" id="necromancer" style="--accent: #9AE69A">
-            <h3>Necromancer</h3>
-            <p class="motto">Rise again</p>
-            <p>Soul Collector. Harvest Souls. Permanent night vision. Save two for a second life.</p>
-            <p class="meta">Class Hall 1 · 9 hearts</p>
+          <article class="class-slide" id="necromancer" data-id="necromancer" style="--accent: #9AE69A">
+            <img src="/assets/img/classes/necromancer.webp" alt="The Necromancer shrine in a BattleTown Class Hall" loading="lazy" width="1600" height="900">
+            <div class="slide-text">
+              <p class="slide-hall">Class Hall 1</p>
+              <h2 class="slide-name">Necromancer</h2>
+              <p class="slide-motto">Rise again</p>
+              <p class="slide-line">Soul Collector. Harvest Souls. Permanent night vision. Save two for a second life.</p>
+              <ul class="chips"><li>9 hearts</li><li>Own weapons &amp; abilities</li></ul>
+            </div>
           </article>
-          <article class="card class-card" id="poseidon" style="--accent: #39C6A3">
-            <h3>Poseidon</h3>
-            <p class="motto">Command the tide</p>
-            <p>Water Commander. Pull enemies in, then dash through them faster.</p>
-            <p class="meta">Class Hall 2 · 10 hearts</p>
+          <article class="class-slide" id="poseidon" data-id="poseidon" style="--accent: #39C6A3">
+            <img src="/assets/img/classes/poseidon.webp" alt="The Poseidon shrine in a BattleTown Class Hall" loading="lazy" width="1600" height="900">
+            <div class="slide-text">
+              <p class="slide-hall">Class Hall 2</p>
+              <h2 class="slide-name">Poseidon</h2>
+              <p class="slide-motto">Command the tide</p>
+              <p class="slide-line">Water Commander. Pull enemies in, then dash through them faster.</p>
+              <ul class="chips"><li>10 hearts</li><li>Own weapons &amp; abilities</li></ul>
+            </div>
           </article>
-          <article class="card class-card" id="pyromancer" style="--accent: #FF8C42">
-            <h3>Pyromancer</h3>
-            <p class="motto">Let it burn</p>
-            <p>Fire Starter. Set the field alight and keep them burning.</p>
-            <p class="meta">Class Hall 1 · 10 hearts</p>
+          <article class="class-slide" id="pyromancer" data-id="pyromancer" style="--accent: #FF8C42">
+            <img src="/assets/img/classes/pyromancer.webp" alt="The Pyromancer shrine in a BattleTown Class Hall" loading="lazy" width="1600" height="900">
+            <div class="slide-text">
+              <p class="slide-hall">Class Hall 1</p>
+              <h2 class="slide-name">Pyromancer</h2>
+              <p class="slide-motto">Let it burn</p>
+              <p class="slide-line">Fire Starter. Set the field alight and keep them burning.</p>
+              <ul class="chips"><li>10 hearts</li><li>Own weapons &amp; abilities</li></ul>
+            </div>
           </article>
-          <article class="card class-card" id="ranger" style="--accent: #5FAE5D">
-            <h3>Ranger</h3>
-            <p class="motto">Own the distance</p>
-            <p>Long-Range Shooter. Stay far. Mark a target. Hit harder with bow and crossbow.</p>
-            <p class="meta">Class Hall 2 · 10 hearts</p>
+          <article class="class-slide" id="ranger" data-id="ranger" style="--accent: #5FAE5D">
+            <img src="/assets/img/classes/ranger.webp" alt="The Ranger shrine in a BattleTown Class Hall" loading="lazy" width="1600" height="900">
+            <div class="slide-text">
+              <p class="slide-hall">Class Hall 2</p>
+              <h2 class="slide-name">Ranger</h2>
+              <p class="slide-motto">Own the distance</p>
+              <p class="slide-line">Long-Range Shooter. Stay far. Mark a target. Hit harder with bow and crossbow.</p>
+              <ul class="chips"><li>10 hearts</li><li>Own weapons &amp; abilities</li></ul>
+            </div>
           </article>
-          <article class="card class-card" id="stormcaller" style="--accent: #5C7CFA">
-            <h3>Stormcaller</h3>
-            <p class="motto">Call the storm</p>
-            <p>Lightning Bringer. Zap several enemies, then finish with your trident.</p>
-            <p class="meta">Class Hall 1 · 10 hearts</p>
+          <article class="class-slide" id="stormcaller" data-id="stormcaller" style="--accent: #5C7CFA">
+            <img src="/assets/img/classes/stormcaller.webp" alt="The Stormcaller shrine in a BattleTown Class Hall" loading="lazy" width="1600" height="900">
+            <div class="slide-text">
+              <p class="slide-hall">Class Hall 1</p>
+              <h2 class="slide-name">Stormcaller</h2>
+              <p class="slide-motto">Call the storm</p>
+              <p class="slide-line">Lightning Bringer. Zap several enemies, then finish with your trident.</p>
+              <ul class="chips"><li>10 hearts</li><li>Own weapons &amp; abilities</li></ul>
+            </div>
           </article>
-          <article class="card class-card" id="warden" style="--accent: #C9812E">
-            <h3>Warden</h3>
-            <p class="motto">Set the rules</p>
-            <p>Ability Breaker. Stop their special moves. You pick who gets shut down.</p>
-            <p class="meta">Class Hall 1 · 10 hearts</p>
+          <article class="class-slide" id="warden" data-id="warden" style="--accent: #C9812E">
+            <img src="/assets/img/classes/warden.webp" alt="The Warden shrine in a BattleTown Class Hall" loading="lazy" width="1600" height="900">
+            <div class="slide-text">
+              <p class="slide-hall">Class Hall 1</p>
+              <h2 class="slide-name">Warden</h2>
+              <p class="slide-motto">Set the rules</p>
+              <p class="slide-line">Ability Breaker. Stop their special moves. You pick who gets shut down.</p>
+              <ul class="chips"><li>10 hearts</li><li>Own weapons &amp; abilities</li></ul>
+            </div>
           </article>
+          <button class="stage-arrow prev" type="button" aria-label="Previous class">‹</button>
+          <button class="stage-arrow next" type="button" aria-label="Next class">›</button>
         </div>
+        <nav class="picker" aria-label="Pick a class">
+          <a href="#acrobat" style="--pick: #E0499E" aria-current="true">
+            <img src="/assets/img/classes/acrobat-thumb.webp" alt="" loading="lazy" width="480" height="270"><span>Acrobat</span>
+          </a>
+          <a href="#alchemist" style="--pick: #9ACD32" aria-current="false">
+            <img src="/assets/img/classes/alchemist-thumb.webp" alt="" loading="lazy" width="480" height="270"><span>Alchemist</span>
+          </a>
+          <a href="#assassin" style="--pick: #C77DFF" aria-current="false">
+            <img src="/assets/img/classes/assassin-thumb.webp" alt="" loading="lazy" width="480" height="270"><span>Assassin</span>
+          </a>
+          <a href="#berserker" style="--pick: #FF3B3B" aria-current="false">
+            <img src="/assets/img/classes/berserker-thumb.webp" alt="" loading="lazy" width="480" height="270"><span>Berserker</span>
+          </a>
+          <a href="#duelist" style="--pick: #FFFFFF" aria-current="false">
+            <img src="/assets/img/classes/duelist-thumb.webp" alt="" loading="lazy" width="480" height="270"><span>Duelist</span>
+          </a>
+          <a href="#frostborn" style="--pick: #7FD4F5" aria-current="false">
+            <img src="/assets/img/classes/frostborn-thumb.webp" alt="" loading="lazy" width="480" height="270"><span>Frostborn</span>
+          </a>
+          <a href="#geomancer" style="--pick: #A855F7" aria-current="false">
+            <img src="/assets/img/classes/geomancer-thumb.webp" alt="" loading="lazy" width="480" height="270"><span>Geomancer</span>
+          </a>
+          <a href="#guardian" style="--pick: #B87333" aria-current="false">
+            <img src="/assets/img/classes/guardian-thumb.webp" alt="" loading="lazy" width="480" height="270"><span>Guardian</span>
+          </a>
+          <a href="#knight" style="--pick: #55FFFF" aria-current="false">
+            <img src="/assets/img/classes/knight-thumb.webp" alt="" loading="lazy" width="480" height="270"><span>Knight</span>
+          </a>
+          <a href="#lancer" style="--pick: #D3D47B" aria-current="false">
+            <img src="/assets/img/classes/lancer-thumb.webp" alt="" loading="lazy" width="480" height="270"><span>Lancer</span>
+          </a>
+          <a href="#necromancer" style="--pick: #9AE69A" aria-current="false">
+            <img src="/assets/img/classes/necromancer-thumb.webp" alt="" loading="lazy" width="480" height="270"><span>Necromancer</span>
+          </a>
+          <a href="#poseidon" style="--pick: #39C6A3" aria-current="false">
+            <img src="/assets/img/classes/poseidon-thumb.webp" alt="" loading="lazy" width="480" height="270"><span>Poseidon</span>
+          </a>
+          <a href="#pyromancer" style="--pick: #FF8C42" aria-current="false">
+            <img src="/assets/img/classes/pyromancer-thumb.webp" alt="" loading="lazy" width="480" height="270"><span>Pyromancer</span>
+          </a>
+          <a href="#ranger" style="--pick: #5FAE5D" aria-current="false">
+            <img src="/assets/img/classes/ranger-thumb.webp" alt="" loading="lazy" width="480" height="270"><span>Ranger</span>
+          </a>
+          <a href="#stormcaller" style="--pick: #5C7CFA" aria-current="false">
+            <img src="/assets/img/classes/stormcaller-thumb.webp" alt="" loading="lazy" width="480" height="270"><span>Stormcaller</span>
+          </a>
+          <a href="#warden" style="--pick: #C9812E" aria-current="false">
+            <img src="/assets/img/classes/warden-thumb.webp" alt="" loading="lazy" width="480" height="270"><span>Warden</span>
+          </a>
+        </nav>
       </div>
     </section>
 
@@ -144,9 +268,13 @@
 
   <footer class="site-footer">
     <div class="wrap">
-      <p>BattleTown · <code>play.battletown.store</code> · Minecraft Java 26.3</p>
+      <div class="footer-brand">
+        <img src="/assets/img/icon-192.png" alt="" width="52" height="52">
+        <p><strong>BattleTown</strong><br><code>play.battletown.store</code> · Minecraft Java 26.3</p>
+      </div>
       <nav aria-label="Footer">
         <a href="https://discord.gg/TJ5wBJYCc">Discord</a>
+        <a href="/store/">Store</a>
         <a href="/rules/">Server Rules</a>
         <a href="/rules/#terms">Terms</a>
         <a href="/rules/#privacy">Privacy</a>
@@ -157,5 +285,6 @@
 
   <script src="/assets/js/config.js"></script>
   <script src="/assets/js/site.js"></script>
+  <script src="/assets/js/classes.js"></script>
 </body>
 </html>

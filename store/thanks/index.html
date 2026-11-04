@@ -5,46 +5,55 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Thank you · BattleTown</title>
   <meta name="description" content="Thanks for supporting BattleTown.">
-  <meta name="theme-color" content="#0a0a0d">
+  <meta name="theme-color" content="#07070a">
+  <meta property="og:type" content="website">
   <meta property="og:title" content="Thank you · BattleTown">
   <meta property="og:description" content="Thanks for supporting BattleTown.">
   <meta property="og:image" content="https://battletown.store/assets/img/logo-512.png">
   <meta property="og:url" content="https://battletown.store/store/thanks/">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="/assets/img/icon-32.png" sizes="32x32">
   <link rel="apple-touch-icon" href="/assets/img/icon-180.png">
+  <link rel="preload" href="/assets/fonts/lilita-one-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/assets/css/site.css">
+  <script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
+  <div class="progress" aria-hidden="true"></div>
   <header class="site-header">
     <div class="wrap">
-      <a class="brand" href="/"><img src="/assets/img/icon-192.png" alt="" width="36" height="36">BattleTown</a>
-      <nav class="nav" aria-label="Main">
+      <a class="brand" href="/"><img src="/assets/img/icon-192.png" alt="" width="38" height="38">BattleTown</a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Menu"><span></span><span></span><span></span></button>
+      <nav class="nav" id="main-nav" aria-label="Main">
         <a href="/">Home</a>
         <a href="/classes/">Classes</a>
         <a href="/modes/">Game modes</a>
         <a href="/maps/">Maps</a>
         <a href="/store/">Store</a>
         <a href="/rules/">Rules</a>
+        <a class="nav-play" href="/#join">Play now</a>
       </nav>
     </div>
   </header>
 
   <main>
     <section class="page-head">
-      <div class="wrap">
-        <h1>Thank you!</h1>
-        <p>Your purchase is on its way. Tebex emails your receipt.</p>
+      <canvas class="embers" aria-hidden="true"></canvas>
+      <div class="wrap reveal">
+        <span class="eyebrow">Thank you</span>
+        <h1>You're all set!</h1>
+        <p class="lead">Your purchase is on its way. Tebex emails your receipt.</p>
       </div>
     </section>
 
-    <section class="section">
+    <section class="section-tight">
       <div class="wrap">
-        <ol class="steps">
+        <ol class="steps reveal">
           <li><strong>Join</strong> <code>play.battletown.store</code>. Delivery can take a few minutes after payment.</li>
           <li><strong>BattleBucks</strong> go straight to your balance. <strong>XP Boosts</strong>, <strong>Collections</strong> and <strong>bundles</strong> show up in game, ready to use. Cosmetics are in your <code>/wardrobe</code>.</li>
           <li>Something missing after 15 minutes? Email <a href="mailto:battletowntm@gmail.com">battletowntm@gmail.com</a> or open a ticket on the <a href="https://discord.gg/TJ5wBJYCc">Discord</a>.</li>
         </ol>
-        <div class="btn-row" style="justify-content: flex-start; margin-top: 24px">
+        <div class="btn-row" style="justify-content: flex-start; margin-top: 28px">
           <a class="btn" href="/store/">Back to the store</a>
         </div>
       </div>
@@ -55,9 +64,13 @@
 
   <footer class="site-footer">
     <div class="wrap">
-      <p>BattleTown · <code>play.battletown.store</code> · Minecraft Java 26.3</p>
+      <div class="footer-brand">
+        <img src="/assets/img/icon-192.png" alt="" width="52" height="52">
+        <p><strong>BattleTown</strong><br><code>play.battletown.store</code> · Minecraft Java 26.3</p>
+      </div>
       <nav aria-label="Footer">
         <a href="https://discord.gg/TJ5wBJYCc">Discord</a>
+        <a href="/store/">Store</a>
         <a href="/rules/">Server Rules</a>
         <a href="/rules/#terms">Terms</a>
         <a href="/rules/#privacy">Privacy</a>

@@ -5,47 +5,56 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Rules & Terms · BattleTown</title>
   <meta name="description" content="BattleTown Server Rules, Terms of Service and Privacy Policy.">
-  <meta name="theme-color" content="#0a0a0d">
+  <meta name="theme-color" content="#07070a">
+  <meta property="og:type" content="website">
   <meta property="og:title" content="Rules & Terms · BattleTown">
   <meta property="og:description" content="BattleTown Server Rules, Terms of Service and Privacy Policy.">
   <meta property="og:image" content="https://battletown.store/assets/img/logo-512.png">
   <meta property="og:url" content="https://battletown.store/rules/">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="/assets/img/icon-32.png" sizes="32x32">
   <link rel="apple-touch-icon" href="/assets/img/icon-180.png">
+  <link rel="preload" href="/assets/fonts/lilita-one-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/assets/css/site.css">
+  <script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
+  <div class="progress" aria-hidden="true"></div>
   <header class="site-header">
     <div class="wrap">
-      <a class="brand" href="/"><img src="/assets/img/icon-192.png" alt="" width="36" height="36">BattleTown</a>
-      <nav class="nav" aria-label="Main">
+      <a class="brand" href="/"><img src="/assets/img/icon-192.png" alt="" width="38" height="38">BattleTown</a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Menu"><span></span><span></span><span></span></button>
+      <nav class="nav" id="main-nav" aria-label="Main">
         <a href="/">Home</a>
         <a href="/classes/">Classes</a>
         <a href="/modes/">Game modes</a>
         <a href="/maps/">Maps</a>
         <a href="/store/">Store</a>
         <a href="/rules/">Rules</a>
+        <a class="nav-play" href="/#join">Play now</a>
       </nav>
     </div>
   </header>
 
   <main>
     <section class="page-head">
-      <div class="wrap">
+      <div class="wrap reveal">
+        <span class="eyebrow">Fair play</span>
         <h1>Rules &amp; Terms</h1>
-        <p>The same Server Rules, Terms of Service and Privacy Policy you agree to in game with <code>/rules</code>.</p>
+        <p class="lead">The same Server Rules, Terms of Service and Privacy Policy you agree to in game with <code>/rules</code>.</p>
         <div class="doc-tabs">
-          <a class="btn" href="#rules">Server Rules</a>
-          <a class="btn" href="#terms">Terms of Service</a>
-          <a class="btn" href="#privacy">Privacy Policy</a>
+          <a class="btn btn-small" href="#rules">Server Rules</a>
+          <a class="btn btn-small" href="#terms">Terms of Service</a>
+          <a class="btn btn-small" href="#privacy">Privacy Policy</a>
         </div>
       </div>
     </section>
 
-    <section class="section">
+    <section class="section-tight">
       <div class="wrap doc">
-        <h2>In short</h2>
-        <ol class="short">
+        <div class="card reveal">
+          <h2>In short</h2>
+          <ol class="short">
             <li>Respect everyone in chat and voice. No hate or bullying.</li>
             <li>No cheats, macros or mods that give you an edge.</li>
             <li>Found a bug? Report it with <code>/report</code>. Don&#x27;t use it.</li>
@@ -53,17 +62,18 @@
             <li>Keep names, signs, books and Maps clean.</li>
             <li>No ads, no selling accounts, no real-money trading.</li>
             <li>Never share your password or personal info.</li>
-        </ol>
-        <p>Break them and you can be muted, kicked or banned.</p>
-        <ul>
+          </ol>
+          <p>Break them and you can be muted, kicked or banned.</p>
+          <ul>
             <li>BattleTown is in alpha: progress may be reset.</li>
             <li>Money and cosmetics have no cash value.</li>
             <li>Maps you build can be featured, changed or removed.</li>
-        </ul>
+          </ul>
+        </div>
       </div>
     </section>
 
-    <section class="section" id="rules">
+    <section class="section-tight" id="rules">
       <div class="wrap doc">
         <h2>Server Rules</h2>
           <p>BattleTown is meant to be fun, fair and safe. By playing, you agree to these rules. Staff decide what counts as breaking them, and the examples below are not a complete list.</p>
@@ -90,7 +100,7 @@
       </div>
     </section>
 
-    <section class="section" id="terms">
+    <section class="section-tight" id="terms">
       <div class="wrap doc">
         <h2>Terms of Service</h2>
           <p>These Terms are an agreement between you and Cameron Theoret, who runs BattleTown (&quot;we&quot;). They cover the BattleTown Minecraft server, its store and its community. By playing, you agree to these Terms, the Server Rules and the Privacy Policy. If you don&#x27;t agree, please don&#x27;t play.</p>
@@ -126,7 +136,7 @@
       </div>
     </section>
 
-    <section class="section" id="privacy">
+    <section class="section-tight" id="privacy">
       <div class="wrap doc">
         <h2>Privacy Policy</h2>
           <p>This explains what BattleTown keeps about you, why, and what you can do about it.</p>
@@ -157,7 +167,9 @@
           <p class="note">Last updated 2 November 2026. Version 2.</p>
         <h3>THIS WEBSITE</h3>
         <p>battletown.store is a plain website hosted on GitHub Pages. It sets no cookies and has no ads or trackers. GitHub may log your IP address when you visit, to run and protect its service.</p>
+        <p>The home page asks mcsrvstat.us, a public server-status service, whether the BattleTown server is online, so your browser contacts that service when you visit it.</p>
         <p>The Store page talks to Tebex to show what's for sale and to keep your basket. It sends Tebex the Minecraft name you type there, and your browser remembers that name and your basket on your own device. Payment happens on Tebex's checkout, under Tebex's own terms and privacy policy.</p>
+        <p>If you turn on the music, your browser remembers that for the rest of your visit. Music never plays until you tap it.</p>
       </div>
     </section>
 
@@ -165,9 +177,13 @@
 
   <footer class="site-footer">
     <div class="wrap">
-      <p>BattleTown · <code>play.battletown.store</code> · Minecraft Java 26.3</p>
+      <div class="footer-brand">
+        <img src="/assets/img/icon-192.png" alt="" width="52" height="52">
+        <p><strong>BattleTown</strong><br><code>play.battletown.store</code> · Minecraft Java 26.3</p>
+      </div>
       <nav aria-label="Footer">
         <a href="https://discord.gg/TJ5wBJYCc">Discord</a>
+        <a href="/store/">Store</a>
         <a href="/rules/">Server Rules</a>
         <a href="/rules/#terms">Terms</a>
         <a href="/rules/#privacy">Privacy</a>

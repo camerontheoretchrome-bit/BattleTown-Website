@@ -5,65 +5,77 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Maps · BattleTown</title>
   <meta name="description" content="BattleTown&#x27;s official Maps, and how to build your own Map and get it into public matches.">
-  <meta name="theme-color" content="#0a0a0d">
+  <meta name="theme-color" content="#07070a">
+  <meta property="og:type" content="website">
   <meta property="og:title" content="Maps · BattleTown">
   <meta property="og:description" content="BattleTown&#x27;s official Maps, and how to build your own Map and get it into public matches.">
   <meta property="og:image" content="https://battletown.store/assets/img/logo-512.png">
   <meta property="og:url" content="https://battletown.store/maps/">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="/assets/img/icon-32.png" sizes="32x32">
   <link rel="apple-touch-icon" href="/assets/img/icon-180.png">
+  <link rel="preload" href="/assets/fonts/lilita-one-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/assets/css/site.css">
+  <script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
+  <div class="progress" aria-hidden="true"></div>
   <header class="site-header">
     <div class="wrap">
-      <a class="brand" href="/"><img src="/assets/img/icon-192.png" alt="" width="36" height="36">BattleTown</a>
-      <nav class="nav" aria-label="Main">
+      <a class="brand" href="/"><img src="/assets/img/icon-192.png" alt="" width="38" height="38">BattleTown</a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Menu"><span></span><span></span><span></span></button>
+      <nav class="nav" id="main-nav" aria-label="Main">
         <a href="/">Home</a>
         <a href="/classes/">Classes</a>
         <a href="/modes/">Game modes</a>
         <a href="/maps/">Maps</a>
         <a href="/store/">Store</a>
         <a href="/rules/">Rules</a>
+        <a class="nav-play" href="/#join">Play now</a>
       </nav>
     </div>
   </header>
 
   <main>
     <section class="page-head">
-      <div class="wrap">
-        <h1>Maps</h1>
-        <p>Every match is played on a Map. Before a match starts, players vote on which one to fight on. BattleTown has 14 official Maps, and players can build more.</p>
+      <div class="page-head-art" style="background-image: url('/assets/img/art/header.webp')"></div>
+      <div class="wrap reveal">
+        <span class="eyebrow">Maps</span>
+        <h1>The arenas</h1>
+        <p class="lead">Every match is played on a Map. Before a match starts, players vote on which one to fight on. BattleTown has 14 official Maps, and players can build more.</p>
       </div>
     </section>
 
-    <section class="section">
+    <section class="section-tight">
       <div class="wrap">
-        <h2>Official Maps</h2>
+        <h2 class="reveal">Official Maps</h2>
         <ul class="map-list">
-          <li>Castle</li>
-          <li>Apocalypse</li>
-          <li>BackRooms</li>
-          <li>Sky Temple</li>
-          <li>Atlantis</li>
-          <li>Volcano</li>
-          <li>IceBound</li>
-          <li>Oriental</li>
-          <li>Mesa</li>
-          <li>Fantasy</li>
-          <li>Jungle</li>
-          <li>Nether</li>
-          <li>Aqua</li>
-          <li>End</li>
+          <li class="reveal" style="--delay: 0.00s">Castle</li>
+          <li class="reveal" style="--delay: 0.04s">Apocalypse</li>
+          <li class="reveal" style="--delay: 0.08s">BackRooms</li>
+          <li class="reveal" style="--delay: 0.12s">Sky Temple</li>
+          <li class="reveal" style="--delay: 0.16s">Atlantis</li>
+          <li class="reveal" style="--delay: 0.20s">Volcano</li>
+          <li class="reveal" style="--delay: 0.24s">IceBound</li>
+          <li class="reveal" style="--delay: 0.28s">Oriental</li>
+          <li class="reveal" style="--delay: 0.32s">Mesa</li>
+          <li class="reveal" style="--delay: 0.36s">Fantasy</li>
+          <li class="reveal" style="--delay: 0.40s">Jungle</li>
+          <li class="reveal" style="--delay: 0.44s">Nether</li>
+          <li class="reveal" style="--delay: 0.48s">Aqua</li>
+          <li class="reveal" style="--delay: 0.52s">End</li>
         </ul>
       </div>
     </section>
 
     <section class="section">
-      <div class="wrap">
-        <h2>Build your own Map</h2>
-        <p>Buy a Map at the Creative Shop in the Hub and build your own arena in Creative. If BattleTown approves it, it joins public matches.</p>
-        <ol class="steps">
+      <div class="wrap split">
+        <div class="reveal">
+          <span class="eyebrow">Creative</span>
+          <h2>Build your own Map</h2>
+          <p class="lead">Buy a Map at the Creative Shop in the Hub and build your own arena in Creative. If BattleTown approves it, it joins public matches.</p>
+        </div>
+        <ol class="steps reveal" style="--delay: 0.1s">
           <li><strong>Buy a Map</strong> with in-game BattleBucks. Pick a size.</li>
           <li><strong>Build</strong> your arena in Creative, with the build tools.</li>
           <li><strong>Set Battle Spawns</strong> so a full match can play on it, then test it.</li>
@@ -76,19 +88,43 @@
 
     <section class="section">
       <div class="wrap">
-        <h2>Map sizes</h2>
-        <table class="prices">
-          <thead><tr><th>Size</th><th>Build area</th><th>Price</th></tr></thead>
-          <tbody>
-            <tr><td>Micro</td><td>64 × 64</td><td>$100,000</td></tr>
-            <tr><td>Mini</td><td>96 × 96</td><td>$300,000</td></tr>
-            <tr><td>Small</td><td>144 × 144</td><td>$1,000,000</td></tr>
-            <tr><td>Medium</td><td>216 × 216</td><td>$5,000,000</td></tr>
-            <tr><td>Large</td><td>288 × 288</td><td>$10,000,000</td></tr>
-            <tr><td>Huge</td><td>388 × 388</td><td>$20,000,000</td></tr>
-          </tbody>
-        </table>
-        <p class="note" style="color: var(--muted)">Prices are in-game BattleBucks. You can grow a Map to a bigger size later.</p>
+        <div class="section-head center reveal">
+          <span class="eyebrow">Map sizes</span>
+          <h2>Start small. Go huge.</h2>
+          <p class="lead">Prices are in-game BattleBucks. You can grow a Map to a bigger size later.</p>
+        </div>
+        <div class="sizes reveal">
+          <div class="size">
+            <div class="size-block" style="--s: 57; --delay: 0.00s"></div>
+            <div class="size-name">Micro</div>
+            <div class="size-meta">64 × 64<br><strong>$100,000</strong></div>
+          </div>
+          <div class="size">
+            <div class="size-block" style="--s: 70; --delay: 0.12s"></div>
+            <div class="size-name">Mini</div>
+            <div class="size-meta">96 × 96<br><strong>$300,000</strong></div>
+          </div>
+          <div class="size">
+            <div class="size-block" style="--s: 90; --delay: 0.24s"></div>
+            <div class="size-name">Small</div>
+            <div class="size-meta">144 × 144<br><strong>$1,000,000</strong></div>
+          </div>
+          <div class="size">
+            <div class="size-block" style="--s: 121; --delay: 0.36s"></div>
+            <div class="size-name">Medium</div>
+            <div class="size-meta">216 × 216<br><strong>$5,000,000</strong></div>
+          </div>
+          <div class="size">
+            <div class="size-block" style="--s: 151; --delay: 0.48s"></div>
+            <div class="size-name">Large</div>
+            <div class="size-meta">288 × 288<br><strong>$10,000,000</strong></div>
+          </div>
+          <div class="size">
+            <div class="size-block" style="--s: 193; --delay: 0.60s"></div>
+            <div class="size-name">Huge</div>
+            <div class="size-meta">388 × 388<br><strong>$20,000,000</strong></div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -96,9 +132,13 @@
 
   <footer class="site-footer">
     <div class="wrap">
-      <p>BattleTown · <code>play.battletown.store</code> · Minecraft Java 26.3</p>
+      <div class="footer-brand">
+        <img src="/assets/img/icon-192.png" alt="" width="52" height="52">
+        <p><strong>BattleTown</strong><br><code>play.battletown.store</code> · Minecraft Java 26.3</p>
+      </div>
       <nav aria-label="Footer">
         <a href="https://discord.gg/TJ5wBJYCc">Discord</a>
+        <a href="/store/">Store</a>
         <a href="/rules/">Server Rules</a>
         <a href="/rules/#terms">Terms</a>
         <a href="/rules/#privacy">Privacy</a>

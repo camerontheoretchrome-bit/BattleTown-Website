@@ -28,6 +28,16 @@
   // Display names for Tebex categories, where the game words differ.
   var CATEGORY_NAMES = { "Battle Bucks": "BattleBucks" };
 
+  // Banner art for each Tebex category (from ~/Documents/BattleTown Art).
+  // "titled" art already has the category name painted in, so the heading
+  // is kept for screen readers only.
+  var CATEGORY_ART = {
+    "Battle Bundles": { src: "/assets/img/art/cat-deals.webp", titled: true },
+    "Battle Bucks": { src: "/assets/img/art/header.webp", titled: false },
+    "XP Boosts": { src: "/assets/img/art/cat-xp.webp", titled: true },
+    "Collections": { src: "/assets/img/art/cat-collections.webp", titled: true }
+  };
+
   var state = {
     categories: [],
     username: "",
@@ -50,7 +60,9 @@
     basketTotal: app.querySelector("#basket-total"),
     basketNote: app.querySelector("#basket-note"),
     checkout: app.querySelector("#basket-checkout"),
-    message: app.querySelector("#store-message")
+    message: app.querySelector("#store-message"),
+    basket: app.querySelector("#basket"),
+    basketBar: app.querySelector("#basket-bar")
   };
 
   // ---------------------------------------------------------------- API
@@ -203,7 +215,7 @@
     });
   }
 
-  function add(packageId) {
+  function add(packageId, from) {
     if (!state.username) {
       nameStatus("Type your Minecraft name first, so we know who to deliver to.", true);
       els.nameInput.focus();
@@ -230,6 +242,7 @@
       save();
       message("");
       render();
+      celebrate(from);
     }).catch(function (error) {
       message("Couldn't add that: " + error.message, true);
     }).then(function () {
@@ -290,7 +303,21 @@
 
       var heading = document.createElement("h2");
       heading.textContent = name;
-      section.appendChild(heading);
+
+      var art = CATEGORY_ART[category.name];
+
+      if (art) {
+        var banner = document.createElement("div");
+        banner.className = "shelf-banner" + (art.titled ? " is-titled" : "");
+        banner.style.backgroundImage = "url('" + art.src + "')";
+        if (art.titled) {
+          heading.className = "sr-only";
+        }
+        banner.appendChild(heading);
+        section.appendChild(banner);
+      } else {
+        section.appendChild(heading);
+      }
 
       var grid = document.createElement("div");
       grid.className = "grid";
@@ -302,11 +329,15 @@
       section.appendChild(grid);
       els.shelves.appendChild(section);
     });
+
+    if (window.BT_TILT) {
+      window.BT_TILT(els.shelves);
+    }
   }
 
   function productCard(pkg, added) {
     var card = document.createElement("article");
-    card.className = "card product";
+    card.className = "card product tilt";
 
     if (pkg.image) {
       var img = document.createElement("img");
@@ -354,7 +385,7 @@
       button.disabled = true;
     } else {
       button.textContent = "Add to basket";
-      button.addEventListener("click", function () { add(pkg.id); });
+      button.addEventListener("click", function () { add(pkg.id, button); });
     }
 
     card.appendChild(button);
@@ -399,6 +430,49 @@
     els.basketTotal.textContent = packages.length ? money(state.basket.total_price, state.basket.currency) : "";
     els.basketNote.textContent = state.username ? "Delivered to " + state.username + " on play.battletown.store." : "Type your Minecraft name to start.";
     els.checkout.disabled = !packages.length || state.busy;
+
+    els.basketBar.classList.toggle("has-items", packages.length > 0);
+    els.basketBar.textContent = "Basket (" + packages.length + ") · " + money(state.basket ? state.basket.total_price : 0, state.basket && state.basket.currency);
+  }
+
+  // A gold coin flies from the button to the basket, which bumps.
+  function celebrate(from) {
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var target = window.innerWidth <= 900 && els.basketBar.offsetParent ? els.basketBar : els.basket;
+
+    function bump() {
+      target.classList.remove("is-bumped");
+      void target.offsetWidth;
+      target.classList.add("is-bumped");
+    }
+
+    if (reduce || !from || !from.getBoundingClientRect) {
+      bump();
+      return;
+    }
+
+    var a = from.getBoundingClientRect();
+    var b = target.getBoundingClientRect();
+    var coin = document.createElement("span");
+    coin.className = "fly";
+    coin.style.left = (a.left + a.width / 2 - 13) + "px";
+    coin.style.top = (a.top + a.height / 2 - 13) + "px";
+    document.body.appendChild(coin);
+
+    var dx = b.left + b.width / 2 - (a.left + a.width / 2);
+    var dy = Math.max(20, b.top + 40) - (a.top + a.height / 2);
+
+    coin.animate([
+      { transform: "translate(0, 0) scale(1)", opacity: 1 },
+      { transform: "translate(" + dx * 0.5 + "px," + (dy * 0.5 - 120) + "px) scale(1.4)", opacity: 1, offset: 0.5 },
+      { transform: "translate(" + dx + "px," + dy + "px) scale(0.6)", opacity: 0.2 }
+    ], { duration: 750, easing: "cubic-bezier(.5,0,.3,1)" }).onfinish = function () {
+      coin.remove();
+      bump();
+      if (window.BT_BURST) {
+        window.BT_BURST(target);
+      }
+    };
   }
 
   // ---------------------------------------------------------------- Helpers

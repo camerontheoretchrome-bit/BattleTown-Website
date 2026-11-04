@@ -5,89 +5,242 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>BattleTown</title>
   <meta name="description" content="BattleTown: class-based PvP arenas for Minecraft Java 26.3. Join at play.battletown.store. Public alpha 1 December 2026.">
-  <meta name="theme-color" content="#0a0a0d">
+  <meta name="theme-color" content="#07070a">
+  <meta property="og:type" content="website">
   <meta property="og:title" content="BattleTown">
   <meta property="og:description" content="BattleTown: class-based PvP arenas for Minecraft Java 26.3. Join at play.battletown.store. Public alpha 1 December 2026.">
   <meta property="og:image" content="https://battletown.store/assets/img/logo-512.png">
   <meta property="og:url" content="https://battletown.store/">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="/assets/img/icon-32.png" sizes="32x32">
   <link rel="apple-touch-icon" href="/assets/img/icon-180.png">
+  <link rel="preload" href="/assets/fonts/lilita-one-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/assets/css/site.css">
+  <script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
+  <div class="progress" aria-hidden="true"></div>
   <header class="site-header">
     <div class="wrap">
-      <a class="brand" href="/"><img src="/assets/img/icon-192.png" alt="" width="36" height="36">BattleTown</a>
-      <nav class="nav" aria-label="Main">
+      <a class="brand" href="/"><img src="/assets/img/icon-192.png" alt="" width="38" height="38">BattleTown</a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Menu"><span></span><span></span><span></span></button>
+      <nav class="nav" id="main-nav" aria-label="Main">
         <a href="/">Home</a>
         <a href="/classes/">Classes</a>
         <a href="/modes/">Game modes</a>
         <a href="/maps/">Maps</a>
         <a href="/store/">Store</a>
         <a href="/rules/">Rules</a>
+        <a class="nav-play" href="/#join">Play now</a>
       </nav>
     </div>
   </header>
 
   <main>
     <section class="hero">
+      <div class="hero-bg" aria-hidden="true">
+          <img src="/assets/img/classes/knight.webp" alt="" fetchpriority="high" width="1600" height="900">
+          <img src="/assets/img/classes/stormcaller.webp" alt="" loading="lazy" width="1600" height="900">
+          <img src="/assets/img/classes/alchemist.webp" alt="" loading="lazy" width="1600" height="900">
+          <img src="/assets/img/classes/pyromancer.webp" alt="" loading="lazy" width="1600" height="900">
+          <img src="/assets/img/classes/geomancer.webp" alt="" loading="lazy" width="1600" height="900">
+          <img src="/assets/img/classes/acrobat.webp" alt="" loading="lazy" width="1600" height="900">
+      </div>
+      <canvas class="embers" aria-hidden="true"></canvas>
       <div class="wrap">
-        <picture>
-          <source srcset="/assets/img/logo-1024.webp" type="image/webp">
-          <img class="hero-logo" src="/assets/img/logo-512.png" alt="BattleTown crowned BT logo" width="420" height="420">
-        </picture>
+        <div class="hero-logo-wrap">
+          <picture>
+            <source srcset="/assets/img/logo-1024.webp" type="image/webp">
+            <img class="hero-logo" src="/assets/img/logo-512.png" alt="BattleTown crowned BT logo" width="400" height="400" fetchpriority="high">
+          </picture>
+        </div>
         <h1>BattleTown</h1>
-        <p class="lead">Class-based PvP arenas for Minecraft Java. Pick one of 16 classes, jump into a fast match, and build your own Maps.</p>
+        <p class="lead">Sixteen classes. Fast, fierce matches. Arenas built by players. Pick your fighter and claim the crown.</p>
 
         <div class="ip-box">
-          <code id="server-address">play.battletown.store</code>
+          <code>play.battletown.store</code>
           <button class="copy-btn" type="button" data-copy="play.battletown.store" aria-label="Copy the server address">Copy</button>
         </div>
 
-        <ul class="facts">
-          <li>Minecraft <strong>Java 26.3</strong></li>
-          <li>Public alpha <strong>1 December 2026</strong></li>
-        </ul>
+        <div class="live-row">
+          <span class="pill" data-server-status><span class="dot"></span><span class="status-text">Checking server…</span></span>
+          <span class="pill" data-countdown="2026-12-01T00:00:00-05:00"><span class="countdown-label">Public alpha in</span> <span class="countdown"></span></span>
+          <span class="pill">Minecraft <strong>Java 26.3</strong></span>
+        </div>
 
         <div class="btn-row">
+          <a class="btn" href="#join">How to join</a>
           <a class="btn btn-discord" href="https://discord.gg/TJ5wBJYCc">Join the Discord</a>
-          <a class="btn" href="/classes/">See the classes</a>
+        </div>
+      </div>
+      <a class="scroll-cue" href="#fighters" aria-label="Scroll down"></a>
+    </section>
+
+    <div class="ticker" aria-hidden="true"><div class="ticker-track"><span>16 classes</span><span>4 game modes</span><span>14 official Maps</span><span>Build your own Map</span><span>Earn royalties</span><span>Rank 1 to 100</span><span>Duel</span><span>Free For All</span><span>Team Deathmatch</span><span>Last Alive</span><span>Java 26.3</span><span>Public alpha 1 December</span><span>16 classes</span><span>4 game modes</span><span>14 official Maps</span><span>Build your own Map</span><span>Earn royalties</span><span>Rank 1 to 100</span><span>Duel</span><span>Free For All</span><span>Team Deathmatch</span><span>Last Alive</span><span>Java 26.3</span><span>Public alpha 1 December</span></div></div>
+
+    <section class="section" id="fighters">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">Choose your fighter</span>
+          <h2>16 classes. One crown.</h2>
+          <p class="lead">Every class has its own weapons, armour and abilities. Walk into a Class Hall, step on a pad, and fight your way.</p>
+        </div>
+        <div class="rail reveal">
+          <a class="class-tile" href="/classes/#acrobat" style="--accent: #E0499E">
+            <img src="/assets/img/classes/acrobat-thumb.webp" alt="" loading="lazy" width="480" height="270">
+            <span class="tile-text"><span class="tile-name">Acrobat</span><span class="tile-motto">Own the air</span></span>
+          </a>
+          <a class="class-tile" href="/classes/#alchemist" style="--accent: #9ACD32">
+            <img src="/assets/img/classes/alchemist-thumb.webp" alt="" loading="lazy" width="480" height="270">
+            <span class="tile-text"><span class="tile-name">Alchemist</span><span class="tile-motto">Brew chaos</span></span>
+          </a>
+          <a class="class-tile" href="/classes/#assassin" style="--accent: #C77DFF">
+            <img src="/assets/img/classes/assassin-thumb.webp" alt="" loading="lazy" width="480" height="270">
+            <span class="tile-text"><span class="tile-name">Assassin</span><span class="tile-motto">Strike from the shadows</span></span>
+          </a>
+          <a class="class-tile" href="/classes/#berserker" style="--accent: #FF3B3B">
+            <img src="/assets/img/classes/berserker-thumb.webp" alt="" loading="lazy" width="480" height="270">
+            <span class="tile-text"><span class="tile-name">Berserker</span><span class="tile-motto">Give in to fury</span></span>
+          </a>
+          <a class="class-tile" href="/classes/#duelist" style="--accent: #FFFFFF">
+            <img src="/assets/img/classes/duelist-thumb.webp" alt="" loading="lazy" width="480" height="270">
+            <span class="tile-text"><span class="tile-name">Duelist</span><span class="tile-motto">Timing is everything</span></span>
+          </a>
+          <a class="class-tile" href="/classes/#frostborn" style="--accent: #7FD4F5">
+            <img src="/assets/img/classes/frostborn-thumb.webp" alt="" loading="lazy" width="480" height="270">
+            <span class="tile-text"><span class="tile-name">Frostborn</span><span class="tile-motto">Freeze the field</span></span>
+          </a>
+          <a class="class-tile" href="/classes/#geomancer" style="--accent: #A855F7">
+            <img src="/assets/img/classes/geomancer-thumb.webp" alt="" loading="lazy" width="480" height="270">
+            <span class="tile-text"><span class="tile-name">Geomancer</span><span class="tile-motto">Shape the land</span></span>
+          </a>
+          <a class="class-tile" href="/classes/#guardian" style="--accent: #B87333">
+            <img src="/assets/img/classes/guardian-thumb.webp" alt="" loading="lazy" width="480" height="270">
+            <span class="tile-text"><span class="tile-name">Guardian</span><span class="tile-motto">Hold the line</span></span>
+          </a>
+          <a class="class-tile" href="/classes/#knight" style="--accent: #55FFFF">
+            <img src="/assets/img/classes/knight-thumb.webp" alt="" loading="lazy" width="480" height="270">
+            <span class="tile-text"><span class="tile-name">Knight</span><span class="tile-motto">Lead the charge</span></span>
+          </a>
+          <a class="class-tile" href="/classes/#lancer" style="--accent: #D3D47B">
+            <img src="/assets/img/classes/lancer-thumb.webp" alt="" loading="lazy" width="480" height="270">
+            <span class="tile-text"><span class="tile-name">Lancer</span><span class="tile-motto">Control the distance</span></span>
+          </a>
+          <a class="class-tile" href="/classes/#necromancer" style="--accent: #9AE69A">
+            <img src="/assets/img/classes/necromancer-thumb.webp" alt="" loading="lazy" width="480" height="270">
+            <span class="tile-text"><span class="tile-name">Necromancer</span><span class="tile-motto">Rise again</span></span>
+          </a>
+          <a class="class-tile" href="/classes/#poseidon" style="--accent: #39C6A3">
+            <img src="/assets/img/classes/poseidon-thumb.webp" alt="" loading="lazy" width="480" height="270">
+            <span class="tile-text"><span class="tile-name">Poseidon</span><span class="tile-motto">Command the tide</span></span>
+          </a>
+          <a class="class-tile" href="/classes/#pyromancer" style="--accent: #FF8C42">
+            <img src="/assets/img/classes/pyromancer-thumb.webp" alt="" loading="lazy" width="480" height="270">
+            <span class="tile-text"><span class="tile-name">Pyromancer</span><span class="tile-motto">Let it burn</span></span>
+          </a>
+          <a class="class-tile" href="/classes/#ranger" style="--accent: #5FAE5D">
+            <img src="/assets/img/classes/ranger-thumb.webp" alt="" loading="lazy" width="480" height="270">
+            <span class="tile-text"><span class="tile-name">Ranger</span><span class="tile-motto">Own the distance</span></span>
+          </a>
+          <a class="class-tile" href="/classes/#stormcaller" style="--accent: #5C7CFA">
+            <img src="/assets/img/classes/stormcaller-thumb.webp" alt="" loading="lazy" width="480" height="270">
+            <span class="tile-text"><span class="tile-name">Stormcaller</span><span class="tile-motto">Call the storm</span></span>
+          </a>
+          <a class="class-tile" href="/classes/#warden" style="--accent: #C9812E">
+            <img src="/assets/img/classes/warden-thumb.webp" alt="" loading="lazy" width="480" height="270">
+            <span class="tile-text"><span class="tile-name">Warden</span><span class="tile-motto">Set the rules</span></span>
+          </a>
+        </div>
+        <div class="btn-row" style="justify-content: flex-start; margin-top: 8px">
+          <a class="btn btn-ghost" href="/classes/">Meet every class</a>
         </div>
       </div>
     </section>
 
     <section class="section">
       <div class="wrap">
-        <h2>How to join</h2>
-        <ol class="steps">
-          <li>Open <strong>Minecraft: Java Edition 26.3</strong>.</li>
-          <li>Go to <strong>Multiplayer</strong>, then <strong>Add Server</strong>.</li>
-          <li>Type <strong>play.battletown.store</strong> as the server address, then join.</li>
-          <li>Say <strong>yes</strong> to the BattleTown resource pack. The game needs it.</li>
-        </ol>
+        <div class="section-head center reveal">
+          <span class="eyebrow">Game modes</span>
+          <h2>Pick your fight</h2>
+          <p class="lead">Matches last 4 to 7 minutes. Vote on the Map, count down, and go.</p>
+        </div>
+        <div class="grid">
+          <article class="card mode-tile tilt reveal" style="--delay: 0.00s">
+            <svg class="icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 10l28 28M10 10h8v8M54 10L26 38M54 10h-8v8M34 42l-6 6 6 6M30 42l6 6-6 6M20 44l-8 8M44 44l8 8"/></svg>
+            <p class="big">1v1</p>
+            <h3>Duel</h3>
+            <ul><li>Best of 3 rounds. Win 2 rounds to win the Duel.</li></ul>
+          </article>
+          <article class="card mode-tile tilt reveal" style="--delay: 0.08s">
+            <svg class="icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M32 6l5 15 15-5-8 13 14 6-15 4 5 15-14-8-2 12-2-12-14 8 5-15-15-4 14-6-8-13 15 5z"/></svg>
+            <p class="big">3–8</p>
+            <h3>Free For All</h3>
+            <ul><li>Everyone for themselves. You respawn after 5 seconds.</li></ul>
+          </article>
+          <article class="card mode-tile tilt reveal" style="--delay: 0.16s">
+            <svg class="icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round" aria-hidden="true"><path d="M8 14l14-6 14 6v14c0 12-8 20-14 24C16 48 8 40 8 28z"/><path d="M28 18l14-6 14 6v14c0 12-8 20-14 24-3-2-6-4-8-7"/></svg>
+            <p class="big">2v2 · 4v4</p>
+            <h3>Team Deathmatch</h3>
+            <ul><li>Blue team against Red team. You respawn after 5 seconds.</li></ul>
+          </article>
+          <article class="card mode-tile tilt reveal" style="--delay: 0.24s">
+            <svg class="icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round" aria-hidden="true"><path d="M8 48l4-30 12 12 8-18 8 18 12-12 4 30z"/><path d="M8 56h48"/><circle cx="32" cy="38" r="3" fill="currentColor"/></svg>
+            <p class="big">4 · 8</p>
+            <h3>Last Alive</h3>
+            <ul><li>One life each. The last fighter standing wins.</li></ul>
+          </article>
+        </div>
+        <div class="btn-row" style="margin-top: 28px">
+          <a class="btn btn-ghost" href="/modes/">All the rules</a>
+        </div>
       </div>
     </section>
 
     <section class="section">
+      <div class="wrap split">
+        <div class="art-frame tilt reveal">
+          <img src="/assets/img/classes/stormcaller.webp" alt="The Stormcaller shrine, built in BattleTown" loading="lazy" width="1600" height="900">
+        </div>
+        <div class="reveal" style="--delay: 0.1s">
+          <span class="eyebrow">Creative Maps</span>
+          <h2>Build the arena. Get paid.</h2>
+          <p class="lead">Buy a Map, build your own arena in Creative and send it to BattleTown. If it's approved, it joins public matches with your name on it, and you earn $1,000 BattleBucks every time a match on it finishes.</p>
+          <div class="btn-row" style="justify-content: flex-start">
+            <a class="btn" href="/maps/">How building works</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap split">
+        <div class="reveal">
+          <span class="eyebrow">Store</span>
+          <h2>Gear up in style</h2>
+          <p class="lead">BattleBucks, XP Boosts, Class Collections and the Winterfest Mythic Bundle. Cosmetics only: nothing you buy changes a fight.</p>
+          <div class="btn-row" style="justify-content: flex-start">
+            <a class="btn" href="/store/">Open the store</a>
+          </div>
+        </div>
+        <div class="art-frame tilt reveal" style="--delay: 0.1s">
+          <img src="/assets/img/art/cat-collections.webp" alt="Class Collections" loading="lazy" width="1400" height="788">
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-band" id="join">
       <div class="wrap">
-        <h2>What's inside</h2>
-        <div class="grid">
-          <a class="card" href="/classes/">
-            <h3>16 classes</h3>
-            <p>Knights, Assassins, Frostborn, Necromancers and more. Each one has its own weapons and abilities.</p>
-          </a>
-          <a class="card" href="/modes/">
-            <h3>4 game modes</h3>
-            <p>Duel, Free For All, Team Deathmatch and Last Alive. Matches last about 4 to 7 minutes.</p>
-          </a>
-          <a class="card" href="/maps/">
-            <h3>Maps you build</h3>
-            <p>Buy a Map, build an arena in Creative, and send it to BattleTown to join public matches.</p>
-          </a>
-          <a class="card" href="/store/">
-            <h3>Store</h3>
-            <p>BattleBucks bundles. The web store is coming soon.</p>
-          </a>
+        <div class="reveal">
+          <span class="eyebrow">Ready?</span>
+          <h2>Join the battle</h2>
+          <p class="lead">Minecraft: Java Edition 26.3 → Multiplayer → Add Server → paste the address. Say yes to the BattleTown resource pack: the game needs it.</p>
+          <div class="ip-box">
+          <code>play.battletown.store</code>
+          <button class="copy-btn" type="button" data-copy="play.battletown.store" aria-label="Copy the server address">Copy</button>
+        </div>
+          <div class="btn-row" style="margin-top: 28px">
+            <a class="btn btn-discord" href="https://discord.gg/TJ5wBJYCc">Join the Discord</a>
+          </div>
         </div>
       </div>
     </section>
@@ -96,9 +249,13 @@
 
   <footer class="site-footer">
     <div class="wrap">
-      <p>BattleTown · <code>play.battletown.store</code> · Minecraft Java 26.3</p>
+      <div class="footer-brand">
+        <img src="/assets/img/icon-192.png" alt="" width="52" height="52">
+        <p><strong>BattleTown</strong><br><code>play.battletown.store</code> · Minecraft Java 26.3</p>
+      </div>
       <nav aria-label="Footer">
         <a href="https://discord.gg/TJ5wBJYCc">Discord</a>
+        <a href="/store/">Store</a>
         <a href="/rules/">Server Rules</a>
         <a href="/rules/#terms">Terms</a>
         <a href="/rules/#privacy">Privacy</a>
