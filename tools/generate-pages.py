@@ -757,7 +757,7 @@ THANKS_BODY = f"""    <section class="page-head">
         <ol class="steps reveal">
           <li><strong>Join</strong> <code>{ADDRESS}</code>. Delivery can take a few minutes after payment.</li>
           <li><strong>BattleBucks</strong> go straight to your balance. <strong>XP Boosts</strong>, <strong>Collections</strong> and <strong>bundles</strong> show up in game, ready to use. Cosmetics are in your <code>/wardrobe</code>.</li>
-          <li>Something missing after 15 minutes? Email <a href="mailto:battletowntm@gmail.com">battletowntm@gmail.com</a> or open a ticket on the <a href="{DISCORD}">Discord</a>.</li>
+          <li>Something missing after 15 minutes? Email <a href="mailto:support@battletown.store">support@battletown.store</a> or open a ticket on the <a href="{DISCORD}">Discord</a>.</li>
         </ol>
         <div class="btn-row" style="justify-content: flex-start; margin-top: 28px">
           <a class="btn" href="/store/">Back to the store</a>
@@ -947,7 +947,7 @@ def parse_rules():
 
 def linkify(text):
     t = html.escape(text)
-    t = t.replace("battletowntm@gmail.com", '<a href="mailto:battletowntm@gmail.com">battletowntm@gmail.com</a>')
+    t = t.replace("support@battletown.store", '<a href="mailto:support@battletown.store">support@battletown.store</a>')
     t = t.replace("discord.gg/TJ5wBJYCc", f'<a href="{DISCORD}">discord.gg/TJ5wBJYCc</a>')
     t = re.sub(r"(/report)", r"<code>\1</code>", t)
     return t
