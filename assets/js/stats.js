@@ -16,6 +16,7 @@
   var config = window.BT_CONFIG || {};
   var base = (config.statsFeedUrl || "").replace(/\/+$/, "");
   var CLASSES = window.BT_CLASSES || {};
+  var MAPS = window.BT_MAPS || {};
 
   var MODES = { duel: "Duel", ffa: "Free For All", tdm: "Team Deathmatch", elimination: "Last Alive" };
   var HALLS = [
@@ -114,10 +115,148 @@
     target.appendChild(box);
   }
 
+  var summaryOnce = null;
+
+  function summary() {
+    summaryOnce = summaryOnce || get("/v1/summary.json");
+    return summaryOnce;
+  }
+
+  function mapName(id) {
+    if (!id) {
+      return "a Map";
+    }
+    return MAPS[id] || id.replace(/[_-]+/g, " ").replace(/\b\w/g, function (c) { return c.toUpperCase(); });
+  }
+
+  function ago(ms) {
+    var minutes = Math.max(0, Math.round((Date.now() - ms) / 60000));
+    if (minutes < 1) {
+      return "just now";
+    }
+    if (minutes < 60) {
+      return minutes + " min ago";
+    }
+    var hrs = Math.round(minutes / 60);
+    if (hrs < 48) {
+      return hrs + (hrs === 1 ? " hour ago" : " hours ago");
+    }
+    return Math.round(hrs / 24) + " days ago";
+  }
+
+  function clock(seconds) {
+    var m = Math.floor((seconds || 0) / 60);
+    var sec = (seconds || 0) % 60;
+    return m + ":" + (sec < 10 ? "0" : "") + sec;
+  }
+
+  function nameLink(name, linked, className) {
+    var node = el(linked ? "a" : "span", className || "", name);
+    if (linked) {
+      node.href = profileLink(name);
+    }
+    return node;
+  }
+
+  function head(name) {
+    var img = el("img", "mini-head");
+    img.src = "https://mc-heads.net/avatar/" + encodeURIComponent(name) + "/32";
+    img.alt = "";
+    img.width = 24;
+    img.height = 24;
+    img.loading = "lazy";
+    return img;
+  }
+
+  // ---------------------------------------------------------------- Online now
+
+  document.querySelectorAll("[data-online-now]").forEach(function (box) {
+    summary().then(function (doc) {
+      var people = doc.onlinePlayers || [];
+      if (!people.length) {
+        return;
+      }
+      var list = box.querySelector("ul");
+      people.forEach(function (p) {
+        var li = el("li");
+        var link = nameLink(p.name, p.profile, "online-name");
+        link.prepend(head(p.name));
+        li.appendChild(link);
+        list.appendChild(li);
+      });
+      box.querySelector("[data-online-count]").textContent = people.length === 1 ? "1 player" : people.length + " players";
+      box.hidden = false;
+    }).catch(function () {});
+  });
+
+  // ---------------------------------------------------------------- Recent matches
+
+  document.querySelectorAll("[data-recent-matches]").forEach(function (box) {
+    summary().then(function (doc) {
+      var matches = (doc.recentMatches || []).slice(0, Number(box.getAttribute("data-recent-matches")) || 6);
+      if (!matches.length) {
+        return;
+      }
+      var list = box.querySelector("ol");
+      matches.forEach(function (m) {
+        var li = el("li", "match-row");
+        var what = el("p", "match-what");
+        if (m.winners && m.winners.length) {
+          m.winners.forEach(function (w, i) {
+            if (i) {
+              what.appendChild(document.createTextNode(i === m.winners.length - 1 ? " & " : ", "));
+            }
+            what.appendChild(nameLink(w, true, "match-winner"));
+          });
+          what.appendChild(document.createTextNode(" won "));
+        } else {
+          what.appendChild(document.createTextNode("A match of "));
+        }
+        what.appendChild(el("strong", "", m.mode));
+        what.appendChild(document.createTextNode(" on "));
+        what.appendChild(el("strong", "", mapName(m.map)));
+        li.appendChild(what);
+
+        var meta = el("p", "match-meta");
+        var bits = [clock(m.durationSeconds), m.players + " fighters", ago(m.endedAt)];
+        meta.textContent = bits.join(" · ");
+        if (m.topPlayer) {
+          meta.appendChild(document.createTextNode(" · Top: "));
+          meta.appendChild(nameLink(m.topPlayer.name, m.topPlayer.profile));
+          meta.appendChild(document.createTextNode(" (" + m.topPlayer.kills + " " + (m.topPlayer.kills === 1 ? "kill" : "kills") + ")"));
+        }
+        li.appendChild(meta);
+        list.appendChild(li);
+      });
+      box.hidden = false;
+    }).catch(function () {});
+  });
+
+  // ---------------------------------------------------------------- Discord
+  // Discord's public invite info (CORS allows battletown.store).
+
+  var discordButtons = document.querySelectorAll("a.btn-discord");
+  var invite = (config.discordUrl || "").split("/").pop();
+
+  if (discordButtons.length && invite) {
+    fetch("https://discord.com/api/v10/invites/" + encodeURIComponent(invite) + "?with_counts=true")
+      .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+      .then(function (data) {
+        var members = data.approximate_member_count;
+        if (!members) {
+          return;
+        }
+        discordButtons.forEach(function (button) {
+          var badge = el("span", "discord-count", number(members) + (members === 1 ? " member" : " members"));
+          button.appendChild(badge);
+        });
+      }).catch(function () {});
+  }
+
   // ---------------------------------------------------------------- Home summary
 
   document.querySelectorAll("[data-live-summary]").forEach(function (box) {
-    get("/v1/summary.json").then(function (summary) {
+    summary().then(function (summary) {
       box.innerHTML = "";
       [
         [summary.players, "player", "players"],
@@ -373,8 +512,23 @@
     who.appendChild(el("h1", "", p.name));
     var level = el("p", "profile-level");
     level.appendChild(el("span", "level-badge", String(p.level)));
-    level.appendChild(document.createTextNode(" Rank level " + p.level + " of 100"));
+    level.appendChild(document.createTextNode(" Rank level " + p.level + " of 100" + (p.rank && p.rank.tier ? " · " + p.rank.tier : "")));
     who.appendChild(level);
+
+    if (p.rank) {
+      var bar = el("div", "rank-bar");
+      bar.setAttribute("role", "progressbar");
+      bar.setAttribute("aria-valuemin", "0");
+      bar.setAttribute("aria-valuemax", "100");
+      bar.setAttribute("aria-valuenow", String(p.rank.percent));
+      var fill = el("span", "rank-fill");
+      fill.style.width = (p.rank.maxed ? 100 : p.rank.percent) + "%";
+      bar.appendChild(fill);
+      who.appendChild(bar);
+      who.appendChild(el("p", "rank-next", p.rank.maxed
+        ? "Max level reached."
+        : number(p.rank.xpToNext) + " XP to level " + (p.level + 1)));
+    }
 
     if (p.titles && p.titles.length) {
       var titles = el("ul", "chips profile-titles");

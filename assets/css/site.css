@@ -1286,3 +1286,55 @@ a.podium-step:hover { transform: translateY(-6px); color: var(--text); }
 .podium-step.place-2 { grid-column: 1; grid-row: 1; }
 .podium-step.place-1 { grid-column: 2; grid-row: 1; }
 .podium-step.place-3 { grid-column: 3; grid-row: 1; }
+
+/* ---------- Online now, recent matches, Discord count ---------- */
+
+.online-now { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 12px; margin: 4px auto 22px; max-width: 760px; }
+.page-head .online-now { justify-content: flex-start; margin: 18px 0 0; }
+.online-label { display: inline-flex; align-items: center; gap: 8px; font-weight: 800; font-size: 0.9rem; color: var(--muted); }
+.online-now ul { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 0; }
+.online-name { display: inline-flex; align-items: center; gap: 8px; padding: 4px 12px 4px 4px; border-radius: 999px; background: rgba(21, 21, 28, 0.9); border: 1px solid rgba(61, 220, 98, 0.45); color: var(--text); font-weight: 800; font-size: 0.88rem; text-decoration: none; }
+a.online-name:hover { border-color: #3ddc62; color: #fff; }
+.mini-head { width: 24px; height: 24px; border-radius: 5px; image-rendering: pixelated; }
+
+.recent-matches { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.match-row { padding: 14px 18px; border-radius: var(--radius); background: linear-gradient(90deg, rgba(30, 30, 40, 0.95), rgba(18, 18, 24, 0.8)); border: 1px solid var(--line); border-left: 4px solid var(--gold); animation: rise 0.5s var(--ease-out) both; }
+.match-what { margin: 0; font-size: 1.05rem; }
+.match-what strong { color: var(--gold-bright); }
+.match-winner { font-weight: 900; color: var(--text); }
+.match-meta { margin: 4px 0 0; color: var(--muted); font-size: 0.88rem; }
+.match-meta a { color: var(--gold-pale); }
+
+.discord-count { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.02em; text-transform: none; padding: 3px 8px; border-radius: 999px; background: rgba(0, 0, 0, 0.25); }
+
+.pill-link { text-decoration: none; color: var(--text); transition: border-color 0.2s, transform 0.2s; }
+.pill-link:hover { color: var(--text); border-color: var(--gold); transform: translateY(-1px); }
+.pill-link::after { content: "📅"; font-size: 0.85rem; }
+
+/* ---------- Rank progress ---------- */
+
+.rank-bar { width: min(360px, 100%); height: 12px; border-radius: 999px; background: rgba(255, 255, 255, 0.08); border: 1px solid var(--line); overflow: hidden; }
+.rank-fill { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--gold-deep), var(--gold-bright)); box-shadow: 0 0 14px rgba(245, 184, 46, 0.6); animation: fill-in 1.2s var(--ease-out) both; transform-origin: 0 50%; }
+@keyframes fill-in { from { transform: scaleX(0); } }
+.rank-next { margin: 6px 0 0; color: var(--muted); font-size: 0.85rem; font-weight: 700; }
+
+/* ---------- Class pages ---------- */
+
+.slide-more { margin-top: 14px; }
+
+.class-hero { position: relative; min-height: min(78svh, 640px); display: flex; align-items: flex-end; overflow: hidden; isolation: isolate; padding: 40px 0; }
+.class-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; animation: hero-zoom 14s ease-out both; }
+@keyframes hero-zoom { from { transform: scale(1.1); } }
+.class-hero::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(0deg, var(--bg) 0%, rgba(7, 7, 10, 0.55) 45%, rgba(7, 7, 10, 0.15) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.6), transparent 60%); }
+.class-hero-text { width: 100%; }
+.class-hero .slide-name { font-size: clamp(3.4rem, 12vw, 7.5rem); }
+
+.class-detail { display: grid; gap: 32px; grid-template-columns: 1.1fr 1fr; }
+@media (max-width: 860px) { .class-detail { grid-template-columns: 1fr; } }
+.class-detail h2 { color: var(--accent); background: none; filter: none; }
+.abilities-big { grid-template-columns: 1fr; gap: 12px; }
+.abilities-big li { padding: 16px 18px; }
+.abilities-big strong { font-size: 1.5rem; }
+.abilities-big span { font-size: 1.02rem; }
+.class-detail .chips li { font-size: 0.92rem; padding: 7px 14px; }
+.class-nav { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; margin-top: 36px; }

@@ -1,0 +1,21 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//BattleTown//Website//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:battletown-public-alpha-2026@battletown.store
+DTSTAMP:20261104T000000Z
+DTSTART:20261201T050000Z
+DTEND:20261201T070000Z
+SUMMARY:BattleTown public alpha
+DESCRIPTION:BattleTown opens! Join at play.battletown.store (Minecraft: Java Edition 26.3). https://battletown.store
+LOCATION:play.battletown.store
+URL:https://battletown.store/
+BEGIN:VALARM
+TRIGGER:-PT30M
+ACTION:DISPLAY
+DESCRIPTION:BattleTown opens in 30 minutes
+END:VALARM
+END:VEVENT
+END:VCALENDAR

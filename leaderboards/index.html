@@ -18,7 +18,7 @@
   <link rel="icon" href="/assets/img/icon-32.png" sizes="32x32">
   <link rel="apple-touch-icon" href="/assets/img/icon-180.png">
   <link rel="preload" href="/assets/fonts/lilita-one-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/assets/css/site.css?v=92159728">
+  <link rel="stylesheet" href="/assets/css/site.css?v=221d720e">
   <script>document.documentElement.classList.add("js");</script>
   
 </head>
@@ -53,6 +53,10 @@
             <input type="text" name="name" placeholder="Search a player…" aria-label="Minecraft name" autocapitalize="off" autocorrect="off" spellcheck="false" maxlength="16" required>
             <button class="copy-btn" type="submit">Find</button>
           </form>
+        <div class="online-now" data-online-now hidden>
+          <span class="online-label"><span class="dot is-online"></span> Online now: <span data-online-count></span></span>
+          <ul></ul>
+        </div>
       </div>
     </section>
 
@@ -61,6 +65,14 @@
         <p class="store-loading">Loading the leaderboards…</p>
       </div>
     </section>
+
+    <section class="section-tight" data-recent-matches="12" hidden>
+      <div class="wrap faq-wrap">
+        <h2>Recent matches</h2>
+        <ol class="recent-matches"></ol>
+      </div>
+    </section>
+    <script>window.BT_MAPS = {"castle":"Castle","apocalypse":"Apocalypse","poolrooms":"PoolRooms","backrooms":"BackRooms","skytemple":"Sky Temple","atlantis":"Atlantis","volcano":"Volcano","ice":"IceBound","oriental":"Oriental","mesa":"Mesa","fantasy":"Fantasy","jungle":"Jungle","nether":"Nether","underwater":"Aqua","end":"End"};</script>
 
   </main>
 
@@ -84,6 +96,7 @@
 
   <script src="/assets/js/config.js?v=6651ff83"></script>
   <script src="/assets/js/site.js?v=5969abb7"></script>
-  <script src="/assets/js/stats.js?v=069fe9dd"></script>
+
+  <script src="/assets/js/stats.js?v=de9bfebd"></script>
 </body>
 </html>

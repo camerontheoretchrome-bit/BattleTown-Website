@@ -18,7 +18,7 @@
   <link rel="icon" href="/assets/img/icon-32.png" sizes="32x32">
   <link rel="apple-touch-icon" href="/assets/img/icon-180.png">
   <link rel="preload" href="/assets/fonts/lilita-one-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/assets/css/site.css?v=92159728">
+  <link rel="stylesheet" href="/assets/css/site.css?v=221d720e">
   <script>document.documentElement.classList.add("js");</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"BattleTown","url":"https://battletown.store/","description":"Class-based PvP arenas for Minecraft: Java Edition 26.3, with 16 classes, four game modes and player-built Maps.","image":"https://battletown.store/assets/img/social-card.jpg","gamePlatform":"Minecraft: Java Edition","genre":["PvP","Arena"],"playMode":"MultiPlayer","sameAs":["https://discord.gg/TJ5wBJYCc"]}</script>
 </head>
@@ -70,10 +70,14 @@
 
         <div class="live-row">
           <span class="pill" data-server-status><span class="dot"></span><span class="status-text">Checking server…</span></span>
-          <span class="pill" data-countdown="2026-12-01T00:00:00-05:00"><span class="countdown-label">Public alpha in</span> <span class="countdown"></span></span>
+          <a class="pill pill-link" href="/alpha.ics" data-countdown="2026-12-01T00:00:00-05:00" title="Add the launch to your calendar"><span class="countdown-label">Public alpha in</span> <span class="countdown"></span></a>
           <span class="pill">Minecraft <strong>Java 26.3</strong></span>
         </div>
         <div class="live-row live-summary" data-live-summary hidden></div>
+        <div class="online-now" data-online-now hidden>
+          <span class="online-label"><span class="dot is-online"></span> Online now: <span data-online-count></span></span>
+          <ul></ul>
+        </div>
 
         <div class="btn-row">
           <a class="btn" href="#join">How to join</a>
@@ -247,6 +251,16 @@
       </div>
     </section>
 
+    <section class="section" data-recent-matches="6" hidden>
+      <div class="wrap faq-wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">Live from the arenas</span>
+          <h2>Recent matches</h2>
+        </div>
+        <ol class="recent-matches"></ol>
+      </div>
+    </section>
+
     <section class="section">
       <div class="wrap">
         <div class="section-head reveal">
@@ -353,7 +367,7 @@
           </details>
           <details>
             <summary>When can I play?</summary>
-            <p>The public alpha opens on 1 December 2026. Join the Discord for news before then.</p>
+            <p>The public alpha opens on 1 December 2026. <a href="/alpha.ics">Add it to your calendar</a> (or <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=BattleTown%20public%20alpha&amp;dates=20261201T050000Z/20261201T070000Z&amp;details=Join%20at%20play.battletown.store%20(Minecraft%20Java%2026.3)&amp;location=play.battletown.store">Google Calendar</a>) and join the Discord for news before then.</p>
           </details>
           <details>
             <summary>Can I play with friends?</summary>
@@ -383,6 +397,7 @@
         </div>
       </div>
     </section>
+    <script>window.BT_MAPS = {"castle":"Castle","apocalypse":"Apocalypse","poolrooms":"PoolRooms","backrooms":"BackRooms","skytemple":"Sky Temple","atlantis":"Atlantis","volcano":"Volcano","ice":"IceBound","oriental":"Oriental","mesa":"Mesa","fantasy":"Fantasy","jungle":"Jungle","nether":"Nether","underwater":"Aqua","end":"End"};</script>
 
   </main>
 
@@ -406,6 +421,7 @@
 
   <script src="/assets/js/config.js?v=6651ff83"></script>
   <script src="/assets/js/site.js?v=5969abb7"></script>
-  <script src="/assets/js/stats.js?v=069fe9dd"></script>
+
+  <script src="/assets/js/stats.js?v=de9bfebd"></script>
 </body>
 </html>

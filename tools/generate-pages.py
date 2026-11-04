@@ -26,7 +26,13 @@ RULES_JAVA = os.path.join(PLUGIN_SRC, "hub/rules/RulesDocuments.java")
 CLASS_CARDS_JAVA = os.path.join(PLUGIN_SRC, "classhall/ClassCards.java")
 CLASSES_YML = os.path.expanduser("~/Documents/BattleTown-Server/plugins/BattleTown/classes.yml")
 SITE_URL = "https://battletown.store"
+MAPS_YML = os.path.expanduser("~/Documents/BattleTown-Server/plugins/BattleTown/maps.yml")
 PAGES = []
+
+# Visitor stats (GoatCounter: free, no cookies). Paste the site code from
+# goatcounter.com here (for https://battletown.goatcounter.com, "battletown")
+# and run this script. Empty = no visitor stats at all.
+GOATCOUNTER_CODE = ""
 
 NAV = [("/", "Home"), ("/classes/", "Classes"), ("/modes/", "Game modes"),
        ("/maps/", "Maps"), ("/leaderboards/", "Leaderboards"), ("/store/", "Store"), ("/rules/", "Rules")]
@@ -45,6 +51,10 @@ def asset(path):
 
 
 JSON_LD = """<script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"BattleTown","url":"https://battletown.store/","description":"Class-based PvP arenas for Minecraft: Java Edition 26.3, with 16 classes, four game modes and player-built Maps.","image":"https://battletown.store/assets/img/social-card.jpg","gamePlatform":"Minecraft: Java Edition","genre":["PvP","Arena"],"playMode":"MultiPlayer","sameAs":["https://discord.gg/TJ5wBJYCc"]}</script>"""
+
+
+GOATCOUNTER_TAG = (f'  <script data-goatcounter="https://{GOATCOUNTER_CODE}.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>\n'
+                   if GOATCOUNTER_CODE else "")
 
 
 def page(path, title, description, body, scripts=(), image="https://battletown.store/assets/img/social-card.jpg"):
@@ -115,6 +125,7 @@ def page(path, title, description, body, scripts=(), image="https://battletown.s
 
   <script src="{asset('/assets/js/config.js')}"></script>
   <script src="{asset('/assets/js/site.js')}"></script>
+{GOATCOUNTER_TAG}
 {extra_scripts}</body>
 </html>
 """
@@ -264,6 +275,7 @@ def class_slides():
               <p class="slide-line">{html.escape(c['playstyle'])}</p>
               <ul class="abilities">{abilities}</ul>
               <ul class="chips"><li>{hearts_text(c['id'])}</li>{weapons}{supplies}</ul>
+              <a class="btn btn-small slide-more" href="/classes/{c['id']}/">Full {c['name']} page</a>
             </div>
           </article>""")
     return "\n".join(slides)
@@ -343,7 +355,7 @@ FAQ = [
     ("Which Minecraft do I need?", "Minecraft: Java Edition 26.3. Bedrock isn't supported."),
     ("Do I need mods?", "No. The BattleTown resource pack downloads when you join. Performance mods (Sodium, Lithium, Iris), Simple Voice Chat, and the Lunar, Feather and LabyMod clients are allowed. Mods that give an advantage are not."),
     ("Is it pay-to-win?", "No. Nothing in the store changes a fight. XP Boosts only speed up rank XP, and BattleBucks buy cosmetics and Maps."),
-    ("When can I play?", "The public alpha opens on 1 December 2026. Join the Discord for news before then."),
+    ("When can I play?", "The public alpha opens on 1 December 2026. <a href=\"/alpha.ics\">Add it to your calendar</a> (or <a href=\"https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=BattleTown%20public%20alpha&amp;dates=20261201T050000Z/20261201T070000Z&amp;details=Join%20at%20play.battletown.store%20(Minecraft%20Java%2026.3)&amp;location=play.battletown.store\">Google Calendar</a>) and join the Discord for news before then."),
     ("Can I play with friends?", "Yes. Add friends with <code>/friends</code>, team up with <code>/party</code>, and queue together."),
     ("How old do I have to be?", "13 or older. Under 18s need a parent or guardian to agree to the <a href=\"/rules/#terms\">Terms</a>."),
 ]
@@ -406,10 +418,14 @@ HOME = f"""    <section class="hero">
 
         <div class="live-row">
           <span class="pill" data-server-status><span class="dot"></span><span class="status-text">Checking server…</span></span>
-          <span class="pill" data-countdown="{ALPHA_START}"><span class="countdown-label">Public alpha in</span> <span class="countdown"></span></span>
+          <a class="pill pill-link" href="/alpha.ics" data-countdown="{ALPHA_START}" title="Add the launch to your calendar"><span class="countdown-label">Public alpha in</span> <span class="countdown"></span></a>
           <span class="pill">Minecraft <strong>Java 26.3</strong></span>
         </div>
         <div class="live-row live-summary" data-live-summary hidden></div>
+        <div class="online-now" data-online-now hidden>
+          <span class="online-label"><span class="dot is-online"></span> Online now: <span data-online-count></span></span>
+          <ul></ul>
+        </div>
 
         <div class="btn-row">
           <a class="btn" href="#join">How to join</a>
@@ -494,6 +510,16 @@ HOME = f"""    <section class="hero">
         </div>
         <div data-podium></div>
         <div class="btn-row" style="margin-top: 28px"><a class="btn btn-ghost" href="/leaderboards/">All leaderboards</a></div>
+      </div>
+    </section>
+
+    <section class="section" data-recent-matches="6" hidden>
+      <div class="wrap faq-wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">Live from the arenas</span>
+          <h2>Recent matches</h2>
+        </div>
+        <ol class="recent-matches"></ol>
       </div>
     </section>
 
@@ -755,12 +781,23 @@ LEADERBOARDS_BODY = f"""    <section class="page-head">
         <h1>Leaderboards</h1>
         <p class="lead">The same boards that stand in the Hub's halls of fame, updated about every minute. Tap a name to see their profile.</p>
         {SEARCH_FORM}
+        <div class="online-now" data-online-now hidden>
+          <span class="online-label"><span class="dot is-online"></span> Online now: <span data-online-count></span></span>
+          <ul></ul>
+        </div>
       </div>
     </section>
 
     <section class="section-tight">
       <div class="wrap" id="leaderboards">
         <p class="store-loading">Loading the leaderboards…</p>
+      </div>
+    </section>
+
+    <section class="section-tight" data-recent-matches="12" hidden>
+      <div class="wrap faq-wrap">
+        <h2>Recent matches</h2>
+        <ol class="recent-matches"></ol>
       </div>
     </section>
 """
@@ -779,6 +816,100 @@ PLAYER_BODY = f"""    <section class="section-tight">
     </section>
     <script>window.BT_CLASSES = {classes_json()};</script>
 """
+
+# ---------------------------------------------------------------- Map names (for recent matches)
+
+
+def map_names():
+    """Map id -> display name from the live maps.yml (official Maps)."""
+    import json
+    names, current = {}, None
+    try:
+        for line in open(MAPS_YML):
+            top = re.match(r"^  ([a-z0-9_]+):\s*$", line)
+            if top:
+                current = top.group(1)
+                continue
+            shown = re.match(r"^    display-name:\s*(.+?)\s*$", line)
+            if shown and current and current not in names:
+                names[current] = shown.group(1).strip("'\"")
+    except OSError:
+        pass
+    return json.dumps(names, separators=(",", ":"))
+
+
+MAPS_SCRIPT = f"    <script>window.BT_MAPS = {map_names()};</script>\n"
+
+# ---------------------------------------------------------------- One page per class
+
+
+def class_page(i, c):
+    prev_c, next_c = CARDS[i - 1], CARDS[(i + 1) % len(CARDS)]
+    abilities = "".join(
+        f'<li><strong>{html.escape(n)}</strong><span>{html.escape(e)}</span></li>' for n, e in c["abilities"])
+    weapons = "".join(
+        f"<li><strong>{html.escape(n)}</strong>{(' · ' + html.escape(k)) if k else ''}</li>"
+        for n, k in map(weapon_name, c["weapons"]))
+    supplies = "".join(f"<li>{html.escape(x)}</li>" for x in c["supplies"])
+    mates = [m for m in CARDS if m["hall"] == c["hall"] and m["id"] != c["id"]]
+    mate_links = "".join(
+        f'<a href="/classes/{m["id"]}/" style="--pick: {accent(m)}"><img src="/assets/img/classes/{m["id"]}-thumb.webp" alt="" loading="lazy" width="480" height="270"><span>{m["name"]}</span></a>'
+        for m in mates)
+    return f"""    <section class="class-hero" style="--accent: {accent(c)}">
+      <img class="class-hero-img" src="/assets/img/classes/{c['id']}.webp" alt="The {c['name']} shrine in the {c['hall']}" width="1600" height="900" fetchpriority="high">
+      <div class="wrap class-hero-text reveal">
+        <p class="slide-hall">{c['hall']} · {html.escape(c['role'])}</p>
+        <h1 class="slide-name">{c['name']}</h1>
+        <p class="slide-motto">{html.escape(c['tagline'])}</p>
+        <p class="slide-line">{html.escape(c['playstyle'])}</p>
+      </div>
+    </section>
+
+    <section class="section-tight" style="--accent: {accent(c)}">
+      <div class="wrap">
+        <div class="class-detail">
+          <div class="reveal">
+            <h2>Abilities</h2>
+            <ul class="abilities abilities-big">{abilities}</ul>
+          </div>
+          <div class="reveal" style="--delay: 0.1s">
+            <h2>Kit</h2>
+            <ul class="chips">{weapons}{supplies}<li>{hearts_text(c['id'])}</li></ul>
+            <p class="lead" style="margin-top: 18px">Pick the {c['name']} on a class pad in the <strong>{c['hall']}</strong> in the Hub. You can switch class between matches.</p>
+            <div class="btn-row" style="justify-content: flex-start">
+              <a class="btn" href="/#join">Play now</a>
+              <button class="btn btn-ghost" type="button" data-copy="https://battletown.store/classes/{c['id']}/">Copy link</button>
+            </div>
+          </div>
+        </div>
+
+        <h2 class="reveal" style="margin-top: 48px">More in the {c['hall']}</h2>
+        <div class="picker reveal">{mate_links}</div>
+
+        <div class="class-nav">
+          <a class="btn btn-small" href="/classes/{prev_c['id']}/">‹ {prev_c['name']}</a>
+          <a class="btn btn-small" href="/classes/">All classes</a>
+          <a class="btn btn-small" href="/classes/{next_c['id']}/">{next_c['name']} ›</a>
+        </div>
+      </div>
+    </section>
+"""
+
+
+def write_calendar():
+    """alpha.ics: the public alpha as a calendar event (Apple, Outlook, Google import)."""
+    ics = "\r\n".join([
+        "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//BattleTown//Website//EN", "CALSCALE:GREGORIAN", "METHOD:PUBLISH",
+        "BEGIN:VEVENT", "UID:battletown-public-alpha-2026@battletown.store", "DTSTAMP:20261104T000000Z",
+        "DTSTART:20261201T050000Z", "DTEND:20261201T070000Z",
+        "SUMMARY:BattleTown public alpha",
+        "DESCRIPTION:BattleTown opens! Join at play.battletown.store (Minecraft: Java Edition 26.3). https://battletown.store",
+        "LOCATION:play.battletown.store", "URL:https://battletown.store/",
+        "BEGIN:VALARM", "TRIGGER:-PT30M", "ACTION:DISPLAY", "DESCRIPTION:BattleTown opens in 30 minutes", "END:VALARM",
+        "END:VEVENT", "END:VCALENDAR", ""])
+    with open(os.path.join(SITE, "alpha.ics"), "w", newline="") as f:
+        f.write(ics)
+
 
 # ---------------------------------------------------------------- Rules
 
@@ -838,6 +969,9 @@ short_rules, short_punish, short_terms, docs = parse_rules()
 short_rules_html = "\n".join(f"            <li>{linkify(r)}</li>" for r in short_rules)
 short_terms_html = "\n".join(f"            <li>{html.escape(t)}</li>" for t in short_terms)
 
+GOATCOUNTER_PRIVACY = ("<p>Visitor numbers are counted with GoatCounter, which sets no cookies and keeps no personal information, only which pages are visited and roughly from where.</p>"
+                       if GOATCOUNTER_CODE else "")
+
 RULES_BODY = f"""    <section class="page-head">
       <div class="wrap reveal">
         <span class="eyebrow">Fair play</span>
@@ -889,6 +1023,8 @@ RULES_BODY = f"""    <section class="page-head">
         <p>The home page asks mcsrvstat.us, a public server-status service, whether the BattleTown server is online, so your browser contacts that service when you visit it.</p>
         <p>The Store page talks to Tebex to show what's for sale and to keep your basket. It sends Tebex the Minecraft name you type there, and your browser remembers that name and your basket on your own device. Payment happens on Tebex's checkout, under Tebex's own terms and privacy policy.</p>
         <p>The Leaderboards and player pages read BattleTown's own public stats feed (api.battletown.store). Player pages show Minecraft skins rendered by mc-heads.net, a third-party service, so your browser contacts it when you open one.</p>
+        <p>The home page and Leaderboards show who is on the server right now, the same names the Minecraft server list shows, and the latest public matches. Discord buttons show the server's member count from Discord's public invite information.</p>
+        {GOATCOUNTER_PRIVACY}
         <p>If you turn on the music, your browser remembers that for the rest of your visit. Music never plays until you tap it.</p>
       </div>
     </section>
@@ -911,12 +1047,21 @@ NOT_FOUND = """    <script>
     </section>
 """
 
+HOME = HOME + MAPS_SCRIPT
+LEADERBOARDS_BODY = LEADERBOARDS_BODY + MAPS_SCRIPT
 page("/", None, "BattleTown: class-based PvP arenas for Minecraft Java 26.3. Join at play.battletown.store. Public alpha 1 December 2026.", HOME,
      scripts=("/assets/js/stats.js",))
 page("/leaderboards/", "Leaderboards", "Live BattleTown leaderboards: Champions, Records and Builders, straight from the Hub.", LEADERBOARDS_BODY,
      scripts=("/assets/js/stats.js",))
 page("/player/", "Player", "A BattleTown player's profile: rank, wins, kills, best classes and leaderboard places.", PLAYER_BODY,
      scripts=("/assets/js/stats.js",))
+for _i, _c in enumerate(CARDS):
+    page(f"/classes/{_c['id']}/", _c["name"],
+         f"{_c['name']}, {_c['role']} in BattleTown's {_c['hall']}: {_c['tagline'].capitalize()}. "
+         + " ".join(f"{n}: {e}" for n, e in _c["abilities"]),
+         class_page(_i, _c), image=f"https://battletown.store/assets/img/classes/{_c['id']}.webp")
+write_calendar()
+
 page("/classes/", "Classes", "All 16 BattleTown classes, from Acrobat to Warden.", CLASSES_BODY, scripts=("/assets/js/classes.js",),
      image="https://battletown.store/assets/img/classes/knight.webp")
 page("/modes/", "Game modes", "BattleTown game modes: Duel, Free For All, Team Deathmatch and Last Alive.", MODES_BODY)
