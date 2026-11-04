@@ -32,7 +32,7 @@ PAGES = []
 # Visitor stats (GoatCounter: free, no cookies). Paste the site code from
 # goatcounter.com here (for https://battletown.goatcounter.com, "battletown")
 # and run this script. Empty = no visitor stats at all.
-GOATCOUNTER_CODE = ""
+GOATCOUNTER_CODE = "battletown"
 
 NAV = [("/", "Home"), ("/classes/", "Classes"), ("/modes/", "Game modes"),
        ("/maps/", "Maps"), ("/leaderboards/", "Leaderboards"), ("/store/", "Store"), ("/rules/", "Rules")]
