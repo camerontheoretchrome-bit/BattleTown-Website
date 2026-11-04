@@ -558,12 +558,68 @@
   els.nameForm.addEventListener("submit", setName);
   els.checkout.addEventListener("click", checkout);
 
+  // From an in-game BUY button: /store/?name=PLAYER&add=PACKAGE. Make the
+  // basket for that player, add the package, and show the basket ready to
+  // check out. The link is cleaned up so a reload doesn't add it again.
+  function openFromGame() {
+    var params = new URLSearchParams(location.search);
+    var name = (params.get("name") || "").trim();
+    var add = (params.get("add") || "").trim();
+
+    if (!NAME_RULE.test(name)) {
+      return Promise.resolve(false);
+    }
+
+    if (history.replaceState) {
+      history.replaceState(null, "", location.pathname + location.hash);
+    }
+
+    els.nameInput.value = name;
+
+    var sameBuyer = state.basket && state.username.toLowerCase() === name.toLowerCase();
+    var ready = sameBuyer ? Promise.resolve(state.basket) : createBasket(name).then(function (basket) {
+      state.username = basket.username || name;
+      state.basket = basket;
+      save();
+      return basket;
+    });
+
+    return ready.then(function (basket) {
+      var already = (basket.packages || []).some(function (p) { return String(p.id) === add; });
+      if (!/^[0-9]{1,12}$/.test(add) || already) {
+        return basket;
+      }
+      return addPackage(basket.ident, add).then(function (updated) {
+        state.basket = updated;
+        save();
+        return updated;
+      });
+    }).then(function () {
+      nameStatus("Buying for " + state.username + ". Your item is in the basket.", false);
+      return true;
+    }).catch(function (error) {
+      nameStatus(error.status === 404
+        ? "We couldn't find the Minecraft account \"" + name + "\"."
+        : "We couldn't add that item. Please try again.", true);
+      return false;
+    });
+  }
+
   busy(true);
   Promise.all([loadCategories(), restore()]).then(function () {
-    if (state.username) {
+    return openFromGame();
+  }).then(function (fromGame) {
+    if (state.username && !fromGame) {
       nameStatus("Buying for " + state.username + ".", false);
     }
     render();
+    if (fromGame) {
+      // Bring the ready basket into view and give it a little bounce.
+      setTimeout(function () {
+        els.basket.scrollIntoView({ behavior: "smooth", block: "center" });
+        els.basket.classList.add("is-bumped");
+      }, 300);
+    }
   }).catch(function () {
     message("The store couldn't load right now. You can still buy in game with /store.", true);
   }).then(function () {
