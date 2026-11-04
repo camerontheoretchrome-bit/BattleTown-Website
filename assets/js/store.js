@@ -32,7 +32,7 @@
   // "titled" art already has the category name painted in, so the heading
   // is kept for screen readers only.
   var CATEGORY_ART = {
-    "Battle Bundles": { src: "/assets/img/art/cat-deals.webp", titled: true },
+    "Battle Bundles": { src: "/assets/img/art/cat-bundles.webp", titled: true },
     "Battle Bucks": { src: "/assets/img/art/header.webp", titled: false },
     "XP Boosts": { src: "/assets/img/art/cat-xp.webp", titled: true },
     "Collections": { src: "/assets/img/art/cat-collections.webp", titled: true }
