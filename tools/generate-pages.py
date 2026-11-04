@@ -24,8 +24,9 @@ DISCORD = "https://discord.gg/TJ5wBJYCc"
 ADDRESS = "play.battletown.store"
 
 
-def page(path, title, description, body):
+def page(path, title, description, body, scripts=()):
     nav = "\n".join(f'        <a href="{href}">{label}</a>' for href, label in NAV)
+    extra_scripts = "".join(f'  <script src="{src}"></script>\n' for src in scripts)
     full_title = "BattleTown" if title is None else f"{title} · BattleTown"
     out = f"""<!doctype html>
 <html lang="en">
@@ -72,7 +73,7 @@ def page(path, title, description, body):
 
   <script src="/assets/js/config.js"></script>
   <script src="/assets/js/site.js"></script>
-</body>
+{extra_scripts}</body>
 </html>
 """
     dest = os.path.join(SITE, path.strip("/"), "index.html") if path != "/404" else os.path.join(SITE, "404.html")
@@ -317,22 +318,70 @@ MAPS_BODY = f"""    <section class="page-head">
 STORE_BODY = f"""    <section class="page-head">
       <div class="wrap">
         <h1>Store</h1>
-        <p>The BattleTown web store is coming soon.</p>
+        <p>BattleBucks, XP Boosts, Class Collections and bundles for BattleTown. Checkout is run by Tebex, our payment partner, so we never see your card details. Everything is delivered to your account on <code>{ADDRESS}</code>.</p>
       </div>
     </section>
 
     <section class="section">
       <div class="wrap">
-        <!-- Phase 2: the Tebex Headless store renders into #store-app. -->
-        <div id="store-app" hidden></div>
+        <!-- Filled by assets/js/store.js from Tebex Headless when a webstore token is set in config.js. -->
+        <div id="store-app" hidden>
+          <form class="store-name" id="store-name-form" autocomplete="on">
+            <label for="store-name">Your Minecraft name</label>
+            <div class="store-name-row">
+              <input id="store-name" name="username" type="text" inputmode="text" autocapitalize="off" autocorrect="off" spellcheck="false" maxlength="16" placeholder="e.g. Steve" required>
+              <button class="copy-btn" type="submit">Use this name</button>
+            </div>
+            <p class="store-name-status" id="store-name-status" aria-live="polite">Purchases go to this Minecraft: Java Edition account.</p>
+          </form>
 
-        <div class="callout" id="store-coming-soon">
-          <p><strong>Until then, buy BattleBucks in game.</strong> Join <code>{ADDRESS}</code> and type <code>/buy</code>. Checkout is handled by Tebex, and we never see your card details.</p>
+          <p class="store-message" id="store-message" role="alert" hidden></p>
+
+          <div class="store-layout">
+            <div class="store-main">
+              <nav class="store-cats" id="store-cats" aria-label="Store sections"></nav>
+              <div id="store-shelves"><p class="store-loading">Loading the store…</p></div>
+            </div>
+
+            <aside class="basket" aria-label="Basket">
+              <h2>Basket</h2>
+              <ul class="basket-items" id="basket-items"></ul>
+              <p class="basket-total-row"><span>Total</span> <strong id="basket-total"></strong></p>
+              <button class="btn basket-checkout" id="basket-checkout" type="button" disabled>Checkout</button>
+              <p class="basket-note" id="basket-note"></p>
+              <p class="basket-note">Taxes are added at checkout. Purchases are covered by the <a href="/rules/#terms">Terms of Service</a>.</p>
+            </aside>
+          </div>
         </div>
 
-        <p>Everything you buy is covered by the <a href="/rules/#terms">Terms of Service</a>.</p>
+        <div class="callout" id="store-coming-soon">
+          <p><strong>Buy in game.</strong> Join <code>{ADDRESS}</code> and type <code>/buy</code>. Checkout is handled by Tebex, and we never see your card details.</p>
+        </div>
+        <noscript><p>The store needs JavaScript. You can also buy in game with <code>/buy</code>.</p></noscript>
       </div>
     </section>
+"""
+
+THANKS_BODY = f"""    <section class="page-head">
+      <div class="wrap">
+        <h1>Thank you!</h1>
+        <p>Your purchase is on its way. Tebex emails your receipt.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <ol class="steps">
+          <li><strong>Join</strong> <code>{ADDRESS}</code>. Delivery can take a few minutes after payment.</li>
+          <li><strong>BattleBucks</strong> go straight to your balance. <strong>XP Boosts</strong>, <strong>Collections</strong> and <strong>bundles</strong> show up in game, ready to use. Cosmetics are in your <code>/wardrobe</code>.</li>
+          <li>Something missing after 15 minutes? Email <a href="mailto:battletowntm@gmail.com">battletowntm@gmail.com</a> or open a ticket on the <a href="{DISCORD}">Discord</a>.</li>
+        </ol>
+        <div class="btn-row" style="justify-content: flex-start; margin-top: 24px">
+          <a class="btn" href="/store/">Back to the store</a>
+        </div>
+      </div>
+    </section>
+    <script>try {{ localStorage.removeItem("bt-store-basket"); }} catch (e) {{}}</script>
 """
 
 # ---------------------------------------------------------------- Rules
@@ -438,6 +487,7 @@ RULES_BODY = f"""    <section class="page-head">
 {render_doc(docs["PRIVACY_PAGES"])}
         <h3>THIS WEBSITE</h3>
         <p>battletown.store is a plain website hosted on GitHub Pages. It sets no cookies and has no ads or trackers. GitHub may log your IP address when you visit, to run and protect its service.</p>
+        <p>The Store page talks to Tebex to show what's for sale and to keep your basket. It sends Tebex the Minecraft name you type there, and your browser remembers that name and your basket on your own device. Payment happens on Tebex's checkout, under Tebex's own terms and privacy policy.</p>
       </div>
     </section>
 """
@@ -454,7 +504,8 @@ page("/", None, "BattleTown: class-based PvP arenas for Minecraft Java 26.3. Joi
 page("/classes/", "Classes", "All 16 BattleTown classes, from Acrobat to Warden.", CLASSES_BODY)
 page("/modes/", "Game modes", "BattleTown game modes: Duel, Free For All, Team Deathmatch and Last Alive.", MODES_BODY)
 page("/maps/", "Maps", "BattleTown's official Maps, and how to build your own Map and get it into public matches.", MAPS_BODY)
-page("/store/", "Store", "The BattleTown store. Buy BattleBucks in game with /buy until the web store opens.", STORE_BODY)
+page("/store/", "Store", "The BattleTown store: BattleBucks, XP Boosts, Class Collections and bundles, with checkout by Tebex.", STORE_BODY, scripts=("/assets/js/store.js",))
+page("/store/thanks/", "Thank you", "Thanks for supporting BattleTown.", THANKS_BODY)
 page("/rules/", "Rules & Terms", "BattleTown Server Rules, Terms of Service and Privacy Policy.", RULES_BODY)
 page("/404", "Page not found", "Page not found.", NOT_FOUND)
 print("ok", sum(len(v) for v in docs.values()), "rule blocks")

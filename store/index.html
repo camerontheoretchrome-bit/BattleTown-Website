@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Store · BattleTown</title>
-  <meta name="description" content="The BattleTown store. Buy BattleBucks in game with /buy until the web store opens.">
+  <meta name="description" content="The BattleTown store: BattleBucks, XP Boosts, Class Collections and bundles, with checkout by Tebex.">
   <meta name="theme-color" content="#0a0a0d">
   <meta property="og:title" content="Store · BattleTown">
-  <meta property="og:description" content="The BattleTown store. Buy BattleBucks in game with /buy until the web store opens.">
+  <meta property="og:description" content="The BattleTown store: BattleBucks, XP Boosts, Class Collections and bundles, with checkout by Tebex.">
   <meta property="og:image" content="https://battletown.store/assets/img/logo-512.png">
   <meta property="og:url" content="https://battletown.store/store/">
   <link rel="icon" href="/assets/img/icon-32.png" sizes="32x32">
@@ -33,20 +33,46 @@
     <section class="page-head">
       <div class="wrap">
         <h1>Store</h1>
-        <p>The BattleTown web store is coming soon.</p>
+        <p>BattleBucks, XP Boosts, Class Collections and bundles for BattleTown. Checkout is run by Tebex, our payment partner, so we never see your card details. Everything is delivered to your account on <code>play.battletown.store</code>.</p>
       </div>
     </section>
 
     <section class="section">
       <div class="wrap">
-        <!-- Phase 2: the Tebex Headless store renders into #store-app. -->
-        <div id="store-app" hidden></div>
+        <!-- Filled by assets/js/store.js from Tebex Headless when a webstore token is set in config.js. -->
+        <div id="store-app" hidden>
+          <form class="store-name" id="store-name-form" autocomplete="on">
+            <label for="store-name">Your Minecraft name</label>
+            <div class="store-name-row">
+              <input id="store-name" name="username" type="text" inputmode="text" autocapitalize="off" autocorrect="off" spellcheck="false" maxlength="16" placeholder="e.g. Steve" required>
+              <button class="copy-btn" type="submit">Use this name</button>
+            </div>
+            <p class="store-name-status" id="store-name-status" aria-live="polite">Purchases go to this Minecraft: Java Edition account.</p>
+          </form>
 
-        <div class="callout" id="store-coming-soon">
-          <p><strong>Until then, buy BattleBucks in game.</strong> Join <code>play.battletown.store</code> and type <code>/buy</code>. Checkout is handled by Tebex, and we never see your card details.</p>
+          <p class="store-message" id="store-message" role="alert" hidden></p>
+
+          <div class="store-layout">
+            <div class="store-main">
+              <nav class="store-cats" id="store-cats" aria-label="Store sections"></nav>
+              <div id="store-shelves"><p class="store-loading">Loading the store…</p></div>
+            </div>
+
+            <aside class="basket" aria-label="Basket">
+              <h2>Basket</h2>
+              <ul class="basket-items" id="basket-items"></ul>
+              <p class="basket-total-row"><span>Total</span> <strong id="basket-total"></strong></p>
+              <button class="btn basket-checkout" id="basket-checkout" type="button" disabled>Checkout</button>
+              <p class="basket-note" id="basket-note"></p>
+              <p class="basket-note">Taxes are added at checkout. Purchases are covered by the <a href="/rules/#terms">Terms of Service</a>.</p>
+            </aside>
+          </div>
         </div>
 
-        <p>Everything you buy is covered by the <a href="/rules/#terms">Terms of Service</a>.</p>
+        <div class="callout" id="store-coming-soon">
+          <p><strong>Buy in game.</strong> Join <code>play.battletown.store</code> and type <code>/buy</code>. Checkout is handled by Tebex, and we never see your card details.</p>
+        </div>
+        <noscript><p>The store needs JavaScript. You can also buy in game with <code>/buy</code>.</p></noscript>
       </div>
     </section>
 
@@ -67,5 +93,6 @@
 
   <script src="/assets/js/config.js"></script>
   <script src="/assets/js/site.js"></script>
+  <script src="/assets/js/store.js"></script>
 </body>
 </html>

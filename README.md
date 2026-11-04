@@ -10,7 +10,8 @@ The public website at **https://battletown.store**, served by GitHub Pages from 
 | `/classes/` | `classes/index.html` | The 16 classes |
 | `/modes/` | `modes/index.html` | Duel, Free For All, Team Deathmatch, Last Alive |
 | `/maps/` | `maps/index.html` | Official Maps, building your own Map, Map sizes |
-| `/store/` | `store/index.html` | Coming soon (phase 2 goes here) |
+| `/store/` | `store/index.html` + `assets/js/store.js` | Live Tebex Headless store: packages, basket, checkout on Tebex |
+| `/store/thanks/` | `store/thanks/index.html` | Where Tebex sends buyers after paying |
 | `/rules/` | `rules/index.html` | Server Rules (`#rules`), Terms (`#terms`), Privacy (`#privacy`) |
 | 404 | `404.html` | Page not found |
 
@@ -36,7 +37,7 @@ Styles are in `assets/css/site.css` and the shared script (copy button, current-
 
 `assets/js/config.js` holds the settings the next phases need. Everything in it is public.
 
-- **Phase 2, store (Tebex Headless).** Put the Tebex *public* webstore token in `tebexWebstoreToken`, add `assets/js/store.js` to fetch packages and run the basket, and render into `<div id="store-app">` on `store/index.html`. Checkout is handed to Tebex, which stays merchant of record. The Tebex private key never goes in this repo.
+- **Phase 2, store (Tebex Headless): live.** `tebexWebstoreToken` holds the store's *public* token. `assets/js/store.js` reads packages from `https://headless.tebex.io/api/accounts/{token}/categories?includePackages=1`, creates a basket for the buyer's Minecraft name (Tebex checks the name and attaches the UUID), adds packages (quantity 1 each), and sends the buyer to the basket's `links.checkout` on `pay.tebex.io`. Tebex stays merchant of record and runs the same package commands as an in-game purchase. Products, prices, images and descriptions all come from the Tebex panel, so editing a package there changes the site. The basket is remembered in the browser's localStorage (`bt-store-basket`). The Tebex private key never goes in this repo. If the token is emptied, the page falls back to "buy in game with /buy".
 - **Phase 3, live stats.** The plugin serves a read-only JSON feed on an HTTPS address (for example `https://api.battletown.store/stats.json` behind Bloom's reverse proxy). Put it in `statsFeedUrl`, add a `stats/` page and `assets/js/stats.js` that read it. GitHub Pages is HTTPS, so the feed must be HTTPS too.
 
 ## Domain
@@ -64,4 +65,4 @@ The `CNAME` file in this repo tells GitHub Pages the site's domain.
 python3 -m http.server 8765
 ```
 
-Then open http://127.0.0.1:8765/.
+Then open http://127.0.0.1:8765/. The store works from the preview too, but Tebex sends you back to 127.0.0.1 after checkout.
