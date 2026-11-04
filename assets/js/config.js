@@ -15,7 +15,7 @@
 // coming-soon text instead.
 window.BT_CONFIG = {
   serverAddress: "play.battletown.store",
-  discordUrl: "https://discord.gg/TJ5wBJYCc",
+  discordUrl: "https://discord.gg/gdWDzFe7wd",
   tebexWebstoreToken: "14jdk-5b8a5aab70ca290954d04f1a993ac6223d18a630",
   statsFeedUrl: "https://api.battletown.store"
 };

@@ -37,7 +37,7 @@ GOATCOUNTER_CODE = ""
 NAV = [("/", "Home"), ("/classes/", "Classes"), ("/modes/", "Game modes"),
        ("/maps/", "Maps"), ("/leaderboards/", "Leaderboards"), ("/store/", "Store"), ("/rules/", "Rules")]
 
-DISCORD = "https://discord.gg/TJ5wBJYCc"
+DISCORD = "https://discord.gg/gdWDzFe7wd"
 ADDRESS = "play.battletown.store"
 
 # Public alpha opens at midnight Ottawa time.
@@ -50,7 +50,7 @@ def asset(path):
         return path + "?v=" + hashlib.sha1(f.read()).hexdigest()[:8]
 
 
-JSON_LD = """<script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"BattleTown","url":"https://battletown.store/","description":"Class-based PvP arenas for Minecraft: Java Edition 26.3, with 16 classes, four game modes and player-built Maps.","image":"https://battletown.store/assets/img/social-card.jpg","gamePlatform":"Minecraft: Java Edition","genre":["PvP","Arena"],"playMode":"MultiPlayer","sameAs":["https://discord.gg/TJ5wBJYCc"]}</script>"""
+JSON_LD = """<script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"BattleTown","url":"https://battletown.store/","description":"Class-based PvP arenas for Minecraft: Java Edition 26.3, with 16 classes, four game modes and player-built Maps.","image":"https://battletown.store/assets/img/social-card.jpg","gamePlatform":"Minecraft: Java Edition","genre":["PvP","Arena"],"playMode":"MultiPlayer","sameAs":["https://discord.gg/gdWDzFe7wd"]}</script>"""
 
 
 GOATCOUNTER_TAG = (f'  <script data-goatcounter="https://{GOATCOUNTER_CODE}.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>\n'
@@ -948,7 +948,7 @@ def parse_rules():
 def linkify(text):
     t = html.escape(text)
     t = t.replace("support@battletown.store", '<a href="mailto:support@battletown.store">support@battletown.store</a>')
-    t = t.replace("discord.gg/TJ5wBJYCc", f'<a href="{DISCORD}">discord.gg/TJ5wBJYCc</a>')
+    t = t.replace("discord.gg/gdWDzFe7wd", f'<a href="{DISCORD}">discord.gg/gdWDzFe7wd</a>')
     t = re.sub(r"(/report)", r"<code>\1</code>", t)
     return t
 
