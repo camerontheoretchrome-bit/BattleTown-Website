@@ -82,7 +82,7 @@ def page(path, title, description, body, scripts=(), image="https://battletown.s
   <div class="progress" aria-hidden="true"></div>
   <header class="site-header">
     <div class="wrap">
-      <a class="brand" href="/"><img src="/assets/img/icon-192.png" alt="" width="38" height="38">BattleTown</a>
+      <a class="brand" href="/"><img src="/assets/img/icon-96.webp" alt="" width="38" height="38">BattleTown</a>
       <button class="menu-btn" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Menu"><span></span><span></span><span></span></button>
       <nav class="nav" id="main-nav" aria-label="Main">
 {nav}
@@ -98,11 +98,12 @@ def page(path, title, description, body, scripts=(), image="https://battletown.s
   <footer class="site-footer">
     <div class="wrap">
       <div class="footer-brand">
-        <img src="/assets/img/icon-192.png" alt="" width="52" height="52">
+        <img src="/assets/img/icon-96.webp" alt="" width="52" height="52" loading="lazy">
         <p><strong>BattleTown</strong><br><code>{ADDRESS}</code> · Minecraft Java 26.3</p>
       </div>
       <nav aria-label="Footer">
         <a href="{DISCORD}">Discord</a>
+        <a href="/leaderboards/">Leaderboards</a>
         <a href="/store/">Store</a>
         <a href="/rules/">Server Rules</a>
         <a href="/rules/#terms">Terms</a>
@@ -299,7 +300,7 @@ MODES = [
     ("Duel", ICON_DUEL, "1v1", ["Best of 3 rounds. Win 2 rounds to win the Duel.", "Each round lasts up to 90 seconds.", "If time runs out, the player with more health left wins the round."]),
     ("Free For All", ICON_FFA, "3–8", ["Everyone for themselves. You respawn after 5 seconds.", "First to 10 kills wins, or most kills after 6 minutes.", "No teaming."]),
     ("Team Deathmatch", ICON_TDM, "2v2 · 4v4", ["Blue team against Red team. You respawn after 5 seconds.", "First team to 10 kills (2v2) or 20 kills (4v4) wins.", "Bring your friends: party up and queue together."]),
-    ("Last Alive", ICON_LAST, "4 · 8", ["One life each. The last fighter standing wins.", "Out of the fight? Watch the rest of the match as a spectator.", "No teaming."]),
+    ("Last Alive", ICON_LAST, "4 · 8", ["One life each. The last fighter standing wins.", "A 5-minute clock: at 4:00 everyone glows, and at time-up the survivor with the most kills wins.", "Out? Watch the rest as a spectator. No teaming."]),
 ]
 
 
@@ -481,6 +482,18 @@ HOME = f"""    <section class="hero">
         <div class="art-frame tilt reveal" style="--delay: 0.1s">
           <img src="/assets/img/art/cat-collections.webp" alt="Class Collections" loading="lazy" width="1400" height="788">
         </div>
+      </div>
+    </section>
+
+    <section class="section" data-home-podium hidden>
+      <div class="wrap">
+        <div class="section-head center reveal">
+          <span class="eyebrow">Live from the Hub</span>
+          <h2>Top of the town</h2>
+          <p class="lead">The Grand Champion board, live from the Hub's hall of fame.</p>
+        </div>
+        <div data-podium></div>
+        <div class="btn-row" style="margin-top: 28px"><a class="btn btn-ghost" href="/leaderboards/">All leaderboards</a></div>
       </div>
     </section>
 
@@ -910,9 +923,9 @@ page("/modes/", "Game modes", "BattleTown game modes: Duel, Free For All, Team D
 page("/maps/", "Maps", "BattleTown's official Maps, and how to build your own Map and get it into public matches.", MAPS_BODY)
 page("/store/", "Store", "The BattleTown store: BattleBucks, XP Boosts, Class Collections and bundles, with checkout by Tebex.", STORE_BODY, scripts=("/assets/js/store.js",),
      image="https://battletown.store/assets/img/art/cat-collections.webp")
-page("/store/thanks/", "Thank you", "Thanks for supporting BattleTown.", THANKS_BODY)
+page("/store/thanks/", "Thank you", "Thanks for supporting BattleTown. Your purchase is on its way to your account.", THANKS_BODY)
 page("/rules/", "Rules & Terms", "BattleTown Server Rules, Terms of Service and Privacy Policy.", RULES_BODY)
-page("/404", "Page not found", "Page not found.", NOT_FOUND)
+page("/404", "Page not found", "This page doesn't exist. Head back to BattleTown: class-based PvP for Minecraft Java.", NOT_FOUND)
 with open(os.path.join(SITE, "sitemap.xml"), "w") as f:
     f.write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n')
     for path in PAGES:

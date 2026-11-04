@@ -1257,3 +1257,32 @@ a.board-name:hover { color: var(--gold-bright); text-decoration: underline; }
 .class-list span { color: var(--muted); font-size: 0.88rem; }
 
 .placings li { background: rgba(0, 0, 0, 0.35); }
+
+/* Podium (Grand Champion top three) */
+.podium { display: grid; grid-template-columns: repeat(3, 1fr); align-items: end; gap: 14px; max-width: 720px; margin: 8px auto 0; }
+.podium-step { position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; text-decoration: none; color: var(--text); padding: 14px 10px 18px; border-radius: 14px 14px 6px 6px; background: linear-gradient(180deg, rgba(30, 30, 40, 0.95), rgba(14, 14, 20, 0.95)); border: 1px solid var(--line); transition: transform 0.3s var(--ease-out), border-color 0.3s; }
+a.podium-step:hover { transform: translateY(-6px); color: var(--text); }
+.podium-step.place-1 { min-height: 300px; border-color: rgba(255, 212, 92, 0.8); box-shadow: 0 0 50px rgba(245, 184, 46, 0.25); }
+.podium-step.place-2 { min-height: 250px; border-color: rgba(215, 222, 232, 0.5); }
+.podium-step.place-3 { min-height: 220px; border-color: rgba(224, 154, 85, 0.6); }
+.podium-skin { width: 70px; height: auto; margin-bottom: 8px; filter: drop-shadow(0 10px 16px rgba(0, 0, 0, 0.6)); }
+.place-1 .podium-skin { width: 90px; }
+.podium-rank { font-family: var(--display); font-size: 1.8rem; line-height: 1; }
+.place-1 .podium-rank { color: var(--gold-bright); }
+.place-2 .podium-rank { color: #d7dee8; }
+.place-3 .podium-rank { color: #e09a55; }
+.podium-name { font-weight: 900; margin-top: 4px; word-break: break-all; }
+.podium-value { color: var(--muted); font-size: 0.9rem; font-weight: 700; }
+@media (max-width: 520px) { .podium { gap: 8px; } .podium-skin { width: 50px; } .place-1 .podium-skin { width: 64px; } .podium-step.place-1 { min-height: 240px; } .podium-step.place-2 { min-height: 200px; } .podium-step.place-3 { min-height: 180px; } }
+
+.board-featured { margin-bottom: 18px; text-align: center; border-color: rgba(245, 184, 46, 0.5); }
+.board-featured h3 { font-size: 1.8rem; }
+.boards-open { margin-top: 22px; padding: 18px 20px; border: 1px dashed rgba(245, 184, 46, 0.4); border-radius: var(--radius); }
+.boards-open h3 { color: var(--gold); margin-bottom: 2px; }
+.boards-open p { color: var(--muted); margin: 0 0 10px; }
+.boards-open .chips li { font-size: 0.78rem; color: var(--muted); }
+.share-btn { margin-top: 12px; }
+/* Each place keeps its column, so a lone champion still stands in the middle. */
+.podium-step.place-2 { grid-column: 1; grid-row: 1; }
+.podium-step.place-1 { grid-column: 2; grid-row: 1; }
+.podium-step.place-3 { grid-column: 3; grid-row: 1; }

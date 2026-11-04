@@ -24,10 +24,7 @@
     { id: "builder", name: "Builders", blurb: "The players whose Maps everyone plays." }
   ];
 
-  function get(path) {
-    if (!base) {
-      return Promise.reject(new Error("no feed"));
-    }
+  function fetchJson(path) {
     return fetch(base + path, { headers: { Accept: "application/json" } }).then(function (response) {
       if (!response.ok) {
         var error = new Error("HTTP " + response.status);
@@ -35,6 +32,22 @@
         throw error;
       }
       return response.json();
+    });
+  }
+
+  // A dropped connection gets one retry, so a blip or a server restart
+  // doesn't blank the page. Real answers (404 no such player) don't retry.
+  function get(path) {
+    if (!base) {
+      return Promise.reject(new Error("no feed"));
+    }
+    return fetchJson(path).catch(function (error) {
+      if (error.status) {
+        throw error;
+      }
+      return new Promise(function (resolve) { setTimeout(resolve, 2500); }).then(function () {
+        return fetchJson(path);
+      });
     });
   }
 
@@ -107,16 +120,19 @@
     get("/v1/summary.json").then(function (summary) {
       box.innerHTML = "";
       [
-        [number(summary.players), "players"],
-        [number(summary.kills), "kills"],
-        [number(summary.communityMaps), "Community Maps"]
+        [summary.players, "player", "players"],
+        [summary.kills, "kill", "kills"],
+        [summary.communityMaps, "Community Map", "Community Maps"]
       ].forEach(function (item) {
+        if (!item[0]) {
+          return; // Before launch a zero reads as empty; leave it out.
+        }
         var pill = el("span", "pill");
-        pill.appendChild(el("strong", "", item[0]));
-        pill.appendChild(document.createTextNode(" " + item[1]));
+        pill.appendChild(el("strong", "", number(item[0])));
+        pill.appendChild(document.createTextNode(" " + (item[0] === 1 ? item[1] : item[2])));
         box.appendChild(pill);
       });
-      box.hidden = false;
+      box.hidden = !box.children.length;
 
       var status = document.querySelector("[data-server-status] .status-text");
       if (status && summary.online > 0) {
@@ -125,6 +141,48 @@
     }).catch(function () {
       box.hidden = true;
     });
+  });
+
+  // ---------------------------------------------------------------- Podium
+  // The Grand Champion board's top three, as a podium (2nd, 1st, 3rd).
+
+  var OVERALL = "champions.overall";
+
+  function podium(board) {
+    var rows = (board.rows || []).slice(0, 3);
+    var wrap = el("div", "podium");
+    [1, 0, 2].forEach(function (i) {
+      var row = rows[i];
+      if (!row) {
+        return;
+      }
+      var step = el(row.profile ? "a" : "div", "podium-step place-" + row.rank);
+      if (row.profile) {
+        step.href = profileLink(row.name);
+      }
+      var skin = el("img", "podium-skin");
+      skin.src = "https://mc-heads.net/body/" + encodeURIComponent(row.name) + "/160";
+      skin.alt = "";
+      skin.loading = "lazy";
+      skin.onerror = function () { skin.remove(); };
+      step.appendChild(skin);
+      step.appendChild(el("span", "podium-rank", "#" + row.rank));
+      step.appendChild(el("strong", "podium-name", row.name));
+      step.appendChild(el("span", "podium-value", (row.value || "") + (row.unit ? " " + row.unit : "")));
+      wrap.appendChild(step);
+    });
+    return wrap;
+  }
+
+  document.querySelectorAll("[data-home-podium]").forEach(function (section) {
+    get("/v1/leaderboards.json").then(function (doc) {
+      var board = (doc.boards || []).filter(function (b) { return b.id === OVERALL; })[0];
+      if (!board || !(board.rows || []).length) {
+        return; // Nothing to show before the first public wins.
+      }
+      section.querySelector("[data-podium]").appendChild(podium(board));
+      section.hidden = false;
+    }).catch(function () {});
   });
 
   // ---------------------------------------------------------------- Player search
@@ -176,13 +234,47 @@
         var panel = el("section", "hall-panel");
         panel.hidden = i !== 0;
         panel.appendChild(el("p", "lead", hall.blurb));
-        var grid = el("div", "grid boards");
 
-        (doc.boards || []).filter(function (b) { return b.hall === hall.id; }).forEach(function (board) {
-          grid.appendChild(boardCard(board));
+        var boards = (doc.boards || []).filter(function (b) { return b.hall === hall.id; });
+
+        // A subheading every board in the hall shares says nothing; drop it.
+        var subs = {};
+        boards.forEach(function (b) { subs[b.subheading] = (subs[b.subheading] || 0) + 1; });
+
+        var featured = boards.filter(function (b) { return b.id === OVERALL && (b.rows || []).length; })[0];
+        if (featured) {
+          var top = el("div", "card board-featured");
+          top.appendChild(el("h3", "", title(featured.heading)));
+          top.appendChild(podium(featured));
+          panel.appendChild(top);
+        }
+
+        var grid = el("div", "grid boards");
+        var empty = [];
+
+        boards.forEach(function (board) {
+          if (board === featured) {
+            return;
+          }
+          if (!(board.rows || []).length) {
+            empty.push(board);
+            return;
+          }
+          grid.appendChild(boardCard(board, subs[board.subheading] > 1));
         });
 
         panel.appendChild(grid);
+
+        if (empty.length) {
+          var open = el("div", "boards-open");
+          open.appendChild(el("h3", "", "Be the first"));
+          open.appendChild(el("p", "", "No one is on these boards yet. Play public matches to claim a spot."));
+          var chips = el("ul", "chips");
+          empty.forEach(function (b) { chips.appendChild(el("li", "", title(b.heading))); });
+          open.appendChild(chips);
+          panel.appendChild(open);
+        }
+
         panels.push(panel);
 
         tab.addEventListener("click", function () {
@@ -206,10 +298,10 @@
     });
   }
 
-  function boardCard(board) {
+  function boardCard(board, hideSubheading) {
     var card = el("article", "card board tilt");
     card.appendChild(el("h3", "", title(board.heading)));
-    if (board.subheading) {
+    if (board.subheading && !hideSubheading) {
       card.appendChild(el("p", "board-sub", board.subheading));
     }
 
@@ -289,6 +381,23 @@
       p.titles.forEach(function (t) { titles.appendChild(el("li", "", titleText(t))); });
       who.appendChild(titles);
     }
+    var share = el("button", "btn btn-small share-btn", "Copy profile link");
+    share.type = "button";
+    share.setAttribute("data-copy", location.origin + profileLink(p.name));
+    share.addEventListener("click", function () {
+      var link = share.getAttribute("data-copy");
+      (navigator.clipboard ? navigator.clipboard.writeText(link) : Promise.reject()).then(function () {
+        share.textContent = "Link copied!";
+        if (window.BT_BURST) {
+          window.BT_BURST(share);
+        }
+        setTimeout(function () { share.textContent = "Copy profile link"; }, 1800);
+      }).catch(function () {
+        window.prompt("Copy this link:", link);
+      });
+    });
+    who.appendChild(share);
+
     head.appendChild(who);
     profileRoot.appendChild(head);
 
