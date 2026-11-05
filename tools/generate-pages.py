@@ -37,13 +37,13 @@ GOATCOUNTER_CODE = "battletown"
 NAV = [("/", "Home"), ("/classes/", "Classes"), ("/modes/", "Game modes"),
        ("/maps/", "Maps"), ("/leaderboards/", "Leaderboards"), ("/store/", "Store"), ("/rules/", "Rules")]
 
-DISCORD = "https://discord.gg/gdWDzFe7wd"
+DISCORD = "https://discord.gg/trSB8HCrTM"
 ADDRESS = "play.battletown.store"
 
 # Official accounts, in the order they show. Icons are Simple Icons (CC0) in assets/img/social/.
 # Discord uses the public invite: a discord.com/channels/... link only opens for people already in the server.
 SOCIALS = [
-    dict(name="Discord", url=DISCORD, icon="discord", handle="discord.gg/gdWDzFe7wd", cta="Join the server",
+    dict(name="Discord", url=DISCORD, icon="discord", handle="discord.gg/trSB8HCrTM", cta="Join the server",
          blurb="Chat with players, find a squad, get help and hear news first."),
     dict(name="YouTube", url="https://www.youtube.com/@battletowntm", icon="youtube", handle="@battletowntm", cta="Subscribe",
          blurb="Trailers, guides and the best fights."),
@@ -1011,7 +1011,7 @@ def parse_rules():
 def linkify(text):
     t = html.escape(text)
     t = t.replace("support@battletown.store", '<a href="mailto:support@battletown.store">support@battletown.store</a>')
-    t = t.replace("discord.gg/gdWDzFe7wd", f'<a href="{DISCORD}">discord.gg/gdWDzFe7wd</a>')
+    t = t.replace("discord.gg/trSB8HCrTM", f'<a href="{DISCORD}">discord.gg/trSB8HCrTM</a>')
     t = re.sub(r"(/report)", r"<code>\1</code>", t)
     return t
 
