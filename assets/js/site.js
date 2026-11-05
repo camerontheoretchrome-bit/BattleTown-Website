@@ -309,32 +309,82 @@
     }, 5000);
   });
 
+  // ---------------------------------------------------------------- Refresh timer
+  // BT_every(ms, fn): runs fn now, then every ms while the tab is visible.
+  // A hidden tab makes no requests; coming back to a stale one runs fn at once.
+
+  window.BT_every = function (ms, fn) {
+    var last = 0;
+    var timer = null;
+
+    function schedule() {
+      clearTimeout(timer);
+      if (!document.hidden) {
+        timer = setTimeout(function () {
+          last = Date.now();
+          fn();
+          schedule();
+        }, Math.max(0, last + ms - Date.now()));
+      }
+    }
+
+    document.addEventListener("visibilitychange", schedule);
+    last = Date.now();
+    fn();
+    schedule();
+  };
+
   // ---------------------------------------------------------------- Server status
-  // [data-server-status]: a pill filled from the public status of the server.
+  // [data-server-status]: a pill filled from two sources, checked every minute.
+  // The plugin's own feed (stats.js calls BT_feedStatus) answers only while the
+  // server is up, so an answer means online with an exact count. The public
+  // checker api.mcsrvstat.us covers the feed being unreachable; it caches, so
+  // it can trail a start or stop by a minute or so.
 
   var statusEl = document.querySelector("[data-server-status]");
+  var checker = null; // { online, players } once the public checker answers
+  var feed = null;    // { online, players } while the plugin's feed answers
+
+  function drawStatus() {
+    var now = feed || checker;
+    if (!statusEl || !now) {
+      return;
+    }
+    var dot = statusEl.querySelector(".dot");
+    var text = statusEl.querySelector(".status-text");
+    statusEl.hidden = false;
+    dot.classList.toggle("is-online", now.online);
+    dot.classList.toggle("is-offline", !now.online);
+    if (!now.online) {
+      text.textContent = "Server offline";
+    } else if (now.players > 0) {
+      text.innerHTML = "<strong>" + now.players + "</strong> playing now";
+    } else {
+      text.innerHTML = "Server <strong>online</strong>";
+    }
+  }
+
+  // players: the feed's online count, or null when the feed didn't answer.
+  window.BT_feedStatus = function (players) {
+    feed = players === null ? null : { online: true, players: players };
+    drawStatus();
+  };
 
   if (statusEl && config.serverAddress) {
-    fetch("https://api.mcsrvstat.us/3/" + encodeURIComponent(config.serverAddress))
-      .then(function (response) { return response.json(); })
-      .then(function (data) {
-        var dot = statusEl.querySelector(".dot");
-        var text = statusEl.querySelector(".status-text");
-
-        if (data && data.online) {
-          dot.classList.add("is-online");
-          var players = data.players && data.players.online;
-          text.innerHTML = players > 0
-            ? "<strong>" + players + "</strong> playing now"
-            : "Server <strong>online</strong>";
-        } else {
-          dot.classList.add("is-offline");
-          text.textContent = "Server offline";
-        }
-      })
-      .catch(function () {
-        statusEl.hidden = true;
-      });
+    window.BT_every(60000, function () {
+      fetch("https://api.mcsrvstat.us/3/" + encodeURIComponent(config.serverAddress))
+        .then(function (response) { return response.json(); })
+        .then(function (data) {
+          var online = !!(data && data.online);
+          checker = { online: online, players: online && data.players ? data.players.online : 0 };
+          drawStatus();
+        })
+        .catch(function () {
+          if (!checker && !feed) {
+            statusEl.hidden = true;
+          }
+        });
+    });
   }
 
   // ---------------------------------------------------------------- Countdown

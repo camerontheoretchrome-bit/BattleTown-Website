@@ -8,7 +8,10 @@
 //   #leaderboards         /leaderboards/: every Hub board, by hall
 //   #profile              /player/?name=NAME: one player's profile
 //
-// The feed refreshes about once a minute (the Hub boards' own rebuild).
+// The feed refreshes about once a minute (the Hub boards' own rebuild), and
+// the home and Leaderboards live bits (status, online now, totals, podium,
+// recent matches) re-read it every minute while the tab is visible. The
+// Leaderboards tables and profiles load once per visit.
 // If it can't be reached the page says so instead of breaking.
 (function () {
   "use strict";
@@ -115,11 +118,28 @@
     target.appendChild(box);
   }
 
-  var summaryOnce = null;
+  // The live bits redraw from one summary.json read a minute (BT_every in
+  // site.js, paused while the tab is hidden). Each part gets the feed's answer,
+  // or null when the feed didn't answer, which usually means the server is off.
+  var summaryParts = [];
 
-  function summary() {
-    summaryOnce = summaryOnce || get("/v1/summary.json");
-    return summaryOnce;
+  function onSummary(draw) {
+    summaryParts.push(draw);
+  }
+
+  function startSummary() {
+    if (!summaryParts.length) {
+      return;
+    }
+    window.BT_every(60000, function () {
+      get("/v1/summary.json").then(function (doc) {
+        window.BT_feedStatus(doc.online || 0);
+        summaryParts.forEach(function (draw) { draw(doc); });
+      }, function () {
+        window.BT_feedStatus(null);
+        summaryParts.forEach(function (draw) { draw(null); });
+      });
+    });
   }
 
   function mapName(id) {
@@ -171,12 +191,11 @@
   // ---------------------------------------------------------------- Online now
 
   document.querySelectorAll("[data-online-now]").forEach(function (box) {
-    summary().then(function (doc) {
-      var people = doc.onlinePlayers || [];
-      if (!people.length) {
-        return;
-      }
+    onSummary(function (doc) {
+      var people = (doc && doc.onlinePlayers) || [];
       var list = box.querySelector("ul");
+      list.innerHTML = "";
+      box.hidden = !people.length;
       people.forEach(function (p) {
         var li = el("li");
         var link = nameLink(p.name, p.profile, "online-name");
@@ -185,19 +204,21 @@
         list.appendChild(li);
       });
       box.querySelector("[data-online-count]").textContent = people.length === 1 ? "1 player" : people.length + " players";
-      box.hidden = false;
-    }).catch(function () {});
+    });
   });
 
   // ---------------------------------------------------------------- Recent matches
 
+  // With the feed down the last list stays up: those matches still happened.
   document.querySelectorAll("[data-recent-matches]").forEach(function (box) {
-    summary().then(function (doc) {
-      var matches = (doc.recentMatches || []).slice(0, Number(box.getAttribute("data-recent-matches")) || 6);
-      if (!matches.length) {
+    onSummary(function (doc) {
+      if (!doc) {
         return;
       }
+      var matches = (doc.recentMatches || []).slice(0, Number(box.getAttribute("data-recent-matches")) || 6);
       var list = box.querySelector("ol");
+      list.innerHTML = "";
+      box.hidden = !matches.length;
       matches.forEach(function (m) {
         var li = el("li", "match-row");
         var what = el("p", "match-what");
@@ -228,8 +249,7 @@
         li.appendChild(meta);
         list.appendChild(li);
       });
-      box.hidden = false;
-    }).catch(function () {});
+    });
   });
 
   // ---------------------------------------------------------------- Discord
@@ -239,24 +259,30 @@
   var invite = (config.discordUrl || "").split("/").pop();
 
   if (discordButtons.length && invite) {
-    fetch("https://discord.com/api/v10/invites/" + encodeURIComponent(invite) + "?with_counts=true")
-      .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
-      .then(function (data) {
-        var members = data.approximate_member_count;
-        if (!members) {
-          return;
-        }
-        discordButtons.forEach(function (button) {
-          var badge = el("span", "discord-count", number(members) + (members === 1 ? " member" : " members"));
-          button.appendChild(badge);
-        });
-      }).catch(function () {});
+    window.BT_every(300000, function () {
+      fetch("https://discord.com/api/v10/invites/" + encodeURIComponent(invite) + "?with_counts=true")
+        .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+        .then(function (data) {
+          var members = data.approximate_member_count;
+          if (!members) {
+            return;
+          }
+          discordButtons.forEach(function (button) {
+            var badge = button.querySelector(".discord-count") || button.appendChild(el("span", "discord-count"));
+            badge.textContent = number(members) + (members === 1 ? " member" : " members");
+          });
+        }).catch(function () {});
+    });
   }
 
   // ---------------------------------------------------------------- Home summary
 
+  // With the feed down the last totals stay up: they are still true.
   document.querySelectorAll("[data-live-summary]").forEach(function (box) {
-    summary().then(function (summary) {
+    onSummary(function (summary) {
+      if (!summary) {
+        return;
+      }
       box.innerHTML = "";
       [
         [summary.players, "player", "players"],
@@ -272,15 +298,10 @@
         box.appendChild(pill);
       });
       box.hidden = !box.children.length;
-
-      var status = document.querySelector("[data-server-status] .status-text");
-      if (status && summary.online > 0) {
-        status.innerHTML = "<strong>" + number(summary.online) + "</strong> playing now";
-      }
-    }).catch(function () {
-      box.hidden = true;
     });
   });
+
+  startSummary();
 
   // ---------------------------------------------------------------- Podium
   // The Grand Champion board's top three, as a podium (2nd, 1st, 3rd).
@@ -314,14 +335,18 @@
   }
 
   document.querySelectorAll("[data-home-podium]").forEach(function (section) {
-    get("/v1/leaderboards.json").then(function (doc) {
-      var board = (doc.boards || []).filter(function (b) { return b.id === OVERALL; })[0];
-      if (!board || !(board.rows || []).length) {
-        return; // Nothing to show before the first public wins.
-      }
-      section.querySelector("[data-podium]").appendChild(podium(board));
-      section.hidden = false;
-    }).catch(function () {});
+    window.BT_every(60000, function () {
+      get("/v1/leaderboards.json").then(function (doc) {
+        var board = (doc.boards || []).filter(function (b) { return b.id === OVERALL; })[0];
+        if (!board || !(board.rows || []).length) {
+          return; // Nothing to show before the first public wins.
+        }
+        var holder = section.querySelector("[data-podium]");
+        holder.innerHTML = "";
+        holder.appendChild(podium(board));
+        section.hidden = false;
+      }).catch(function () {});
+    });
   });
 
   // ---------------------------------------------------------------- Player search

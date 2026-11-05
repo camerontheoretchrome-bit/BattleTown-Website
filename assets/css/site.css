@@ -28,6 +28,9 @@
 
 @view-transition { navigation: auto; }
 
+/* Rules like .online-now { display: flex } would otherwise show hidden boxes. */
+[hidden] { display: none !important; }
+
 ::view-transition-old(root) { animation: 220ms ease both vt-out; }
 ::view-transition-new(root) { animation: 380ms var(--ease-out) both vt-in; }
 
