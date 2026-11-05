@@ -40,6 +40,23 @@ NAV = [("/", "Home"), ("/classes/", "Classes"), ("/modes/", "Game modes"),
 DISCORD = "https://discord.gg/gdWDzFe7wd"
 ADDRESS = "play.battletown.store"
 
+# Official accounts, in the order they show. Icons are Simple Icons (CC0) in assets/img/social/.
+# Discord uses the public invite: a discord.com/channels/... link only opens for people already in the server.
+SOCIALS = [
+    dict(name="Discord", url=DISCORD, icon="discord", handle="discord.gg/gdWDzFe7wd", cta="Join the server",
+         blurb="Chat with players, find a squad, get help and hear news first."),
+    dict(name="YouTube", url="https://www.youtube.com/@battletowntm", icon="youtube", handle="@battletowntm", cta="Subscribe",
+         blurb="Trailers, guides and the best fights."),
+    dict(name="TikTok", url="https://www.tiktok.com/@battletowntm", icon="tiktok", handle="@battletowntm", cta="Follow",
+         blurb="Quick clips straight from the arenas."),
+    dict(name="Instagram", url="https://www.instagram.com/battletowntm/", icon="instagram", handle="@battletowntm", cta="Follow",
+         blurb="Class art, sneak peeks and screenshots."),
+    dict(name="X", url="https://x.com/BattleTowntm", icon="x", handle="@BattleTowntm", cta="Follow",
+         blurb="Updates, patch notes and server news."),
+    dict(name="Reddit", url="https://www.reddit.com/user/BattleTownTM/", icon="reddit", handle="u/BattleTownTM", cta="Follow",
+         blurb="Posts, feedback and discussion."),
+]
+
 # Public alpha opens at midnight Ottawa time.
 ALPHA_START = "2026-12-01T00:00:00-05:00"
 
@@ -50,7 +67,39 @@ def asset(path):
         return path + "?v=" + hashlib.sha1(f.read()).hexdigest()[:8]
 
 
-JSON_LD = """<script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"BattleTown","url":"https://battletown.store/","description":"Class-based PvP arenas for Minecraft: Java Edition 26.3, with 16 classes, four game modes and player-built Maps.","image":"https://battletown.store/assets/img/social-card.jpg","gamePlatform":"Minecraft: Java Edition","genre":["PvP","Arena"],"playMode":"MultiPlayer","sameAs":["https://discord.gg/gdWDzFe7wd"]}</script>"""
+JSON_LD = """<script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"BattleTown","url":"https://battletown.store/","description":"Class-based PvP arenas for Minecraft: Java Edition 26.3, with 16 classes, four game modes and player-built Maps.","image":"https://battletown.store/assets/img/social-card.jpg","gamePlatform":"Minecraft: Java Edition","genre":["PvP","Arena"],"playMode":"MultiPlayer","sameAs":SAME_AS}</script>"""
+
+
+JSON_LD = JSON_LD.replace("SAME_AS", "[" + ",".join(f'"{s["url"]}"' for s in SOCIALS) + "]")
+
+
+def social_icon(icon):
+    with open(os.path.join(SITE, "assets", "img", "social", icon + ".svg")) as f:
+        path = re.search(r'<path d="([^"]+)"', f.read()).group(1)
+    return f'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="{path}"/></svg>'
+
+
+def social_links(label="BattleTown on social media"):
+    """A compact row of icon links (the footer); each lights up in its brand colour."""
+    links = "".join(f'<a class="is-{s["icon"]}" href="{s["url"]}" aria-label="BattleTown on {s["name"]}" title="{s["name"]}" '
+                    f'target="_blank" rel="noopener me">{social_icon(s["icon"])}</a>' for s in SOCIALS)
+    return f'<nav class="socials" aria-label="{label}">{links}</nav>'
+
+
+def social_cards():
+    """The home page's community wall: one big branded card per account."""
+    cards = []
+    for i, s in enumerate(SOCIALS):
+        live = ' <span class="social-live" data-discord-live hidden></span>' if s["icon"] == "discord" else ""
+        cards.append(f'''          <a class="social-card is-{s["icon"]} tilt reveal" style="--delay: {i * 0.07:.2f}s" href="{s["url"]}" target="_blank" rel="noopener me">
+            <span class="social-mark" aria-hidden="true">{social_icon(s["icon"])}</span>
+            <span class="social-icon">{social_icon(s["icon"])}</span>
+            <span class="social-name">{s["name"]}</span>
+            <span class="social-handle">{s["handle"]}{live}</span>
+            <span class="social-blurb">{s["blurb"]}</span>
+            <span class="social-cta">{s["cta"]} <span aria-hidden="true">→</span></span>
+          </a>''')
+    return "\n".join(cards)
 
 
 GOATCOUNTER_TAG = (f'  <script data-goatcounter="https://{GOATCOUNTER_CODE}.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>\n'
@@ -111,6 +160,7 @@ def page(path, title, description, body, scripts=(), image="https://battletown.s
         <img src="/assets/img/icon-96.webp" alt="" width="52" height="52" loading="lazy">
         <p><strong>BattleTown</strong><br><code>{ADDRESS}</code> · Minecraft Java 26.3</p>
       </div>
+      {social_links()}
       <nav aria-label="Footer">
         <a href="{DISCORD}">Discord</a>
         <a href="/leaderboards/">Leaderboards</a>
@@ -544,6 +594,19 @@ HOME = f"""    <section class="hero">
         </div>
         <div class="grid features">
 {features()}
+        </div>
+      </div>
+    </section>
+
+    <section class="section community" id="community">
+      <div class="wrap">
+        <div class="section-head center reveal">
+          <span class="eyebrow">Follow the fight</span>
+          <h2>Join the community</h2>
+          <p class="lead">Clips, news, sneak peeks and the people you'll be fighting. Find BattleTown everywhere.</p>
+        </div>
+        <div class="social-wall">
+{social_cards()}
         </div>
       </div>
     </section>

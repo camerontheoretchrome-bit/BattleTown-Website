@@ -992,6 +992,195 @@ html:not(.js) .stage-arrow { display: none; }
 .footer-brand { display: flex; align-items: center; gap: 12px; }
 .footer-brand img { width: 52px; height: 52px; mix-blend-mode: lighten; }
 
+/* ---------- Social links ---------- */
+
+/* Each platform's own colours: --brand fills the icon tile, --brand-glow lights the card. */
+.is-discord { --brand: #5865f2; --brand-ink: #fff; --brand-glow: rgba(88, 101, 242, 0.55); }
+.is-youtube { --brand: #ff0033; --brand-ink: #fff; --brand-glow: rgba(255, 0, 51, 0.5); }
+.is-tiktok { --brand: #000; --brand-ink: #fff; --brand-glow: rgba(37, 244, 238, 0.4); }
+.is-instagram { --brand: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285aeb 90%); --brand-ink: #fff; --brand-glow: rgba(214, 36, 159, 0.5); }
+.is-x { --brand: #fff; --brand-ink: #000; --brand-glow: rgba(255, 255, 255, 0.35); }
+.is-reddit { --brand: #ff4500; --brand-ink: #fff; --brand-glow: rgba(255, 69, 0, 0.5); }
+
+/* Footer row. */
+.socials { display: flex; flex-wrap: wrap; gap: 10px; }
+.socials a {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.03);
+  overflow: hidden;
+  isolation: isolate;
+  transition: color 0.2s, border-color 0.2s, transform 0.2s var(--ease-out), box-shadow 0.2s;
+}
+.socials a::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--brand); opacity: 0; transition: opacity 0.2s; }
+.socials a:hover, .socials a:focus-visible { color: var(--brand-ink); border-color: transparent; transform: translateY(-3px); box-shadow: 0 8px 22px var(--brand-glow); }
+.socials a:hover::before, .socials a:focus-visible::before { opacity: 1; }
+.socials svg { width: 20px; height: 20px; fill: currentColor; }
+
+/* Home page community wall. */
+.community { overflow: hidden; }
+.community::before {
+  content: "";
+  position: absolute;
+  inset: 10% -10% auto;
+  height: 70%;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse 30% 50% at 20% 50%, rgba(88, 101, 242, 0.14), transparent 70%),
+    radial-gradient(ellipse 30% 50% at 50% 40%, rgba(245, 184, 46, 0.1), transparent 70%),
+    radial-gradient(ellipse 30% 50% at 80% 55%, rgba(255, 0, 51, 0.1), transparent 70%);
+  filter: blur(20px);
+  pointer-events: none;
+}
+
+.social-wall { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; }
+.social-wall .is-discord { grid-column: 1 / -1; }
+
+.social-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 26px;
+  min-height: 210px;
+  border-radius: 22px;
+  color: var(--text);
+  text-decoration: none;
+  overflow: hidden;
+  isolation: isolate;
+  background: linear-gradient(160deg, rgba(34, 34, 46, 0.92), rgba(14, 14, 20, 0.96));
+  border: 1px solid var(--line);
+}
+
+/* Brand light pooling up from the corner, brighter on hover. */
+.social-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  border-radius: inherit;
+  background: radial-gradient(circle at 100% 0%, var(--brand-glow), transparent 60%);
+  opacity: 0.35;
+  transition: opacity 0.4s;
+}
+.social-card:hover::before, .social-card:focus-visible::before { opacity: 1; }
+.social-card:hover, .social-card:focus-visible { border-color: var(--brand-glow); box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55), 0 0 50px var(--brand-glow); }
+
+/* Giant faded logo bleeding off the corner. */
+.social-mark { position: absolute; right: -28px; bottom: -34px; z-index: -1; width: 170px; height: 170px; opacity: 0.06; transform: rotate(-12deg); transition: transform 0.6s var(--ease-out), opacity 0.4s; }
+.social-mark svg { width: 100%; height: 100%; fill: #fff; }
+.social-card:hover .social-mark { opacity: 0.12; transform: rotate(-4deg) scale(1.08); }
+
+.social-icon {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  margin-bottom: 10px;
+  border-radius: 16px;
+  background: var(--brand);
+  color: var(--brand-ink);
+  box-shadow: 0 10px 26px var(--brand-glow), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transition: transform 0.4s var(--ease-out), box-shadow 0.4s;
+}
+.social-icon svg { width: 30px; height: 30px; fill: currentColor; }
+.social-card:hover .social-icon { transform: translateY(-4px) rotate(-6deg) scale(1.06); box-shadow: 0 16px 34px var(--brand-glow), inset 0 1px 0 rgba(255, 255, 255, 0.25); }
+.is-tiktok .social-icon { border: 1px solid #222; }
+.is-tiktok .social-icon svg { filter: drop-shadow(-2px -1px 0 #25f4ee) drop-shadow(2px 1px 0 #fe2c55); }
+
+.social-name { font-family: var(--display); font-size: 1.9rem; line-height: 1; letter-spacing: 0.01em; }
+.social-handle { font-weight: 700; color: var(--gold-bright); font-size: 0.95rem; overflow-wrap: anywhere; }
+.social-live { display: inline-flex; align-items: center; gap: 6px; margin-left: 6px; color: var(--muted); font-weight: 600; }
+.social-live::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #3ddc84; box-shadow: 0 0 10px #3ddc84; }
+.social-blurb { color: var(--muted); font-size: 0.95rem; max-width: 26em; }
+
+.social-cta {
+  margin-top: auto;
+  padding-top: 14px;
+  font-family: var(--display);
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+.social-cta span { display: inline-block; transition: transform 0.3s var(--ease-out); }
+.social-card:hover .social-cta span { transform: translateX(6px); }
+
+/* Discord leads: a wide hero card across the top, logo left, call to action right. */
+.social-wall .is-discord {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas: "icon name cta" "icon handle cta" "icon blurb cta";
+  align-items: center;
+  column-gap: 28px;
+  row-gap: 4px;
+  padding: 34px 40px;
+  min-height: 0;
+  background: linear-gradient(110deg, rgba(64, 72, 190, 0.42), rgba(14, 14, 20, 0.96) 75%);
+}
+.social-wall .is-discord::before { background: radial-gradient(circle at 15% 50%, var(--brand-glow), transparent 55%); }
+.social-wall .is-discord .social-icon { grid-area: icon; width: 104px; height: 104px; margin: 0; border-radius: 28px; }
+.social-wall .is-discord .social-icon svg { width: 58px; height: 58px; }
+.social-wall .is-discord .social-name { grid-area: name; font-size: clamp(2.4rem, 4vw, 3.2rem); }
+.social-wall .is-discord .social-handle { grid-area: handle; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; }
+.social-wall .is-discord .social-live { margin: 0; }
+.social-wall .is-discord .social-blurb { grid-area: blurb; font-size: 1.05rem; }
+.social-wall .is-discord .social-mark { width: 320px; height: 320px; right: 18%; bottom: -120px; }
+.social-wall .is-discord .social-cta {
+  grid-area: cta;
+  margin: 0;
+  padding: 16px 30px;
+  border-radius: 999px;
+  font-size: 1.2rem;
+  white-space: nowrap;
+  background: var(--brand);
+  box-shadow: 0 12px 34px var(--brand-glow), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transition: transform 0.3s var(--ease-out), box-shadow 0.3s;
+}
+.social-wall .is-discord:hover .social-cta { transform: scale(1.05); box-shadow: 0 16px 44px var(--brand-glow), inset 0 1px 0 rgba(255, 255, 255, 0.3); }
+
+/* Tablet: three across, the last two centred. */
+@media (max-width: 1080px) {
+  .social-wall { grid-template-columns: repeat(6, 1fr); }
+  .social-wall .social-card { grid-column: span 2; }
+  .social-wall .is-discord { grid-column: 1 / -1; }
+  .social-wall .social-card:nth-child(5) { grid-column: 2 / span 2; }
+}
+
+@media (max-width: 760px) {
+  .social-wall .is-discord { grid-template-columns: auto 1fr; grid-template-areas: "icon name" "icon handle" "blurb blurb" "cta cta"; row-gap: 8px; padding: 26px; }
+  .social-wall .is-discord .social-icon { width: 76px; height: 76px; border-radius: 22px; }
+  .social-wall .is-discord .social-icon svg { width: 42px; height: 42px; }
+  .social-wall .is-discord .social-cta { justify-self: start; margin-top: 8px; }
+}
+
+/* Phone: two across, Reddit full width at the end. */
+@media (max-width: 560px) {
+  .social-wall { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .social-wall .social-card, .social-wall .social-card:nth-child(5) { grid-column: span 1; }
+  .social-wall .is-discord, .social-wall .social-card:last-child { grid-column: 1 / -1; }
+  .social-card { padding: 18px; min-height: 0; border-radius: 18px; }
+  .social-icon { width: 46px; height: 46px; border-radius: 13px; margin-bottom: 6px; }
+  .social-icon svg { width: 24px; height: 24px; }
+  .social-name { font-size: 1.45rem; }
+  .social-handle { font-size: 0.82rem; }
+  .social-blurb { display: none; }
+  .social-cta { font-size: 0.9rem; padding-top: 8px; }
+  .social-wall .is-discord { padding: 22px; }
+  .social-wall .is-discord .social-icon { width: 64px; height: 64px; }
+  .social-wall .is-discord .social-icon svg { width: 36px; height: 36px; }
+  .social-wall .is-discord .social-name { font-size: 2.2rem; }
+  .social-wall .is-discord .social-blurb { display: block; font-size: 0.95rem; }
+  .social-wall .is-discord .social-cta { justify-self: stretch; text-align: center; }
+}
+
 /* ---------- Music player ---------- */
 
 .music {

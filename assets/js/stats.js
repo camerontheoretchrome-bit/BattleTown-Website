@@ -256,9 +256,10 @@
   // Discord's public invite info (CORS allows battletown.store).
 
   var discordButtons = document.querySelectorAll("a.btn-discord");
+  var discordLive = document.querySelectorAll("[data-discord-live]");
   var invite = (config.discordUrl || "").split("/").pop();
 
-  if (discordButtons.length && invite) {
+  if ((discordButtons.length || discordLive.length) && invite) {
     window.BT_every(300000, function () {
       fetch("https://discord.com/api/v10/invites/" + encodeURIComponent(invite) + "?with_counts=true")
         .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
@@ -270,6 +271,11 @@
           discordButtons.forEach(function (button) {
             var badge = button.querySelector(".discord-count") || button.appendChild(el("span", "discord-count"));
             badge.textContent = number(members) + (members === 1 ? " member" : " members");
+          });
+          var online = data.approximate_presence_count;
+          discordLive.forEach(function (live) {
+            live.textContent = number(members) + (members === 1 ? " member" : " members") + (online ? " · " + number(online) + " online" : "");
+            live.hidden = false;
           });
         }).catch(function () {});
     });
