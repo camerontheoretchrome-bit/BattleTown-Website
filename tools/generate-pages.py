@@ -428,6 +428,22 @@ def features():
           </article>""" for i, (big, name, text) in enumerate(FEATURES))
 
 
+JOIN_STEPS = [
+    ("1", "Open Minecraft Java", "In the Minecraft Launcher, play the latest release: <strong>Java Edition 26.3</strong>. Bedrock isn't supported."),
+    ("2", "Add the server", "Go to <strong>Multiplayer → Add Server</strong> and paste the address below."),
+    ("3", "Accept the pack", "Say yes to the BattleTown resource pack when you join. The game needs it, and no mods are required."),
+]
+
+
+def join_steps():
+    return "\n".join(
+        f"""          <article class="card feature reveal" style="--delay: {i * 0.06:.2f}s">
+            <p class="big">{big}</p>
+            <h3>{name}</h3>
+            <p>{text}</p>
+          </article>""" for i, (big, name, text) in enumerate(JOIN_STEPS))
+
+
 def faq():
     return "\n".join(
         f"""          <details>
@@ -486,6 +502,23 @@ HOME = f"""    <section class="hero">
     </section>
 
     <div class="ticker" aria-hidden="true"><div class="ticker-track">{ticker}</div></div>
+
+    <section class="section section-tight" id="join">
+      <div class="wrap">
+        <div class="section-head center reveal">
+          <span class="eyebrow">Play in a minute</span>
+          <h2>Three steps to the Hub</h2>
+          <p class="lead" data-prelaunch hidden>The public alpha opens on <strong>1 December</strong>. Until then the server is invite-only, so <a href="{DISCORD}">join the Discord</a> to hear the moment it opens.</p>
+        </div>
+        <div class="grid features">
+{join_steps()}
+        </div>
+        <div class="join-address reveal">
+          {ip_box()}
+          <p>You'll land in the Hub. Step onto a platform in the Battle Plaza and your first match starts.</p>
+        </div>
+      </div>
+    </section>
 
     <section class="section" id="fighters">
       <div class="wrap">
@@ -623,7 +656,7 @@ HOME = f"""    <section class="hero">
       </div>
     </section>
 
-    <section class="cta-band" id="join">
+    <section class="cta-band" id="play">
       <div class="wrap">
         <div class="reveal">
           <span class="eyebrow">Ready?</span>

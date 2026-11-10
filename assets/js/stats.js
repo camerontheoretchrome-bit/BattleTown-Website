@@ -258,6 +258,7 @@
   var discordButtons = document.querySelectorAll("a.btn-discord");
   var discordLive = document.querySelectorAll("[data-discord-live]");
   var invite = (config.discordUrl || "").split("/").pop();
+  var DISCORD_COUNT_MIN = 50;
 
   if ((discordButtons.length || discordLive.length) && invite) {
     window.BT_every(300000, function () {
@@ -265,7 +266,8 @@
         .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
         .then(function (data) {
           var members = data.approximate_member_count;
-          if (!members) {
+          // A small count is social proof against joining; stay quiet until it helps.
+          if (!members || members < DISCORD_COUNT_MIN) {
             return;
           }
           discordButtons.forEach(function (button) {

@@ -334,6 +334,23 @@
     schedule();
   };
 
+  // ---------------------------------------------------------------- Pre-launch
+  // BT_prelaunch(): true until config.alphaStart. [data-prelaunch] shows only
+  // before it, [data-postlaunch] only after, so launch day needs no edit.
+
+  var alphaStart = new Date(config.alphaStart || 0).getTime();
+
+  window.BT_prelaunch = function () {
+    return Date.now() < alphaStart;
+  };
+
+  document.querySelectorAll("[data-prelaunch]").forEach(function (el) {
+    el.hidden = !window.BT_prelaunch();
+  });
+  document.querySelectorAll("[data-postlaunch]").forEach(function (el) {
+    el.hidden = window.BT_prelaunch();
+  });
+
   // ---------------------------------------------------------------- Server status
   // [data-server-status]: a pill filled from two sources, checked every minute.
   // The plugin's own feed (stats.js calls BT_feedStatus) answers only while the
@@ -352,6 +369,18 @@
     }
     var dot = statusEl.querySelector(".dot");
     var text = statusEl.querySelector(".status-text");
+    // Before the public alpha the server is whitelisted: "offline" reads as
+    // dead and "online" invites a join that bounces. The countdown pill
+    // beside it already says when to come back.
+    if (BT_prelaunch()) {
+      statusEl.hidden = !now.online;
+      dot.classList.toggle("is-online", now.online);
+      dot.classList.remove("is-offline");
+      text.innerHTML = now.players > 0
+        ? "<strong>" + now.players + "</strong> playtesting now"
+        : "Invite-only playtest";
+      return;
+    }
     statusEl.hidden = false;
     dot.classList.toggle("is-online", now.online);
     dot.classList.toggle("is-offline", !now.online);
@@ -440,6 +469,13 @@
   // Phones start with just the icon; bigger screens show the label first.
   if (window.innerWidth <= 820) {
     music.classList.add("is-compact");
+    // On a phone the corner sits on top of the hero's Join buttons.
+    var heroButtons = document.querySelector(".hero .btn-row");
+    if (heroButtons && "IntersectionObserver" in window) {
+      new IntersectionObserver(function (entries) {
+        music.classList.toggle("is-tucked", entries[0].isIntersecting);
+      }).observe(heroButtons);
+    }
   } else {
     setTimeout(function () { music.classList.add("is-compact"); }, 6000);
   }

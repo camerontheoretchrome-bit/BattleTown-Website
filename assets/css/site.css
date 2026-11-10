@@ -486,6 +486,9 @@ h2 { font-size: clamp(2rem, 5.5vw, 3.4rem); }
   .copy-btn { min-width: 0; padding: 0 14px; font-size: 0.95rem; }
 }
 
+.join-address { margin-top: 28px; text-align: center; }
+.join-address p { margin: 16px auto 0; max-width: 560px; color: var(--muted); }
+
 /* ---------- Live row: status and countdown ---------- */
 
 .live-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 18px 0 24px; }
@@ -1213,10 +1216,11 @@ html:not(.js) .stage-arrow { display: none; }
   font-weight: 800;
   text-align: left;
   cursor: pointer;
-  transition: border-color 0.3s, transform 0.2s;
+  transition: border-color 0.3s, transform 0.2s, opacity 0.3s;
 }
 
 .music:hover { border-color: var(--gold); transform: translateY(-2px); }
+.music.is-tucked:not(.is-playing) { opacity: 0; pointer-events: none; transform: translateY(12px); }
 
 .music-icon {
   width: 34px;
