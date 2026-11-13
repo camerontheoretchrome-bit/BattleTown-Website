@@ -225,6 +225,47 @@ def _strings(text):
     return [java_string(m) for m in re.findall(r'"((?:[^"\\]|\\.)*)"', text)]
 
 
+# Card placeholders ({counter}, {backstab}, ...) filled exactly as the game's
+# ClassCardNumbers does: classes.yml HP x the live combat.damage-multiplier,
+# printed as hearts (AbilityNumbers.hearts).
+CONFIG_YML = os.path.expanduser("~/Documents/BattleTown-Server/plugins/BattleTown/config.yml")
+CARD_NUMBERS = {
+    "counter": ("duelist", ["counter", "damage"], 8.5),
+    "backstab": ("assassin", ["backstab", "bonus-damage"], 5.0),
+    "combustion": ("pyromancer", ["combustion", "damage", "amount"], 4.4),
+    "thrust": ("lancer", ["counterthrust", "damage"], 4.0),
+    "thrust_counter": ("lancer", ["counterthrust", "counter-damage"], 6.5),
+}
+
+
+def _hearts(hp):
+    hearts = max(0.0, hp) / 2.0
+    quarters = hearts * 4.0
+    if abs(quarters - round(quarters)) < 1e-6:
+        number = ("%.2f" % (round(quarters) / 4.0)).rstrip("0").rstrip(".")
+    else:
+        number = ("%.1f" % hearts).rstrip("0").rstrip(".")
+    return "1 heart" if number == "1" else number + " hearts"
+
+
+def fill_card_numbers(text):
+    import yaml
+    classes = yaml.safe_load(open(CLASSES_YML))["classes"]
+    dial = float(yaml.safe_load(open(CONFIG_YML))["combat"]["damage-multiplier"])
+
+    def one(match):
+        key = match.group(1)
+        if key not in CARD_NUMBERS:
+            raise ValueError("card placeholder the website can't fill: {%s}" % key)
+        cls, path, default = CARD_NUMBERS[key]
+        node = classes[cls]["abilities"]
+        for part in path:
+            node = node.get(part) if isinstance(node, dict) else None
+        return _hearts((default if node is None else float(node)) * dial)
+
+    return re.sub(r"\{([a-z_]+)\}", one, text)
+
+
 def parse_class_cards():
     src = open(CLASS_CARDS_JAVA).read()
     body = src[src.index("private static Map<String, ClassCard> build()"):]
@@ -249,7 +290,7 @@ def parse_class_cards():
         cards.append({
             "id": cid, "name": name, "tagline": tagline, "role": role, "playstyle": playstyle,
             "weapons": weapons, "supplies": supplies,
-            "abilities": [(java_string(a), java_string(b)) for a, b in abilities],
+            "abilities": [(java_string(a), fill_card_numbers(java_string(b))) for a, b in abilities],
             "colour": colour, "hall": hall,
         })
     return cards
